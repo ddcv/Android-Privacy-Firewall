@@ -3,15 +3,6 @@
 
     <item
         is-multidex="true"
-        jar="F:\Project\Fall2016_InfoSecProject\app\build\intermediates\exploded-aar\com.android.support\support-media-compat\24.2.1\jars\libs\internal_impl-24.2.1.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="24.0.3"
-        sha1="fbf8da429efd5ad21e02e3e5ecaa1efc4167878d">
-        <dex dex="F:\Project\Fall2016_InfoSecProject\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-24.2.1_d22d2f3138a73c44383e1956927023e9812fc148\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
         jar="E:\AppData\Local\Android\Sdk\extras\android\m2repository\com\android\support\support-annotations\24.2.1\support-annotations-24.2.1.jar"
         jumboMode="true"
         optimize="true"
@@ -30,30 +21,12 @@
     </item>
     <item
         is-multidex="true"
-        jar="F:\Project\Fall2016_InfoSecProject\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\24.2.1\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="24.0.3"
-        sha1="43b2dba6b5a0b14527961b75329d0b90025f15ea">
-        <dex dex="F:\Project\Fall2016_InfoSecProject\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-appcompat-v7-24.2.1_b06cee8f0d80c9329ddf521a33b716212a224de6\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
         jar="F:\Project\Fall2016_InfoSecProject\app\build\intermediates\exploded-aar\com.android.support\support-media-compat\24.2.1\jars\classes.jar"
         jumboMode="true"
         optimize="true"
         revision="24.0.3"
         sha1="09b462bbcb77650284bd6614f1a32f360ef369f8">
         <dex dex="F:\Project\Fall2016_InfoSecProject\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-media-compat-24.2.1_6321295c7be465ca3c573381b2d66a691a8b31fe\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="F:\Project\Fall2016_InfoSecProject\app\build\intermediates\exploded-aar\com.android.support\support-v4\24.2.1\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="24.0.3"
-        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
-        <dex dex="F:\Project\Fall2016_InfoSecProject\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-v4-24.2.1_e703bacb344462c0e68106127ad7e11cd42ada0b\classes.dex" />
     </item>
     <item
         is-multidex="true"
@@ -84,15 +57,6 @@
     </item>
     <item
         is-multidex="true"
-        jar="F:\Project\Fall2016_InfoSecProject\app\build\intermediates\exploded-aar\com.android.support\support-compat\24.2.1\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="24.0.3"
-        sha1="0ecb4b595fa0f0f8018a149ace3ea6525624f94e">
-        <dex dex="F:\Project\Fall2016_InfoSecProject\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-compat-24.2.1_6b598cb431568d1392311d81a9a3a92ac960f277\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
         jar="F:\Project\Fall2016_InfoSecProject\app\build\intermediates\exploded-aar\com.android.support\support-fragment\24.2.1\jars\libs\internal_impl-24.2.1.jar"
         jumboMode="true"
         optimize="true"
@@ -115,17 +79,8 @@
         jumboMode="true"
         optimize="true"
         revision="24.0.3"
-        sha1="695d5e550ba826d2f7ee7cd6199c8f27ebb687c3">
+        sha1="b477c7110e0ade6e3b83002c22af18394111de8d">
         <dex dex="F:\Project\Fall2016_InfoSecProject\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_c2cc45db1f2c59f67e4e543e17dddb0d63fc10ce\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="F:\Project\Fall2016_InfoSecProject\app\build\intermediates\exploded-aar\com.android.support\support-fragment\24.2.1\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="24.0.3"
-        sha1="b9a1ac78ad7ef3abedc4a4b30cd92bcacb939d1f">
-        <dex dex="F:\Project\Fall2016_InfoSecProject\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-fragment-24.2.1_83f5c2c456889c6057b2a35981b19fa7d030c75f\classes.dex" />
     </item>
     <item
         is-multidex="true"
@@ -133,7 +88,7 @@
         jumboMode="true"
         optimize="true"
         revision="24.0.3"
-        sha1="292fe338bb30b46d1a71678aa4f993f39ff5c9b8">
+        sha1="b1d2cacc49f93cc3fbbce536f892abb5733ab00d">
         <dex dex="F:\Project\Fall2016_InfoSecProject\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_86ebbafb6fb11abc9e4ba19af7bb6ac040810726\classes.dex" />
     </item>
     <item
@@ -144,6 +99,51 @@
         revision="24.0.3"
         sha1="867dad63c33388ff8c7644b236579355036d075f">
         <dex dex="F:\Project\Fall2016_InfoSecProject\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-24.2.1_88dd308fd3481d756e75cb448b352db1c1ec569f\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="F:\Project\Fall2016_InfoSecProject\app\build\intermediates\exploded-aar\com.android.support\support-media-compat\24.2.1\jars\libs\internal_impl-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="fbf8da429efd5ad21e02e3e5ecaa1efc4167878d">
+        <dex dex="F:\Project\Fall2016_InfoSecProject\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-24.2.1_d22d2f3138a73c44383e1956927023e9812fc148\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="F:\Project\Fall2016_InfoSecProject\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\24.2.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="43b2dba6b5a0b14527961b75329d0b90025f15ea">
+        <dex dex="F:\Project\Fall2016_InfoSecProject\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-appcompat-v7-24.2.1_b06cee8f0d80c9329ddf521a33b716212a224de6\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="F:\Project\Fall2016_InfoSecProject\app\build\intermediates\exploded-aar\com.android.support\support-v4\24.2.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="F:\Project\Fall2016_InfoSecProject\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-v4-24.2.1_e703bacb344462c0e68106127ad7e11cd42ada0b\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="F:\Project\Fall2016_InfoSecProject\app\build\intermediates\exploded-aar\com.android.support\support-compat\24.2.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="0ecb4b595fa0f0f8018a149ace3ea6525624f94e">
+        <dex dex="F:\Project\Fall2016_InfoSecProject\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-compat-24.2.1_6b598cb431568d1392311d81a9a3a92ac960f277\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="F:\Project\Fall2016_InfoSecProject\app\build\intermediates\exploded-aar\com.android.support\support-fragment\24.2.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="b9a1ac78ad7ef3abedc4a4b30cd92bcacb939d1f">
+        <dex dex="F:\Project\Fall2016_InfoSecProject\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-fragment-24.2.1_83f5c2c456889c6057b2a35981b19fa7d030c75f\classes.dex" />
     </item>
     <item
         is-multidex="true"
