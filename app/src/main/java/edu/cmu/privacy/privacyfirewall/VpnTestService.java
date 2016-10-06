@@ -92,10 +92,18 @@ public class VpnTestService extends VpnService {
                    so package send by it will not be feedback to the vpn service. */
                 protect(tunnel.socket());
 
+
+                Log.d(TAG, "run: ready to run");
                 // Use a loop to pass packets.
                 while (true) {
                     //get packet with in
-                    vpnInput.read(bufferToNetwork);
+                    int bytes = vpnInput.read(bufferToNetwork);
+                    Log.d(TAG, "run: " + bytes);
+
+                    bufferToNetwork.flip();
+                    while (bufferToNetwork.hasRemaining()) {
+                        vpnOutput.write(bufferToNetwork);
+                    }
 
                     //put packet to tunnel
 //                    tunnel.write(bufferToNetwork);
