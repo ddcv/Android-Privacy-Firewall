@@ -6,13 +6,36 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
-public class MainActivity extends AppCompatActivity {
+// Needed for AppList UI
+import java.util.ArrayList;
+import java.util.List;
 
+import android.app.ListActivity;
+import android.widget.ListAdapter;
+
+public class MainActivity extends ListActivity {
+    /** Called when the activity is first created. */
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Create our own version of the list adapter
+        List<Privacyapp> apps = getData();
+        ListAdapter adapter = new AppListAdapter(this, apps, R.layout.applist, new String[] {
+                Privacyapp.KEY_APPNAME, Privacyapp.KEY_DETAIL }, new int[] { android.R.id.text1, android.R.id.text2 });
+        this.setListAdapter(adapter);
+    }
+
+    private List<Privacyapp> getData() {
+        List<Privacyapp> apps = new ArrayList<Privacyapp>();
+        apps.add(new Privacyapp("Dodge", "Viper"));
+        apps.add(new Privacyapp("Chevrolet", "Corvette"));
+        apps.add(new Privacyapp("Aston Martin", "Vanquish"));
+        apps.add(new Privacyapp("Lamborghini", "Diablo"));
+        apps.add(new Privacyapp("Ford", "Pinto"));
+        return apps;
+    }
 //        // Database Write and Read Demo
 //        // init connection database
 //        ConnectionDatabase cDb = new ConnectionDatabase(MainActivity.this);
@@ -34,5 +57,4 @@ public class MainActivity extends AppCompatActivity {
 //                    ", action = " + cur.getString(cur.getColumnIndex("action")));
 //        }
 
-    }
 }
