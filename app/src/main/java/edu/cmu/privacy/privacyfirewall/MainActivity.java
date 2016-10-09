@@ -1,7 +1,9 @@
 package edu.cmu.privacy.privacyfirewall;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,27 +21,60 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        // Database Write and Read Demo
-//        // init connection database
-//        ConnectionDatabase cDb = new ConnectionDatabase(MainActivity.this);
+        /** Database Demo Start */
+        
+//        // init database
+//        DatabaseInterface db = new DataBaseController(MainActivity.this);
 //
 //        // write data
-//        SQLiteDatabase cDbWrite = cDb.getWritableDatabase();
-//        cDb.insertConnection(cDbWrite, "App2", "192.168.0.2", "CMU", "", "ACCEPT");
+//        db.insertApplication("Amazon", "Online Shopping");
+//        db.insertApplication("BestBuy", "Online Shopping");
+//        db.insertRule("192.168.0.1", "Host", 1);
+//        db.insertRule("4.4.4.4", "Evil", 0);
+//        db.insertRule("8.8.8.8", "Good guy", 1);
+//        db.insertConnection(1, 1, "Good data", 0);
+//        db.insertConnection(1, 2, "Evil data", 1);
+//        db.insertConnection(2, 1, "General data", 0);
 //
-//        // read data
-//        SQLiteDatabase cDbRead = cDb.getReadableDatabase();
-//        Cursor cur = cDb.getConnectionCursor(cDbRead, "app");
-//        for (cur.moveToFirst(); !cur.isAfterLast(); cur.moveToNext()) {
-//            Log.i(ConnectionDatabase.DATABASE_TAG, "Output: " +
-//                    "id = " + cur.getString(cur.getColumnIndex("id")) +
-//                    ", app = " + cur.getString(cur.getColumnIndex("app")) +
-//                    ", IP = " + cur.getString(cur.getColumnIndex("IP")) +
-//                    ", org = " + cur.getString(cur.getColumnIndex("org")) +
-//                    ", sensitive = " + cur.getString(cur.getColumnIndex("sensitive")) +
-//                    ", action = " + cur.getString(cur.getColumnIndex("action")));
+//        // print all the application, its connection and action
+//
+//        // For each Application
+//        Cursor appCur = db.getAllApplicationCursor();
+//        for (appCur.moveToFirst(); !appCur.isAfterLast(); appCur.moveToNext()) {
+//            ContentValues appVal = new ContentValues();
+//            DatabaseUtils.cursorRowToContentValues(appCur, appVal);
+//            Log.i(ApplicationDatabase.DATABASE_TAG, "Output-Application: " +
+//                    "id = " + appVal.getAsString(ApplicationDatabase.FIELD_ID) +
+//                    ", name = " + appVal.getAsString(ApplicationDatabase.FIELD_NAME) +
+//                    ", description = " + appVal.getAsString(ApplicationDatabase.FIELD_DESC));
+//
+//            // For each connection of the application
+//            Cursor cntCur = db.getConnectionCursorByAppId(
+//                                                appVal.getAsInteger(ApplicationDatabase.FIELD_ID));
+//            for (cntCur.moveToFirst(); !cntCur.isAfterLast(); cntCur.moveToNext()) {
+//                ContentValues cntVal = new ContentValues();
+//                DatabaseUtils.cursorRowToContentValues(cntCur, cntVal);
+//                Log.i(ConnectionDatabase.DATABASE_TAG, "\tConnection: " +
+//                        "id = " + cntVal.getAsInteger(ConnectionDatabase.FIELD_ID) +
+//                        ", content = " + cntVal.getAsString(ConnectionDatabase.FIELD_CONTENT) +
+//                        ", sensitive = " + cntVal.getAsInteger(ConnectionDatabase.FIELD_SENSITIVE));
+//                Cursor ruleCur = db.getRuleCursorById(
+//                                                cntVal.getAsInteger(ConnectionDatabase.FIELD_RULE));
+//
+//                // For each rule of the connection
+//                for (ruleCur.moveToFirst(); !ruleCur.isAfterLast(); ruleCur.moveToNext()) {
+//                    ContentValues ruleVal = new ContentValues();
+//                    DatabaseUtils.cursorRowToContentValues(ruleCur, ruleVal);
+//                    Log.i(RuleDatabase.DATABASE_TAG, "\t\t\t\tRule: " +
+//                            "id = " + ruleVal.getAsInteger(RuleDatabase.FIELD_ID) +
+//                            ", ipAdd = " + ruleVal.getAsString(RuleDatabase.FIELD_IP_ADD) +
+//                            ", ipOwner = " + ruleVal.getAsString(RuleDatabase.FIELD_ID_OWNER) +
+//                            ", action = " + ruleVal.getAsInteger(RuleDatabase.FIELD_ACTION));
+//                }
+//            }
 //        }
 
+        /** Database Demo End */
 
         /** VPN Part Demo Start */
 

@@ -79,7 +79,7 @@
         jumboMode="true"
         optimize="true"
         revision="24.0.3"
-        sha1="b477c7110e0ade6e3b83002c22af18394111de8d">
+        sha1="75cf21ab36373996699fdb2e660d079f474c94d4">
         <dex dex="F:\Project\Fall2016_InfoSecProject\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_c2cc45db1f2c59f67e4e543e17dddb0d63fc10ce\classes.dex" />
     </item>
     <item
@@ -88,7 +88,7 @@
         jumboMode="true"
         optimize="true"
         revision="24.0.3"
-        sha1="b1d2cacc49f93cc3fbbce536f892abb5733ab00d">
+        sha1="c3d9c422b2a3ca282fbd526a569d6917dce8c404">
         <dex dex="F:\Project\Fall2016_InfoSecProject\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_86ebbafb6fb11abc9e4ba19af7bb6ac040810726\classes.dex" />
     </item>
     <item
