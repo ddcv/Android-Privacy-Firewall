@@ -81,8 +81,6 @@ public class VpnTestService extends VpnService {
             FileChannel vpnOutput = new FileOutputStream(vpnFileDescriptor).getChannel();
 
             try {
-                ByteBuffer bufferToNetwork = ByteBuffer.allocateDirect(1 << 14);
-
 
                 /* The UDP channel can be used to pass/get ip package to/from server */
                 DatagramChannel tunnel = DatagramChannel.open();
@@ -93,17 +91,27 @@ public class VpnTestService extends VpnService {
                 protect(tunnel.socket());
 
 
+
                 Log.d(TAG, "run: ready to run");
                 // Use a loop to pass packets.
                 while (true) {
+                    ByteBuffer bufferToNetwork = ByteBuffer.allocateDirect(1 << 10);
+
                     //get packet with in
                     int bytes = vpnInput.read(bufferToNetwork);
-                    Log.d(TAG, "run: " + bytes);
+//                    Log.d(TAG, "run: " + bytes);
 
-                    bufferToNetwork.flip();
-                    while (bufferToNetwork.hasRemaining()) {
-                        vpnOutput.write(bufferToNetwork);
+                    if (bytes > 0) {
+                        bufferToNetwork.flip();
+                        IPPacket packet = new IPPacket(bufferToNetwork);
+
+                        Log.d(TAG, "run: " + packet);
                     }
+//                    bufferToNetwork.flip();
+////                    tunnel.write(bufferToNetwork);
+//                    while (bufferToNetwork.hasRemaining()) {
+//                        vpnOutput.write(bufferToNetwork);
+//                    }
 
                     //put packet to tunnel
 //                    tunnel.write(bufferToNetwork);
