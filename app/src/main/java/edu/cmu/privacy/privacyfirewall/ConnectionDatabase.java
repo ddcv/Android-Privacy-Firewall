@@ -10,16 +10,14 @@ import android.database.sqlite.SQLiteOpenHelper;
  * Created by YunfanW on 9/30/2016.
  */
 
-public class ConnectionDatabase extends SQLiteOpenHelper implements QueryConnection{
-    private final static String DATABASE_NAME = "ConnectionDB";
-    private final static int DATABASE_VERSION = 1;
-    private final static String TABLE_NAME = "ConnectionInfo";
-    public final static String FIELD_ID = "id";
-    public final static String FIELD_APP = "app";
-    public final static String FIELD_IP = "IP";
-    public final static String FIELD_ORG = "org";
-    public final static String FIELD_SENSITIVE = "sensitive";
-    public final static String FIELD_ACTION = "action";
+public class ConnectionDatabase extends SQLiteOpenHelper{
+    final static String TABLE_NAME = "Connection";
+    final static String FIELD_ID = "cid";
+    final static String FIELD_CTIME = "cTime";
+    final static String FIELD_CONTENT = "content";
+    final static String FIELD_SENSITIVE = "sensitive";
+    final static String FIELD_APP = "aid";
+    final static String FIELD_RULE = "rid";
 
     public final static String DATABASE_TAG = "ConnectionDB";
 
@@ -33,30 +31,34 @@ public class ConnectionDatabase extends SQLiteOpenHelper implements QueryConnect
         sql.append(TABLE_NAME);
         sql.append(" (");
         sql.append(FIELD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, ");
-        sql.append(FIELD_IP + " TEXT, ");
-        sql.append(FIELD_APP + " TEXT, ");
-        sql.append(FIELD_ORG + " TEXT, ");
-        sql.append(FIELD_SENSITIVE + " TEXT, ");
-        sql.append(FIELD_ACTION + " TEXT");
+        sql.append(FIELD_CTIME + " DATETIME DEFAULT CURRENT_TIMESTAMP, ");
+        sql.append(FIELD_CONTENT + " TEXT, ");
+        sql.append(FIELD_SENSITIVE + " INTEGER NOT NULL, ");
+        sql.append(FIELD_APP + " INTEGER NOT NULL, ");
+        sql.append(FIELD_RULE + " INTEGER NOT NULL");
         sql.append(");");
         db.execSQL(sql.toString());
     }
 
-    public static void insertConnection(SQLiteDatabase db, String app, String ip, String org,
-                                        String sensitive, String action) {
+    public static boolean insertConnection(SQLiteDatabase db, int appId, int ruleId,
+                                           String content, int sensitive) {
         ContentValues v = new ContentValues();
-        v.put("app", app);
-        v.put("org", org);
-        v.put("sensitive", sensitive);
-        v.put("action", action);
-        db.insert(TABLE_NAME, "null", v);
+        v.put(FIELD_APP, appId);
+        v.put(FIELD_RULE, ruleId);
+        v.put(FIELD_CONTENT, content);
+        v.put(FIELD_SENSITIVE, sensitive);
+        if (db.insert(TABLE_NAME, "null", v) != -1) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
     }
 
-    public Cursor getConnectionCursor(SQLiteDatabase db, String app) {
+    public static Cursor getConnectionCursorByAppId(SQLiteDatabase db, int appId) {
         /*
          * table
          * columns
@@ -66,6 +68,6 @@ public class ConnectionDatabase extends SQLiteOpenHelper implements QueryConnect
          * having
          * orderBy
          * */
-        return db.query(TABLE_NAME, null, FIELD_APP + " = " + app, null, null, null, null);
+        return db.query(TABLE_NAME, null, FIELD_APP + " = " + appId, null, null, null, null);
     }
 }
