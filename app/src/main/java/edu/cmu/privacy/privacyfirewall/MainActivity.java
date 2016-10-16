@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
          * Find Alternative way to use Actual App Names
          */
         listView = (ListView) findViewById(android.R.id.list);
-        String[] values = new String[] { "My First App", "Game", "Malware", "Social Media", "Bloatware", "Phone" };
+        String[] values = new String[] { "My App", "Game", "Malware", "Social Media", "Bloatware", "Phone" };
         //
         ArrayAdapter adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1, values);
         listView.setAdapter(adapter);
@@ -51,7 +51,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 listappName = (String) listView.getItemAtPosition(position);
-                listappDisplay.setText(listappName);            }
+//                listappDisplay.setText(listappName);
+
+                Intent intent = new Intent(MainActivity.this, AppDetailActivity.class);
+                intent.putExtra("ITEM", listappName);
+                startActivity(intent);
+            }
         });
 
 
