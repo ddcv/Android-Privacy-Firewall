@@ -3,6 +3,8 @@ package edu.cmu.privacy.privacyfirewall;
 import android.app.ListActivity;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
@@ -14,6 +16,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -119,6 +123,17 @@ public class MainActivity extends AppCompatActivity {
 //        } else {
 //            onActivityResult(VPN_REQUEST_CODE, RESULT_OK, null);
 //        }
+
+        final PackageManager packageManager = getPackageManager();
+        List<ApplicationInfo> installedApplications =
+                packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
+
+        for (ApplicationInfo appInfo : installedApplications)
+        {
+            Log.d("OUTPUT", "Package name : " + appInfo.packageName);
+            Log.d("OUTPUT", "Name: " + appInfo.loadLabel(packageManager));
+
+        }
 
         /** VPN Part Demo End   */
     }
