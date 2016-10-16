@@ -19,8 +19,14 @@ public class AppDetailActivity extends Activity {
         Intent intent = getIntent();
         String value = intent.getStringExtra("ITEM");
 
-        TextView textView = (TextView) findViewById(R.id.app_detail);
-        textView.setText(value);
+        TextView appnametextView = (TextView) findViewById(R.id.app_name);
+        appnametextView.setText(value);
+
+        TextView appdetailtextView = (TextView) findViewById(R.id.app_detail);
+        appdetailtextView.setText("This is an app.");
+
+      //  ListView listView = (ListView) findViewById(R.id.connection_history);
+
 
     }
 }

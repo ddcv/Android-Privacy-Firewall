@@ -5,8 +5,23 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+    <TextView
         android:id="@+id/app_detail"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/app_name"/>
+  <!--      android:layout_centerHorizontal="true"/> -->
+
+<!--    <ListView
+        android:id="@+id/connectionhistory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/app_detail" />-->
 
 </RelativeLayout>
