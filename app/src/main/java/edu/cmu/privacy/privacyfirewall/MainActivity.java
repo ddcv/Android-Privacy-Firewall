@@ -1,5 +1,6 @@
 package edu.cmu.privacy.privacyfirewall;
 
+import android.app.ListActivity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -8,6 +9,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -16,13 +22,41 @@ public class MainActivity extends AppCompatActivity {
     private Intent serviceIntent;    /* The VPN Service Intent */
     /** VPN Part Variables End   */
 
+    private ListView listView;
+    private TextView listappDisplay;
+    private String listappName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        /** UI Component Start */
+
+        /**
+         * Find Alternative way to use Actual App Names
+         */
+        listView = (ListView) findViewById(android.R.id.list);
+        String[] values = new String[] { "My First App", "Game", "Malware", "Social Media", "Bloatware", "Phone" };
+        //
+        ArrayAdapter adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1, values);
+        listView.setAdapter(adapter);
+        listappDisplay = (TextView) findViewById(R.id.text1);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                listappName = (String) listView.getItemAtPosition(position);
+                listappDisplay.setText(listappName);            }
+        });
+
+
+
+        /** UI Component End*/
+
+
         /** Database Demo Start */
-        
+
 //        // init database
 //        DatabaseInterface db = new DataBaseController(MainActivity.this);
 //

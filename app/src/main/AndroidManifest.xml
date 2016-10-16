@@ -3,7 +3,7 @@
     package="edu.cmu.privacy.privacyfirewall">
 
     <!-- Request the User Permission for Internet Access -->
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -21,13 +21,14 @@
 
         <!-- Added by Bill -->
         <service
-            android:name="edu.cmu.privacy.privacyfirewall.VpnTestService"
-            android:permission="android.permission.BIND_VPN_SERVICE" >
+            android:name=".VpnTestService"
+            android:permission="android.permission.BIND_VPN_SERVICE">
             <intent-filter>
                 <action android:name="android.net.VpnService" />
             </intent-filter>
         </service>
         <!-- End by Bill -->
+        <activity android:name=".AppListActivity"></activity>
     </application>
 
 </manifest>
