@@ -2,26 +2,57 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingBottom="16dp"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="16dp"
+    android:paddingTop="16dp">
 
     <TextView
         android:id="@+id/app_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:textAppearance="?android:attr/textAppearanceLarge"/>
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/app_detail"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:scrollbars = "vertical"
+        android:fadeScrollbars="false"
+        android:layout_height="100dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="5dp"
+        android:background="@android:color/white"
+        android:text="@string/app_detail"
         android:layout_below="@+id/app_name"/>
   <!--      android:layout_centerHorizontal="true"/> -->
 
-<!--    <ListView
-        android:id="@+id/connectionhistory"
+    <TextView
+        android:id="@+id/connection_historystring"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/app_detail" />-->
+        android:layout_marginLeft="16dp"
+        android:text="@string/connectionhistory"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/app_detail"/>
+
+    <ListView
+        android:id="@android:id/list"
+        android:divider="#000000"
+        android:dividerHeight="5px"
+        android:scrollbarThumbVertical="@drawable/scrollbar"
+        android:fadeScrollbars="false"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/connection_historystring"
+        android:textStyle="bold"/>
 
 </RelativeLayout>

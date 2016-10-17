@@ -11,9 +11,27 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="edu.cmu.privacy.privacyfirewall.MainActivity">
 
+    <TextView
+        android:id="@+id/applisttext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="@string/applist"
+        android:textColor="@android:color/black"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textStyle="bold"/>
+
     <ListView
         android:id="@android:id/list"
+        android:divider="#000000"
+        android:dividerHeight="5px"
+        android:scrollbarThumbVertical="@drawable/scrollbar"
+        android:fadeScrollbars="false"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/applisttext"
+        android:textStyle="bold"/>
 
 </RelativeLayout>

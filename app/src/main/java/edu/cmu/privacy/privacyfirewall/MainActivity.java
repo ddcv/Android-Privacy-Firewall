@@ -1,6 +1,5 @@
 package edu.cmu.privacy.privacyfirewall;
 
-import android.app.ListActivity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -15,7 +14,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.List;
 
@@ -26,9 +24,10 @@ public class MainActivity extends AppCompatActivity {
     private Intent serviceIntent;    /* The VPN Service Intent */
     /** VPN Part Variables End   */
 
+    /** UI Variables Start */
     private ListView listView;
-    private TextView listappDisplay;
     private String listappName;
+    /** UI Variables End */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,52 +35,27 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        /** UI Component Start */
 
-        /**
-         * Find Alternative way to use Actual App Names
-         */
-        listView = (ListView) findViewById(android.R.id.list);
-        String[] values = new String[] { "My App", "Game", "Malware", "Social Media", "Bloatware", "Phone" };
-        //
-        ArrayAdapter adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1, values);
-        listView.setAdapter(adapter);
-        listappDisplay = (TextView) findViewById(R.id.text1);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                listappName = (String) listView.getItemAtPosition(position);
-//                listappDisplay.setText(listappName);
-
-                Intent intent = new Intent(MainActivity.this, AppDetailActivity.class);
-                intent.putExtra("ITEM", listappName);
-                startActivity(intent);
-            }
-        });
-
-
-
-        /** UI Component End*/
 
 
         /** Database Demo Start */
 
 //        // init database
-//        DatabaseInterface db = new DataBaseController(MainActivity.this);
+        DatabaseInterface db = new DataBaseController(MainActivity.this);
 //
 //        // write data
-//        db.insertApplication("Amazon", "Online Shopping");
-//        db.insertApplication("BestBuy", "Online Shopping");
-//        db.insertRule("192.168.0.1", "Host", 1);
-//        db.insertRule("4.4.4.4", "Evil", 0);
-//        db.insertRule("8.8.8.8", "Good guy", 1);
-//        db.insertConnection(1, 1, "Good data", 0);
-//        db.insertConnection(1, 2, "Evil data", 1);
-//        db.insertConnection(2, 1, "General data", 0);
-//
-//        // print all the application, its connection and action
-//
-//        // For each Application
+        db.insertApplication("Amazon", "Online Shopping");
+        db.insertApplication("BestBuy", "Online Shopping");
+        db.insertRule("192.168.0.1", "Host", 1);
+        db.insertRule("4.4.4.4", "Evil", 0);
+        db.insertRule("8.8.8.8", "Good guy", 1);
+        db.insertConnection(1, 1, "Good data", 0);
+        db.insertConnection(1, 2, "Evil data", 1);
+        db.insertConnection(2, 1, "General data", 0);
+
+        // print all the application, its connection and action
+
+        // For each Application
 //        Cursor appCur = db.getAllApplicationCursor();
 //        for (appCur.moveToFirst(); !appCur.isAfterLast(); appCur.moveToNext()) {
 //            ContentValues appVal = new ContentValues();
@@ -129,19 +103,58 @@ public class MainActivity extends AppCompatActivity {
 //            onActivityResult(VPN_REQUEST_CODE, RESULT_OK, null);
 //        }
 
+        /** VPN Part Demo End   */
+
+
+
+        /** UI Component Start */
+
+        // Use Package Manager to retrieve List of installedApplications
+
         final PackageManager packageManager = getPackageManager();
         List<ApplicationInfo> installedApplications =
                 packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
 
-        for (ApplicationInfo appInfo : installedApplications)
-        {
-            Log.d("OUTPUT", "Package name : " + appInfo.packageName);
-            Log.d("OUTPUT", "Name: " + appInfo.loadLabel(packageManager));
+//        for (ApplicationInfo appInfo : installedApplications)
+//        {
+//            Log.d("OUTPUT", "Package name : " + appInfo.packageName);
+//            Log.d("OUTPUT", "Name: " + appInfo.loadLabel(packageManager));
+//       }
 
+        //Convert InstalledApplication List to Java StringArray
+
+        String[] appnames = new String[installedApplications.size()];
+        for(int i = 0; i<installedApplications.size(); i++) {
+            appnames[i] = (String) installedApplications.get(i).loadLabel(packageManager);
         }
 
-        /** VPN Part Demo End   */
+        // Android methods for using and displaying a ListView
+        listView = (ListView) findViewById(android.R.id.list);
+        ArrayAdapter adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1, appnames);
+        listView.setAdapter(adapter);
+
+
+
+        /**
+         *  Creates Android Click Functionality so that when each app's name
+         *  is clicked, an "intent" is created that changes the app's view from the current
+         *  one (MainActivity) to the "AppDetailActivity", and passes the relevant extra
+         *  information to the intent
+         */
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                listappName = (String) listView.getItemAtPosition(position);
+
+                Intent intent = new Intent(MainActivity.this, AppDetailActivity.class);
+                intent.putExtra("listappName", listappName);
+                startActivity(intent);
+            }
+        });
+
+        /** UI Component End*/
     }
+
 
 
     /** VPN Part Functions Start */

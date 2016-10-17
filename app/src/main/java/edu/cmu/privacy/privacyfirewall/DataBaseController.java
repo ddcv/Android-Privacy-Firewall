@@ -34,6 +34,11 @@ public class DataBaseController implements DatabaseInterface {
         return ApplicationDatabase.getAllApplicationCursor(aDb.getReadableDatabase());
     }
 
+    // Application Database Interface
+    public Cursor getApplicationCursorByAppName(String AppName) {
+        return ApplicationDatabase.getApplicationCursorByAppName(aDb.getReadableDatabase(), AppName);
+    }
+
     public boolean insertApplication(String name, String description) {
         return ApplicationDatabase.insertApplication(aDb.getWritableDatabase(), name, description);
     }

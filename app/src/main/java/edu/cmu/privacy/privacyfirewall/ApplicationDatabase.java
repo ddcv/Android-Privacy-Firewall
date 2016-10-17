@@ -61,4 +61,18 @@ public class ApplicationDatabase extends SQLiteOpenHelper{
          * */
         return db.query(TABLE_NAME, null, null, null, null, null, null);
     }
+
+
+    public static Cursor getApplicationCursorByAppName(SQLiteDatabase db, String appName) {
+        /*
+         * table
+         * columns
+         * selection
+         * selectionArgs
+         * groupBy
+         * having
+         * orderBy
+         * */
+        return db.query(TABLE_NAME, null, FIELD_NAME + " = " + appName, null, null, null, null);
+    }
 }

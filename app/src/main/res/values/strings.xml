@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">PrivacyFirewall</string>
+    <string name="applist">App List</string>
+    <string name= "connectionhistory">Connection History</string>
+    <string name="app_detail">
+    Get the official Google Calendar app for your Android phone and tablet to save time and make the most of every day.
+• Events from Gmail - Flight, hotel, concert, restaurant reservations and more are added to your calendar automatically.
+• Goals - Add personal goals—like “run 3 times a week”—and Calendar will schedule time for them automatically.
+• To-dos on your calendar - Use Reminders to create and view to-dos alongside your events.
+• A new Schedule View - See your schedule at a glance with photos and maps of the places you’re going.
+• Assists to fill in your calendar - You can quickly create events with smart suggestions for event titles, places and people.
+• Different ways to view your calendar - Speedily switch between viewing a single day to getting an overview of multiple days at once.
+• All your calendars in one, easy place - Google Calendar works with all calendars on your phone, including Exchange.
+• (Google Apps for Work and Education only) Find a time and book a room - Add colleagues as guests to your event and Google Calendar
+        will find the best meeting times and rooms for you. </string>
 </resources>
