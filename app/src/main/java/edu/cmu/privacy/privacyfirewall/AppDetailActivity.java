@@ -67,14 +67,14 @@ public class AppDetailActivity extends ListActivity {
             HashMap<String, String> Connectionvalue = new HashMap<String, String>();
 
 
-            Connectionvalue.put("Org Name", OrgHistory);
-            Connectionvalue.put("IP Address", RuleVal.get(OrgHistory));
-            Connectionvalue.put("Data Content", ConnectionVal.get(OrgHistory)[0]);
+            Connectionvalue.put("Org Name", "Organization: " + OrgHistory);
+            Connectionvalue.put("IP Address", "IP Address: " + RuleVal.get(OrgHistory));
+            Connectionvalue.put("Data Content", "Data Content: " + ConnectionVal.get(OrgHistory)[0]);
             if (ConnectionVal.get(OrgHistory)[1].equals("0") ) {
-                Connectionvalue.put("Sensitive?", "No");
+                Connectionvalue.put("Sensitive?", "Sensitive Data? No");
             }
             else {
-                Connectionvalue.put("Sensitive?", "Yes");
+                Connectionvalue.put("Sensitive?", "Sensitive Data? Yes");
             }
 
 

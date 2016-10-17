@@ -3,48 +3,12 @@
 
     <item
         is-multidex="true"
-        jar="/home/ddcv/AndroidStudioProjects/Fall2016_InfoSecProject/app/build/intermediates/exploded-aar/com.android.support/support-compat/24.2.1/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="24.0.3"
-        sha1="0ecb4b595fa0f0f8018a149ace3ea6525624f94e">
-        <dex dex="/home/ddcv/AndroidStudioProjects/Fall2016_InfoSecProject/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-compat-24.2.1_74a70144754ae1360cfd92ca65deaebf29003837/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/ddcv/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/24.2.1/support-annotations-24.2.1.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="24.0.3"
-        sha1="8de3aafecbdf98a61db6427f008f2d515bcd2544">
-        <dex dex="/home/ddcv/AndroidStudioProjects/Fall2016_InfoSecProject/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-24.2.1_857c3b718ac3e74bbae9569ffaf967ec899ae57a/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
         jar="/home/ddcv/AndroidStudioProjects/Fall2016_InfoSecProject/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/24.2.1/jars/classes.jar"
         jumboMode="true"
         optimize="true"
         revision="24.0.3"
         sha1="9c4c3bc902450c39ed54de170db4fb12aea20a35">
         <dex dex="/home/ddcv/AndroidStudioProjects/Fall2016_InfoSecProject/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-core-utils-24.2.1_24896cca4d7d7aa0b07ac84fad03150233a2e491/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/ddcv/AndroidStudioProjects/Fall2016_InfoSecProject/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/24.2.1/jars/libs/internal_impl-24.2.1.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="24.0.3"
-        sha1="935a969265b2a166b2d20415423f5f6e90fe16e0">
-        <dex dex="/home/ddcv/AndroidStudioProjects/Fall2016_InfoSecProject/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.1_7b7d512f6dee3bd8b7786993e827b51fda32c4b1/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/ddcv/AndroidStudioProjects/Fall2016_InfoSecProject/app/build/intermediates/exploded-aar/com.android.support/support-compat/24.2.1/jars/libs/internal_impl-24.2.1.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="24.0.3"
-        sha1="7e4389bd133359a2ff88623ff1e4ff93d6e6f780">
-        <dex dex="/home/ddcv/AndroidStudioProjects/Fall2016_InfoSecProject/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.1_e6b571d1c482cb34e0927a0b79155f366c15c259/classes.dex" />
     </item>
     <item
         is-multidex="true"
@@ -66,21 +30,93 @@
     </item>
     <item
         is-multidex="true"
-        jar="/home/ddcv/AndroidStudioProjects/Fall2016_InfoSecProject/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/24.2.1/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="24.0.3"
-        sha1="09b462bbcb77650284bd6614f1a32f360ef369f8">
-        <dex dex="/home/ddcv/AndroidStudioProjects/Fall2016_InfoSecProject/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-media-compat-24.2.1_7a80b03592acafd7f690d3e7dc9d770355e4d3e3/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
         jar="/home/ddcv/AndroidStudioProjects/Fall2016_InfoSecProject/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/24.2.1/jars/classes.jar"
         jumboMode="true"
         optimize="true"
         revision="24.0.3"
         sha1="d5c731fc64c03dfe04d51134955b483551c35849">
         <dex dex="/home/ddcv/AndroidStudioProjects/Fall2016_InfoSecProject/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-vector-drawable-24.2.1_751c21c9d878616d6885c72985f8cc29a7fc4f86/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/ddcv/AndroidStudioProjects/Fall2016_InfoSecProject/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="e7f3132168957eefc46229fc32c3bd464642b71e">
+        <dex dex="/home/ddcv/AndroidStudioProjects/Fall2016_InfoSecProject/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-core-ui-24.2.1_e6a71063e3cdda0df70c01210a3cd4208299effc/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/ddcv/AndroidStudioProjects/Fall2016_InfoSecProject/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="94bc1dfb84dcc8b6f6f8f7cc726d7b2dd39c1574">
+        <dex dex="/home/ddcv/AndroidStudioProjects/Fall2016_InfoSecProject/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-animated-vector-drawable-24.2.1_1f8fd9244a9c8ec81b560eabae893de06b894da9/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/ddcv/AndroidStudioProjects/Fall2016_InfoSecProject/app/build/intermediates/exploded-aar/com.android.support/support-v4/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="/home/ddcv/AndroidStudioProjects/Fall2016_InfoSecProject/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-v4-24.2.1_21960ad895a70002739aca0e0caf5bfce4d353ce/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/ddcv/AndroidStudioProjects/Fall2016_InfoSecProject/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="427d4d615137109cf66d33fa5245bba0fddb2a31">
+        <dex dex="/home/ddcv/AndroidStudioProjects/Fall2016_InfoSecProject/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_14b5273dd0e07abb99867facd430f6175a911057/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/ddcv/AndroidStudioProjects/Fall2016_InfoSecProject/app/build/intermediates/exploded-aar/com.android.support/support-compat/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="0ecb4b595fa0f0f8018a149ace3ea6525624f94e">
+        <dex dex="/home/ddcv/AndroidStudioProjects/Fall2016_InfoSecProject/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-compat-24.2.1_74a70144754ae1360cfd92ca65deaebf29003837/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/ddcv/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/24.2.1/support-annotations-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="8de3aafecbdf98a61db6427f008f2d515bcd2544">
+        <dex dex="/home/ddcv/AndroidStudioProjects/Fall2016_InfoSecProject/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-24.2.1_857c3b718ac3e74bbae9569ffaf967ec899ae57a/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/ddcv/AndroidStudioProjects/Fall2016_InfoSecProject/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/24.2.1/jars/libs/internal_impl-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="935a969265b2a166b2d20415423f5f6e90fe16e0">
+        <dex dex="/home/ddcv/AndroidStudioProjects/Fall2016_InfoSecProject/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.1_7b7d512f6dee3bd8b7786993e827b51fda32c4b1/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/ddcv/AndroidStudioProjects/Fall2016_InfoSecProject/app/build/intermediates/exploded-aar/com.android.support/support-compat/24.2.1/jars/libs/internal_impl-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="7e4389bd133359a2ff88623ff1e4ff93d6e6f780">
+        <dex dex="/home/ddcv/AndroidStudioProjects/Fall2016_InfoSecProject/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.1_e6b571d1c482cb34e0927a0b79155f366c15c259/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/ddcv/AndroidStudioProjects/Fall2016_InfoSecProject/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="09b462bbcb77650284bd6614f1a32f360ef369f8">
+        <dex dex="/home/ddcv/AndroidStudioProjects/Fall2016_InfoSecProject/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-media-compat-24.2.1_7a80b03592acafd7f690d3e7dc9d770355e4d3e3/classes.dex" />
     </item>
     <item
         is-multidex="true"
@@ -106,26 +142,8 @@
         jumboMode="true"
         optimize="true"
         revision="24.0.3"
-        sha1="bb3f86ba71558cd8881cddd0c5fa285dfeef2dd0">
+        sha1="cfa13d7bc0bacbaf0e14afa50b62b7a1068419e9">
         <dex dex="/home/ddcv/AndroidStudioProjects/Fall2016_InfoSecProject/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_7a383520b7135bcf1c054164e071a35c760cb7e4/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/ddcv/AndroidStudioProjects/Fall2016_InfoSecProject/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/24.2.1/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="24.0.3"
-        sha1="e7f3132168957eefc46229fc32c3bd464642b71e">
-        <dex dex="/home/ddcv/AndroidStudioProjects/Fall2016_InfoSecProject/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-core-ui-24.2.1_e6a71063e3cdda0df70c01210a3cd4208299effc/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/ddcv/AndroidStudioProjects/Fall2016_InfoSecProject/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/24.2.1/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="24.0.3"
-        sha1="94bc1dfb84dcc8b6f6f8f7cc726d7b2dd39c1574">
-        <dex dex="/home/ddcv/AndroidStudioProjects/Fall2016_InfoSecProject/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-animated-vector-drawable-24.2.1_1f8fd9244a9c8ec81b560eabae893de06b894da9/classes.dex" />
     </item>
     <item
         is-multidex="true"
@@ -135,24 +153,6 @@
         revision="24.0.3"
         sha1="b9a1ac78ad7ef3abedc4a4b30cd92bcacb939d1f">
         <dex dex="/home/ddcv/AndroidStudioProjects/Fall2016_InfoSecProject/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-fragment-24.2.1_2707af030623b9f970583bc0736f35d177470a9c/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/ddcv/AndroidStudioProjects/Fall2016_InfoSecProject/app/build/intermediates/exploded-aar/com.android.support/support-v4/24.2.1/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="24.0.3"
-        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
-        <dex dex="/home/ddcv/AndroidStudioProjects/Fall2016_InfoSecProject/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-v4-24.2.1_21960ad895a70002739aca0e0caf5bfce4d353ce/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/ddcv/AndroidStudioProjects/Fall2016_InfoSecProject/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="24.0.3"
-        sha1="4a6a0c99c09e735a17162e19942af9becd5487b6">
-        <dex dex="/home/ddcv/AndroidStudioProjects/Fall2016_InfoSecProject/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_14b5273dd0e07abb99867facd430f6175a911057/classes.dex" />
     </item>
 
 </items>
