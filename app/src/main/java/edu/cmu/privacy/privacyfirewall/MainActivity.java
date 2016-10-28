@@ -27,8 +27,8 @@ public class MainActivity extends AppCompatActivity {
 
         /** Database Demo Start */
         
-//        // init database
-//        DatabaseInterface db = new DataBaseController(MainActivity.this);
+        // init database
+        Monitor.db = new DataBaseController(MainActivity.this);
 //
 //        // write data
 //        db.insertApplication("Amazon", "Online Shopping");

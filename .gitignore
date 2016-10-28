@@ -36,3 +36,6 @@ local.properties
 .Trashes
 ehthumbs.db
 Thumbs.db
+build/intermediates/dex-cache/cache.xml
+build.gradle
+build/generated/mockable-android-24.jar
