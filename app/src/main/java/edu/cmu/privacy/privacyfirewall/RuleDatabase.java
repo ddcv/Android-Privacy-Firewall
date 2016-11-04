@@ -64,7 +64,7 @@ public class RuleDatabase extends SQLiteOpenHelper {
          * having
          * orderBy
          * */
-        return db.query(TABLE_NAME, null, FIELD_IP_ADD + " = " + ipAdd, null, null, null, null);
+        return db.query(TABLE_NAME, null, FIELD_IP_ADD + " = \"" + ipAdd + "\"", null, null, null, null);
     }
 
     public static Cursor getRuleCursorById(SQLiteDatabase db, int id) {

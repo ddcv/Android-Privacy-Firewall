@@ -23,7 +23,7 @@ import java.nio.channels.FileChannel;
 public class VpnTestService extends VpnService {
 
     private static final String TAG = "VPNService";
-    private static final String VPN_ADDRESS = "10.0.0.2";
+    public static final String VPN_ADDRESS = "10.0.0.2";
     private static final String VPN_ROUTE = "0.0.0.0";
 
     private ParcelFileDescriptor vpnInterface = null;
@@ -104,8 +104,8 @@ public class VpnTestService extends VpnService {
                     if (bytes > 0) {
                         bufferToNetwork.flip();
                         IPPacket packet = new IPPacket(bufferToNetwork);
-
-                        Log.d(TAG, "run: " + packet);
+                        Monitor.filter(packet);
+                        //Log.d(TAG, "run: " + packet);
                     }
 //                    bufferToNetwork.flip();
 ////                    tunnel.write(bufferToNetwork);

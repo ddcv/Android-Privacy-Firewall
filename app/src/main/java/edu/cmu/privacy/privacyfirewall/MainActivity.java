@@ -26,11 +26,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         /** Database Demo Start */
-        
-        // init database
+
+        /** init database */
         Monitor.db = new DataBaseController(MainActivity.this);
-//
-//        // write data
+
+//        /** write data */
 //        db.insertApplication("Amazon", "Online Shopping");
 //        db.insertApplication("BestBuy", "Online Shopping");
 //        db.insertRule("192.168.0.1", "Host", 1);
@@ -39,11 +39,11 @@ public class MainActivity extends AppCompatActivity {
 //        db.insertConnection(1, 1, "Good data", 0);
 //        db.insertConnection(1, 2, "Evil data", 1);
 //        db.insertConnection(2, 1, "General data", 0);
+
+//        /** print all the application, its connection and action */
 //
-//        // print all the application, its connection and action
-//
-//        // For each Application
-//        Cursor appCur = db.getAllApplicationCursor();
+//        /** For each Application */
+//        Cursor appCur = Monitor.db.getAllApplicationCursor();
 //        for (appCur.moveToFirst(); !appCur.isAfterLast(); appCur.moveToNext()) {
 //            ContentValues appVal = new ContentValues();
 //            DatabaseUtils.cursorRowToContentValues(appCur, appVal);
@@ -52,8 +52,8 @@ public class MainActivity extends AppCompatActivity {
 //                    ", name = " + appVal.getAsString(ApplicationDatabase.FIELD_NAME) +
 //                    ", description = " + appVal.getAsString(ApplicationDatabase.FIELD_DESC));
 //
-//            // For each connection of the application
-//            Cursor cntCur = db.getConnectionCursorByAppId(
+//            /** For each connection of the application */
+//            Cursor cntCur = Monitor.db.getConnectionCursorByAppId(
 //                                                appVal.getAsInteger(ApplicationDatabase.FIELD_ID));
 //            for (cntCur.moveToFirst(); !cntCur.isAfterLast(); cntCur.moveToNext()) {
 //                ContentValues cntVal = new ContentValues();
@@ -62,10 +62,10 @@ public class MainActivity extends AppCompatActivity {
 //                        "id = " + cntVal.getAsInteger(ConnectionDatabase.FIELD_ID) +
 //                        ", content = " + cntVal.getAsString(ConnectionDatabase.FIELD_CONTENT) +
 //                        ", sensitive = " + cntVal.getAsInteger(ConnectionDatabase.FIELD_SENSITIVE));
-//                Cursor ruleCur = db.getRuleCursorById(
+//                Cursor ruleCur = Monitor.db.getRuleCursorById(
 //                                                cntVal.getAsInteger(ConnectionDatabase.FIELD_RULE));
 //
-//                // For each rule of the connection
+//                /** For each rule of the connection */
 //                for (ruleCur.moveToFirst(); !ruleCur.isAfterLast(); ruleCur.moveToNext()) {
 //                    ContentValues ruleVal = new ContentValues();
 //                    DatabaseUtils.cursorRowToContentValues(ruleCur, ruleVal);
@@ -82,13 +82,13 @@ public class MainActivity extends AppCompatActivity {
 
         /** VPN Part Demo Start */
 
-        /* Start VPN */
-//        serviceIntent = VpnTestService.prepare(getApplicationContext());
-//        if (serviceIntent != null) {
-//            startActivityForResult(serviceIntent, VPN_REQUEST_CODE);
-//        } else {
-//            onActivityResult(VPN_REQUEST_CODE, RESULT_OK, null);
-//        }
+        /** Start VPN */
+        serviceIntent = VpnTestService.prepare(getApplicationContext());
+        if (serviceIntent != null) {
+            startActivityForResult(serviceIntent, VPN_REQUEST_CODE);
+        } else {
+            onActivityResult(VPN_REQUEST_CODE, RESULT_OK, null);
+        }
 
         final PackageManager packageManager = getPackageManager();
         List<ApplicationInfo> installedApplications =
@@ -96,9 +96,17 @@ public class MainActivity extends AppCompatActivity {
 
         for (ApplicationInfo appInfo : installedApplications)
         {
-            Log.d("OUTPUT", "Package name : " + appInfo.packageName);
-            Log.d("OUTPUT", "Name: " + appInfo.loadLabel(packageManager));
+            //Log.d("OUTPUT", "Package name : " + appInfo.packageName);
+            //Log.d("OUTPUT", "Name: " + appInfo.loadLabel(packageManager));
+            Cursor c = Monitor.db.getApplicationCursorById(appInfo.uid);
 
+            /** Not exist */
+            if (c.isAfterLast()) {
+                Monitor.db.insertApplication(appInfo.loadLabel(packageManager).toString(),
+                        appInfo.packageName, appInfo.uid);
+                Log.d("OUTPUT", "Add new App: Name = " + appInfo.loadLabel(packageManager) +
+                        ", UID = " + appInfo.uid);
+            }
         }
 
         /** VPN Part Demo End   */

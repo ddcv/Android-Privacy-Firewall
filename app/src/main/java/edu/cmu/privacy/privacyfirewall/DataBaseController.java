@@ -19,7 +19,7 @@ public class DataBaseController implements DatabaseInterface {
         cDb = new ConnectionDatabase(context);
     }
 
-    // Connection Database Interface
+    /** Connection Database Interface */
     public Cursor getConnectionCursorByAppId(int appId) {
         return ConnectionDatabase.getConnectionCursorByAppId(cDb.getReadableDatabase(), appId);
     }
@@ -29,16 +29,25 @@ public class DataBaseController implements DatabaseInterface {
                                                     content, sensitive);
     }
 
-    // Application Database Interface
+    /** Application Database Interface */
     public Cursor getAllApplicationCursor() {
         return ApplicationDatabase.getAllApplicationCursor(aDb.getReadableDatabase());
     }
 
-    public boolean insertApplication(String name, String description) {
-        return ApplicationDatabase.insertApplication(aDb.getWritableDatabase(), name, description);
+    public boolean insertApplication(String name, String description, int id) {
+        return ApplicationDatabase.insertApplication(aDb.getWritableDatabase(), name, description,
+                id);
     }
 
-    // Rule Database Interface
+    public Cursor getApplicationCursorByName(String name) {
+        return ApplicationDatabase.getApplicationCursorByName(aDb.getReadableDatabase(), name);
+    }
+
+    public Cursor getApplicationCursorById(int id) {
+        return ApplicationDatabase.getApplicationCursorById(aDb.getReadableDatabase(), id);
+    }
+
+    /** Rule Database Interface */
     public Cursor getRuleCursorByAdd(String ipAdd) {
         return RuleDatabase.getRuleCursorByAdd(rDb.getReadableDatabase(), ipAdd);
     }

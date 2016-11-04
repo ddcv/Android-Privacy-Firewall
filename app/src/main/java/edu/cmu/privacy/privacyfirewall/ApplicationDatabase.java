@@ -27,15 +27,17 @@ public class ApplicationDatabase extends SQLiteOpenHelper{
         sql.append("CREATE TABLE ");
         sql.append(TABLE_NAME);
         sql.append(" (");
-        sql.append(FIELD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, ");
+        sql.append(FIELD_ID + " INTEGER PRIMARY KEY, ");
         sql.append(FIELD_NAME + " TEXT, ");
         sql.append(FIELD_DESC + " TEXT");
         sql.append(");");
         db.execSQL(sql.toString());
     }
 
-    public static boolean insertApplication(SQLiteDatabase db, String name, String description) {
+    public static boolean insertApplication(SQLiteDatabase db, String name, String description,
+                                            int id) {
         ContentValues v = new ContentValues();
+        v.put(FIELD_ID, id);
         v.put(FIELD_NAME, name);
         v.put(FIELD_DESC, description);
         if (db.insert(TABLE_NAME, "null", v) != -1) {
@@ -60,5 +62,31 @@ public class ApplicationDatabase extends SQLiteOpenHelper{
          * orderBy
          * */
         return db.query(TABLE_NAME, null, null, null, null, null, null);
+    }
+
+    public static Cursor getApplicationCursorByName(SQLiteDatabase db, String name) {
+        /*
+         * table
+         * columns
+         * selection
+         * selectionArgs
+         * groupBy
+         * having
+         * orderBy
+         * */
+        return db.query(TABLE_NAME, null, FIELD_NAME + " = \"" + name + "\"", null, null, null, null);
+    }
+
+    public static Cursor getApplicationCursorById(SQLiteDatabase db, int id) {
+        /*
+         * table
+         * columns
+         * selection
+         * selectionArgs
+         * groupBy
+         * having
+         * orderBy
+         * */
+        return db.query(TABLE_NAME, null, FIELD_ID + " = " + id, null, null, null, null);
     }
 }
