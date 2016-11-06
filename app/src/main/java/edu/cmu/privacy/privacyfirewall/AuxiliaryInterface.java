@@ -8,5 +8,5 @@ import java.net.InetAddress;
 
 public interface AuxiliaryInterface {
     public String traceRecipient(InetAddress ipaddr);
-    public String scanSensitive(char[] content);
+    public String scanSensitive(String content);
 }
