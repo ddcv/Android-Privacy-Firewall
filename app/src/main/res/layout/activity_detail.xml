@@ -20,46 +20,58 @@
             android:transitionName="actionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-        <ScrollView
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/toolbar"
-            android:layout_centerHorizontal="true"
-            android:clipToPadding="false"
-            android:paddingBottom="@dimen/activity_detail_vertical_margin"
-            android:paddingTop="@dimen/activity_vertical_margin"
-            android:scrollbars="none">
+            android:layout_below="@id/toolbar">
 
-            <LinearLayout
-                android:id="@+id/row_container"
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/swipe_container"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:orientation="vertical">
+                android:layout_height="match_parent">
 
-                <include
-                    android:id="@+id/row_name"
-                    layout="@layout/row_detailiconview" />
-
-                <include
-                    android:id="@+id/row_package_name"
-                    layout="@layout/row_detailview" />
-
-                <include
-                    android:id="@+id/row_version"
-                    layout="@layout/row_detailview" />
-
-                <TextView
-                    android:text="@string/connection"
+                <ScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/textView"
-                    android:textStyle="normal|bold"
-                    android:textSize="24sp" />
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/toolbar"
+                    android:layout_centerHorizontal="true"
+                    android:clipToPadding="false"
+                    android:paddingBottom="@dimen/activity_detail_vertical_margin"
+                    android:paddingTop="@dimen/activity_vertical_margin"
+                    android:scrollbars="none">
 
-            </LinearLayout>
-        </ScrollView>
+                    <LinearLayout
+                        android:id="@+id/row_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                        android:layout_marginRight="@dimen/activity_horizontal_margin"
+                        android:orientation="vertical">
+
+                        <include
+                            android:id="@+id/row_name"
+                            layout="@layout/row_detailiconview" />
+
+                        <include
+                            android:id="@+id/row_package_name"
+                            layout="@layout/row_detailview" />
+
+                        <include
+                            android:id="@+id/row_version"
+                            layout="@layout/row_detailview" />
+
+                        <TextView
+                            android:text="@string/connection"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/textView"
+                            android:textStyle="normal|bold"
+                            android:textSize="24sp" />
+
+                    </LinearLayout>
+                </ScrollView>
+            </android.support.v4.widget.SwipeRefreshLayout>
+        </FrameLayout>
     </RelativeLayout>
 
     <android.support.design.widget.FloatingActionButton

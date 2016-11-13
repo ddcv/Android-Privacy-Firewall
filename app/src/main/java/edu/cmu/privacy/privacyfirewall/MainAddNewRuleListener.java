@@ -3,24 +3,25 @@ package edu.cmu.privacy.privacyfirewall;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
+import java.net.InetAddress;
+
 /**
  * Created by YunfanW on 11/13/2016.
  */
 
-public class AddNewRuleListener implements View.OnClickListener{
+public class MainAddNewRuleListener implements View.OnClickListener{
     private Context context;
-    private View view;
 
-    public AddNewRuleListener(Context _context, View _view) {
+    public MainAddNewRuleListener(Context _context) {
         super();
 
         context = _context;
-        view = _view;
     }
 
     @Override
@@ -36,9 +37,21 @@ public class AddNewRuleListener implements View.OnClickListener{
         builder.setPositiveButton(R.string.dialog_add, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Log.i("Dialog", "IP Addr: " + ipaddr.getText());
+                String addrStr = ipaddr.getText().toString();
+                Log.i("Dialog", "IP Addr: " + addrStr);
 
-                Snackbar.make(parentView, "Add Successfully", Snackbar.LENGTH_SHORT).show();
+                if (Monitor.checkIPAddr(addrStr)) {
+                    Cursor ruleCur = Monitor.db.getRuleCursorByAdd(addrStr);
+                    if (ruleCur.getCount() >= 1) {
+                        Snackbar.make(parentView, "IP Address " + addrStr + " Exist",
+                                Snackbar.LENGTH_SHORT).show();
+                    } else {
+                        Monitor.db.insertRule(addrStr, "New Rule", 0);
+                    }
+                } else {
+                    Snackbar.make(parentView, "Invalid IP Address: " + addrStr,
+                            Snackbar.LENGTH_SHORT).show();
+                }
             }
         });
         builder.show();

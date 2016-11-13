@@ -1,18 +1,10 @@
 package edu.cmu.privacy.privacyfirewall;
 
-import android.content.ContentValues;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -23,9 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.app.Activity;
 import android.graphics.Color;
-import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -36,13 +26,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.mikepenz.aboutlibraries.Libs;
-import com.mikepenz.aboutlibraries.LibsBuilder;
 import edu.cmu.privacy.privacyfirewall.adapter.ApplicationAdapter;
 import edu.cmu.privacy.privacyfirewall.entity.AppInfo;
 import edu.cmu.privacy.privacyfirewall.itemanimator.CustomItemAnimator;
 
-import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.materialdrawer.Drawer;
@@ -82,17 +69,6 @@ public class MainActivity extends AppCompatActivity {
         /** init database */
         Monitor.db = new DataBaseController(MainActivity.this);
 
-        /** VPN Part Demo Start */
-
-        /** Start VPN */
-        serviceIntent = VpnTestService.prepare(getApplicationContext());
-        if (serviceIntent != null) {
-            startActivityForResult(serviceIntent, VPN_REQUEST_CODE);
-        } else {
-            onActivityResult(VPN_REQUEST_CODE, RESULT_OK, null);
-        }
-        /** VPN Part Demo End   */
-
         /** Load Application info into Database */
         final PackageManager packageManager = getPackageManager();
         List<ApplicationInfo> installedApplications =
@@ -117,20 +93,38 @@ public class MainActivity extends AppCompatActivity {
 
         // Fab Button
         mFabButton = (FloatingActionButton) findViewById(R.id.fab_normal);
-        mFabButton.setImageDrawable(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_add).color(Color.WHITE).actionBar());
-        mFabButton.setOnClickListener(new AddNewRuleListener(this, mRecyclerView));
+        mFabButton.setImageDrawable(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_add)
+                .color(Color.WHITE).actionBar());
+        mFabButton.setOnClickListener(new MainAddNewRuleListener(this));
 
+        // Build Drawer
         drawer = new DrawerBuilder(this)
                 .withToolbar(toolbar)
                 .addDrawerItems(
-                        new SecondaryDrawerItem().withIcon(GoogleMaterial.Icon.gmd_settings).withName(R.string.drawer_title)
+                        new SecondaryDrawerItem().withIcon(GoogleMaterial.Icon.gmd_settings)
+                                .withName(R.string.drawer_title)
                 )
                 .addDrawerItems(
-                        new SwitchDrawerItem().withOnCheckedChangeListener(new OnCheckedChangeListener() {
+                        new SwitchDrawerItem().withOnCheckedChangeListener(
+                                new OnCheckedChangeListener() {
                             @Override
-                            public void onCheckedChanged(IDrawerItem drawerItem, CompoundButton compoundButton, boolean b) {
+                            public void onCheckedChanged(IDrawerItem drawerItem,
+                                                         CompoundButton compoundButton, boolean b) {
                                 if (b) {
                                     Log.i("Switch", "click-on");
+
+                                    /** VPN Part Demo Start */
+
+                                    /** Start VPN */
+                                    serviceIntent = VpnTestService.prepare(getApplicationContext());
+                                    if (serviceIntent != null) {
+                                        startActivityForResult(serviceIntent, VPN_REQUEST_CODE);
+                                    } else {
+                                        onActivityResult(VPN_REQUEST_CODE, RESULT_OK, null);
+                                    }
+
+                                    /** VPN Part Demo End   */
+
                                     Snackbar.make(mRecyclerView, "VPN turn on",
                                             Snackbar.LENGTH_SHORT).show();
                                 } else {
@@ -148,6 +142,7 @@ public class MainActivity extends AppCompatActivity {
         // Handle ProgressBar
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
 
+        // Handle RecyclerView
         mRecyclerView = (RecyclerView) findViewById(R.id.list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setItemAnimator(new CustomItemAnimator());
@@ -156,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
                                                                                 MainActivity.this);
         mRecyclerView.setAdapter(mAdapter);
 
+        // Handle Refresh
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
         mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.theme_accent));
         mSwipeRefreshLayout.setRefreshing(true);
@@ -215,7 +211,9 @@ public class MainActivity extends AppCompatActivity {
         Intent i = new Intent(this, DetailActivity.class);
         i.putExtra("appInfo", appInfo.getComponentName());
 
-        ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(this, Pair.create(appIcon, "appIcon"));
+        ActivityOptionsCompat transitionActivityOptions =
+                ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        this, Pair.create(appIcon, "appIcon"));
         startActivity(i, transitionActivityOptions.toBundle());
     }
 

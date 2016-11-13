@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.util.Log;
+import android.util.Patterns;
 
 import java.nio.CharBuffer;
 import java.nio.charset.StandardCharsets;
@@ -111,5 +112,9 @@ public class Monitor {
         } else {
             return null;
         }
+    }
+
+    public static boolean checkIPAddr(String ipaddr) {
+        return Patterns.IP_ADDRESS.matcher(ipaddr).matches();
     }
 }
