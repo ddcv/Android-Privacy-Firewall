@@ -11,6 +11,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.util.DisplayMetrics;
+import android.util.Log;
 
 import java.util.Locale;
 
@@ -33,6 +34,7 @@ public class AppInfo implements Comparable<Object> {
         try {
             pi = ctx.getPackageManager().getPackageInfo(getPackageName(), 0);
         } catch (NameNotFoundException e) {
+            Log.i("AppInfo", "Error");
         }
     }
 

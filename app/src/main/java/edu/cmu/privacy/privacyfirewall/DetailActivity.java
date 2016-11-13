@@ -1,38 +1,31 @@
 package edu.cmu.privacy.privacyfirewall;
 
 import android.animation.Animator;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
-import android.graphics.Color;
+import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.mikepenz.iconics.IconicsDrawable;
 import edu.cmu.privacy.privacyfirewall.entity.AppInfo;
-import edu.cmu.privacy.privacyfirewall.util.UploadHelper;
-
-import java.util.Date;
 
 public class DetailActivity extends AppCompatActivity {
 
     private static final int SCALE_DELAY = 30;
 
     private LinearLayout mRowContainer;
-    private CoordinatorLayout mCoordinatorLayout;
+//    private CoordinatorLayout mCoordinatorLayout;
 
     private AppInfo mAppInfo = null;
 
@@ -41,7 +34,7 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.container);
+//        mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.container);
         mRowContainer = (LinearLayout) findViewById(R.id.row_container);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -49,7 +42,7 @@ public class DetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        // Handle Back Navigation :D
+        // Handle Back Navigation
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,12 +50,12 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
 
-        //getWindow().getEnterTransition().removeListener(this);
+        View view;
 
-        for (int i = 1; i < mRowContainer.getChildCount(); i++) {
-            View rowView = mRowContainer.getChildAt(i);
-            rowView.animate().setStartDelay(100 + i * SCALE_DELAY).scaleX(1).scaleY(1);
-        }
+        LayoutInflater inflater = getLayoutInflater();
+        inflater.inflate(R.layout.row_detailconnection, mRowContainer, true);
+        fillConnection(mRowContainer.getChildAt(mRowContainer.getChildCount() - 1),
+                "IP Address: 192.168.0.1(Demo)", "Recipient: Amazon", "Sensitive Info: NULL");
 
         ComponentName componentName = null;
 
@@ -83,24 +76,42 @@ public class DetailActivity extends AppCompatActivity {
             //toolbar.setLogo(mAppInfo.getIcon());
             toolbar.setTitle(mAppInfo.getName());
 
-            View view = mRowContainer.findViewById(R.id.row_name);
+            view = mRowContainer.findViewById(R.id.row_name);
             fillRow(view, "Application Name", mAppInfo.getName());
             ((ImageView) view.findViewById(R.id.appIcon)).setImageDrawable(mAppInfo.getIcon());
 
             view = mRowContainer.findViewById(R.id.row_package_name);
             fillRow(view, "Package Name", mAppInfo.getPackageName());
 
-            view = mRowContainer.findViewById(R.id.row_activity);
-            fillRow(view, "Activity", mAppInfo.getActivityName());
-
-            view = mRowContainer.findViewById(R.id.row_component_info);
-            fillRow(view, "ComponentInfo", mAppInfo.getComponentInfo());
-
             view = mRowContainer.findViewById(R.id.row_version);
             fillRow(view, "Version", mAppInfo.getVersionName() + " (" + mAppInfo.getVersionCode() + ")");
 
-            view = mRowContainer.findViewById(R.id.row_moments);
-            fillRow(view, "Moments", "First installed: " + new Date(mAppInfo.getFirstInstallTime()) + "\nLast updated: " + new Date(mAppInfo.getLastUpdateTime()));
+            int appId = Monitor.db.getApplicationIdByPackagename(mAppInfo.getPackageName());
+            if (appId != -1) {
+                Cursor appCur = Monitor.db.getConnectionCursorByAppId(appId);
+                for (appCur.moveToFirst(); !appCur.isAfterLast(); appCur.moveToNext()) {
+                    String sensitive = appCur.getString(appCur.getColumnIndex(
+                            ConnectionDatabase.FIELD_CONTENT));
+                    Cursor ruleCur = Monitor.db.getRuleCursorById(appCur.getInt(
+                            appCur.getColumnIndex(ConnectionDatabase.FIELD_RULE)));
+                    String ip = "Not Known";
+                    String recipient = "Not Know";
+                    if (ruleCur.getCount() >= 1) {
+                        ip = ruleCur.getString(ruleCur.getColumnIndex(RuleDatabase.FIELD_IP_ADD));
+                        recipient = ruleCur.getString(ruleCur.getColumnIndex(
+                                RuleDatabase.FIELD_ID_OWNER));
+                    }
+                    inflater.inflate(R.layout.row_detailconnection, mRowContainer, true);
+                    fillConnection(mRowContainer.getChildAt(mRowContainer.getChildCount() - 1),
+                            "IP Address: " + ip, "Recipient: " + recipient,
+                            "Sensitive Info: " + sensitive);
+                }
+            }
+        }
+
+        for (int i = 1; i < mRowContainer.getChildCount(); i++) {
+            View rowView = mRowContainer.getChildAt(i);
+            rowView.animate().setStartDelay(100 + i * SCALE_DELAY).scaleX(1).scaleY(1);
         }
     }
 
@@ -109,16 +120,6 @@ public class DetailActivity extends AppCompatActivity {
         outState.putParcelable("appInfo", mAppInfo.getComponentName());
         super.onSaveInstanceState(outState);
     }
-
-    /**
-     * a sample onClickListener for the upload view
-     */
-    View.OnClickListener fabClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            UploadHelper.getInstance(DetailActivity.this, null).upload(mAppInfo);
-        }
-    };
 
     /**
      * fill the rows with some information
@@ -137,11 +138,42 @@ public class DetailActivity extends AppCompatActivity {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("AppInfo", description);
-                clipboard.setPrimaryClip(clip);
+//                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+//                ClipData clip = ClipData.newPlainText("AppInfo", description);
+//                clipboard.setPrimaryClip(clip);
+//
+//                Snackbar.make(mCoordinatorLayout, "Copied " + title, Snackbar.LENGTH_SHORT).show();
+            }
+        });
+    }
 
-                Snackbar.make(mCoordinatorLayout, "Copied " + title, Snackbar.LENGTH_SHORT).show();
+    /**
+     * fill the rows with some information
+     *
+     * @param view
+     * @param ip
+     * @param recipient
+     * @param sensitive
+     */
+    public void fillConnection(View view, final String ip, final String recipient,
+                               final String sensitive) {
+        TextView titleView = (TextView) view.findViewById(R.id.dest_ip_address);
+        titleView.setText(ip);
+
+        TextView descriptionView = (TextView) view.findViewById(R.id.recipient);
+        descriptionView.setText(recipient);
+
+        TextView sensitiveView = (TextView) view.findViewById(R.id.sensitive);
+        sensitiveView.setText(sensitive);
+
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+//                ClipData clip = ClipData.newPlainText("AppInfo", description);
+//                clipboard.setPrimaryClip(clip);
+//
+//                Snackbar.make(mCoordinatorLayout, "Copied " + title, Snackbar.LENGTH_SHORT).show();
             }
         });
     }

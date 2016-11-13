@@ -28,29 +28,19 @@ import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import com.mikepenz.aboutlibraries.Libs;
 import com.mikepenz.aboutlibraries.LibsBuilder;
-import com.mikepenz.fontawesome_typeface_library.FontAwesome;
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.mikepenz.iconics.IconicsDrawable;
 import edu.cmu.privacy.privacyfirewall.adapter.ApplicationAdapter;
 import edu.cmu.privacy.privacyfirewall.entity.AppInfo;
 import edu.cmu.privacy.privacyfirewall.itemanimator.CustomItemAnimator;
-import edu.cmu.privacy.privacyfirewall.util.UploadHelper;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
-import com.mikepenz.materialdrawer.interfaces.OnCheckedChangeListener;
-import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
-import com.mikepenz.materialdrawer.model.SwitchDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 public class MainActivity extends AppCompatActivity {
@@ -60,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private Intent serviceIntent;    /* The VPN Service Intent */
     /** VPN Part Variables End   */
 
-    /** UI Variables*/
+    /** UI Variables Start */
     private static final int DRAWER_ITEM_SWITCH = 1;
     private static final int DRAWER_ITEM_OPEN_SOURCE = 10;
 
@@ -73,11 +63,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private ProgressBar mProgressBar;
-
-    private static UploadHelper.UploadComponentInfoTask uploadComponentInfoTask = null;
-    /** UI Variables */
-
-    List<Application> applications = new ArrayList<>();
+    /** UI Variables End */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
 //        }
         /** VPN Part Demo End   */
 
+        /** Load Application info into Database */
         final PackageManager packageManager = getPackageManager();
         List<ApplicationInfo> installedApplications =
                 packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
@@ -107,32 +94,9 @@ public class MainActivity extends AppCompatActivity {
 
             /** Not exist */
             if (c.isAfterLast()) {
-                /** compress icon */
-                ByteArrayOutputStream iconOs = new ByteArrayOutputStream();
-                Drawable icon = (appInfo.loadIcon(packageManager));
-                Bitmap bmp = ((BitmapDrawable)icon).getBitmap();
-                bmp.compress(Bitmap.CompressFormat.PNG, 100, iconOs);
-
                 Monitor.db.insertApplication(appInfo.loadLabel(packageManager).toString(),
-                        appInfo.packageName, appInfo.uid, iconOs);
+                        appInfo.packageName, appInfo.uid);
             }
-        }
-
-
-
-        /** Add each Application */
-        Cursor appCur = Monitor.db.getAllApplicationCursor();
-        for (appCur.moveToFirst(); !appCur.isAfterLast(); appCur.moveToNext()) {
-            ContentValues appVal = new ContentValues();
-            DatabaseUtils.cursorRowToContentValues(appCur, appVal);
-
-            byte[] blob = appVal.getAsByteArray(ApplicationDatabase.FIELD_ICON);
-            Bitmap bmp = BitmapFactory.decodeByteArray(blob, 0, blob.length);
-            BitmapDrawable bd = new BitmapDrawable(MainActivity.this.getResources(), bmp);
-
-            applications.add(new Application(appVal.getAsString(ApplicationDatabase.FIELD_NAME),
-                                                appVal.getAsString(ApplicationDatabase.FIELD_DESC),
-                                                bd));
         }
 
         /** UI Start */
@@ -142,26 +106,8 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        final SharedPreferences pref = getSharedPreferences("com.mikepenz.applicationreader", 0);
-
         drawer = new DrawerBuilder(this)
                 .withToolbar(toolbar)
-                .addDrawerItems(
-                        new SwitchDrawerItem().withOnCheckedChangeListener(new OnCheckedChangeListener() {
-                            @Override
-                            public void onCheckedChanged(IDrawerItem drawerItem, CompoundButton compoundButton, boolean b) {
-                                SharedPreferences.Editor editor = pref.edit();
-                                editor.putBoolean("autouploadenabled", b);
-                                editor.apply();
-                            }
-                        }).withName(R.string.drawer_switch).withChecked(pref.getBoolean("autouploadenabled", false))
-                ).addStickyDrawerItems(
-                        new SecondaryDrawerItem()
-                                .withName(R.string.drawer_opensource)
-                                .withIdentifier(DRAWER_ITEM_OPEN_SOURCE)
-                                .withIcon(FontAwesome.Icon.faw_github)
-                                .withSelectable(false)
-                )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int i, IDrawerItem drawerItem) {
@@ -187,9 +133,9 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setItemAnimator(new CustomItemAnimator());
-        //mRecyclerView.setItemAnimator(new ReboundItemAnimator());
 
-        mAdapter = new ApplicationAdapter(new ArrayList<AppInfo>(), R.layout.row_application, MainActivity.this);
+        mAdapter = new ApplicationAdapter(new ArrayList<AppInfo>(), R.layout.row_application,
+                                                                                MainActivity.this);
         mRecyclerView.setAdapter(mAdapter);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
@@ -204,19 +150,20 @@ public class MainActivity extends AppCompatActivity {
 
         new InitializeApplicationsTask().execute();
 
-        if (savedInstanceState != null) {
-            if (uploadComponentInfoTask != null) {
-                if (uploadComponentInfoTask.isRunning) {
-                    uploadComponentInfoTask.showProgress(this);
-                }
-            }
-        }
-
         //show progress
         mRecyclerView.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.VISIBLE);
 
         /** UI End */
+
+        /** Add Fake Data */
+        int fakeAppId = Monitor.db.getApplicationIdByPackagename("com.android.browser");
+        if (fakeAppId != -1) {
+            Cursor FakeCur = Monitor.db.getConnectionCursorByAppId(fakeAppId);
+            if (FakeCur.getCount() < 1) {
+                Monitor.db.insertConnection(fakeAppId, 0, "FakeData", 0);
+            }
+        }
     }
 
 
@@ -237,6 +184,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /** VPN Part Functions End   */
+
+    /** UI Part Functions Start */
 
     /**
      * helper class to start the new detailActivity animated
@@ -298,5 +247,7 @@ public class MainActivity extends AppCompatActivity {
             super.onPostExecute(result);
         }
     }
+
+    /** UI Part Functions End */
 
 }

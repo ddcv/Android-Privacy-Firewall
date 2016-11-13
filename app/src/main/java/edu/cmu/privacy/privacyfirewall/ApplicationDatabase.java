@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 
@@ -17,7 +18,6 @@ public class ApplicationDatabase extends SQLiteOpenHelper{
     final static String FIELD_ID = "aid";
     final static String FIELD_NAME = "name";
     final static String FIELD_DESC = "description";
-    final static String FIELD_ICON = "icon";
 
     public final static String DATABASE_TAG = "ApplicationDB";
 
@@ -32,19 +32,17 @@ public class ApplicationDatabase extends SQLiteOpenHelper{
         sql.append(" (");
         sql.append(FIELD_ID + " INTEGER PRIMARY KEY, ");
         sql.append(FIELD_NAME + " TEXT, ");
-        sql.append(FIELD_ICON + " BLOB, ");
         sql.append(FIELD_DESC + " TEXT");
         sql.append(");");
         db.execSQL(sql.toString());
     }
 
     public static boolean insertApplication(SQLiteDatabase db, String name, String description,
-                                            int id, ByteArrayOutputStream icon) {
+                                            int id) {
         ContentValues v = new ContentValues();
         v.put(FIELD_ID, id);
         v.put(FIELD_NAME, name);
         v.put(FIELD_DESC, description);
-        v.put(FIELD_ICON, icon.toByteArray());
         if (db.insert(TABLE_NAME, "null", v) != -1) {
             return true;
         } else {
@@ -93,5 +91,25 @@ public class ApplicationDatabase extends SQLiteOpenHelper{
          * orderBy
          * */
         return db.query(TABLE_NAME, null, FIELD_ID + " = " + id, null, null, null, null);
+    }
+
+    public static int getApplicationIdByPackagename(SQLiteDatabase db, String packagename) {
+        /*
+         * table
+         * columns
+         * selection
+         * selectionArgs
+         * groupBy
+         * having
+         * orderBy
+         * */
+        Cursor cur = db.query(TABLE_NAME, null, FIELD_DESC + " = \"" + packagename + "\"",
+                null, null, null, null);
+        if (cur.getCount() < 1) {
+            return -1;
+        } else {
+            cur.moveToFirst();
+            return cur.getInt(cur.getColumnIndex(FIELD_ID));
+        }
     }
 }

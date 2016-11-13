@@ -36,9 +36,9 @@ public class DataBaseController implements DatabaseInterface {
         return ApplicationDatabase.getAllApplicationCursor(aDb.getReadableDatabase());
     }
 
-    public boolean insertApplication(String name, String description, int id, ByteArrayOutputStream icon) {
+    public boolean insertApplication(String name, String description, int id) {
         return ApplicationDatabase.insertApplication(aDb.getWritableDatabase(), name, description,
-                id, icon);
+                id);
     }
 
     public Cursor getApplicationCursorByName(String name) {
@@ -47,6 +47,10 @@ public class DataBaseController implements DatabaseInterface {
 
     public Cursor getApplicationCursorById(int id) {
         return ApplicationDatabase.getApplicationCursorById(aDb.getReadableDatabase(), id);
+    }
+
+    public int getApplicationIdByPackagename(String packagename) {
+        return ApplicationDatabase.getApplicationIdByPackagename(aDb.getReadableDatabase(), packagename);
     }
 
     /** Rule Database Interface */

@@ -15,7 +15,8 @@ public interface DatabaseInterface {
     public Cursor getAllApplicationCursor();
     public Cursor getApplicationCursorByName(String name);
     public Cursor getApplicationCursorById(int id);
-    public boolean insertApplication(String name, String description, int id, ByteArrayOutputStream icon);
+    public boolean insertApplication(String name, String description, int id);
+    public int getApplicationIdByPackagename(String packagename);
     public Cursor getRuleCursorByAdd(String ipAdd);
     public Cursor getRuleCursorById(int id);
     public boolean updateAction(int id, int action);

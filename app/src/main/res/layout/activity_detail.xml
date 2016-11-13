@@ -47,32 +47,18 @@
                     layout="@layout/row_detailview" />
 
                 <include
-                    android:id="@+id/row_activity"
-                    layout="@layout/row_detailview" />
-
-                <include
-                    android:id="@+id/row_component_info"
-                    layout="@layout/row_detailview" />
-
-                <include
                     android:id="@+id/row_version"
                     layout="@layout/row_detailview" />
 
-                <include
-                    android:id="@+id/row_moments"
-                    layout="@layout/row_detailview" />
+                <TextView
+                    android:text="@string/connection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView"
+                    android:textStyle="normal|bold"
+                    android:textSize="24sp" />
+
             </LinearLayout>
         </ScrollView>
     </RelativeLayout>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_normal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:elevation="8dp"
-        android:stateListAnimator="@anim/fab_anim"
-        android:transitionName="fab"
-        app:fabSize="normal" />
 </android.support.design.widget.CoordinatorLayout>
