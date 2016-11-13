@@ -28,7 +28,7 @@ public class MainAddNewRuleListener implements View.OnClickListener{
     public void onClick(View view) {
         android.support.v7.app.AlertDialog.Builder builder = new
                     android.support.v7.app.AlertDialog.Builder(context);
-        builder.setTitle(R.string.dialog_title);
+        builder.setTitle(R.string.dialog_main_title);
         builder.setMessage(R.string.dialog_addr);
         final EditText ipaddr = new EditText(context);
         builder.setView(ipaddr);
@@ -40,14 +40,37 @@ public class MainAddNewRuleListener implements View.OnClickListener{
                 String addrStr = ipaddr.getText().toString();
                 Log.i("Dialog", "IP Addr: " + addrStr);
 
+                /** check IP address validate */
                 if (Monitor.checkIPAddr(addrStr)) {
+                    /** get rule id */
                     Cursor ruleCur = Monitor.db.getRuleCursorByAdd(addrStr);
+                    int ruleId;
                     if (ruleCur.getCount() >= 1) {
-                        Snackbar.make(parentView, "IP Address " + addrStr + " Exist",
-                                Snackbar.LENGTH_SHORT).show();
+                        /** exist rule */
+                        ruleCur.moveToFirst();
+                        ruleId = ruleCur.getInt(ruleCur.getColumnIndex(RuleDatabase.FIELD_ID));
                     } else {
+                        /** add new rule */
+                        ruleId = Monitor.db.getNewRuleId();
                         Monitor.db.insertRule(addrStr, "New Rule", 0);
                     }
+
+                    /** for all application */
+                    Cursor appCur = Monitor.db.getAllApplicationCursor();
+                    for (appCur.moveToFirst(); !appCur.isAfterLast(); appCur.moveToNext()) {
+                        /** get application id */
+                        int appId = appCur.getInt(appCur.getColumnIndex(
+                                ApplicationDatabase.FIELD_ID));
+
+                        /** add rule if not exist */
+                        Cursor conCur = Monitor.db.getConnectionCursorByAppIdRuleId(appId, ruleId);
+                        if (conCur.getCount() < 1) {
+                            Monitor.db.insertConnection(appId, ruleId, "New Global Rule", 0);
+                        }
+                    }
+
+                    Snackbar.make(parentView, "IP Address " + addrStr + " Add Successfully",
+                            Snackbar.LENGTH_SHORT).show();
                 } else {
                     Snackbar.make(parentView, "Invalid IP Address: " + addrStr,
                             Snackbar.LENGTH_SHORT).show();

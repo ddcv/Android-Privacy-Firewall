@@ -11,6 +11,7 @@ import java.io.ByteArrayOutputStream;
 
 public interface DatabaseInterface {
     public Cursor getConnectionCursorByAppId(int appId);
+    public Cursor getConnectionCursorByAppIdRuleId(int appId, int ruleId);
     public boolean insertConnection(int appId, int ruleId, String content, int sensitive);
     public void deleteConnectionByRuleId(int ruleId);
     public Cursor getAllApplicationCursor();

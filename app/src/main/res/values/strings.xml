@@ -6,6 +6,7 @@
     <string name="drawer_switch">VPN Switch</string>
     <string name="connection">Connections</string>
     <string name="drawer_title">Setting</string>
+    <string name="dialog_main_title">Add New Global Deny Rule</string>
     <string name="dialog_title">Add New Deny Rule</string>
     <string name="dialog_delete_title">Do you want to delete this rule?</string>
     <string name="dialog_addr">IP Address: </string>

@@ -26,6 +26,11 @@ public class DataBaseController implements DatabaseInterface {
         return ConnectionDatabase.getConnectionCursorByAppId(cDb.getReadableDatabase(), appId);
     }
 
+    public Cursor getConnectionCursorByAppIdRuleId(int appId, int ruleId) {
+        return ConnectionDatabase.getConnectionCursorByAppIdRuleId(cDb.getReadableDatabase(),
+                appId, ruleId);
+    }
+
     public boolean insertConnection(int appId, int ruleId, String content, int sensitive) {
         return ConnectionDatabase.insertConnection(cDb.getWritableDatabase(), appId, ruleId,
                                                     content, sensitive);
