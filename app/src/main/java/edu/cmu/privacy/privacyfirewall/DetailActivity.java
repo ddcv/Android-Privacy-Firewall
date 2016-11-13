@@ -2,21 +2,29 @@ package edu.cmu.privacy.privacyfirewall;
 
 import android.animation.Animator;
 import android.content.ComponentName;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 
 import edu.cmu.privacy.privacyfirewall.entity.AppInfo;
 
@@ -33,8 +41,8 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+        View view;
 
-//        mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.container);
         mRowContainer = (LinearLayout) findViewById(R.id.row_container);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -50,7 +58,10 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
 
-        View view;
+        // Fab Button
+        FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.fab_normal);
+        floatingActionButton.setImageDrawable(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_add).color(Color.WHITE).actionBar());
+        floatingActionButton.setOnClickListener(new AddNewRuleListener(this, mRowContainer));
 
         LayoutInflater inflater = getLayoutInflater();
         inflater.inflate(R.layout.row_detailconnection, mRowContainer, true);
@@ -139,11 +150,7 @@ public class DetailActivity extends AppCompatActivity {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-//                ClipData clip = ClipData.newPlainText("AppInfo", description);
-//                clipboard.setPrimaryClip(clip);
-//
-//                Snackbar.make(mCoordinatorLayout, "Copied " + title, Snackbar.LENGTH_SHORT).show();
+
             }
         });
     }
@@ -170,11 +177,19 @@ public class DetailActivity extends AppCompatActivity {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-//                ClipData clip = ClipData.newPlainText("AppInfo", description);
-//                clipboard.setPrimaryClip(clip);
-//
-//                Snackbar.make(mCoordinatorLayout, "Copied " + title, Snackbar.LENGTH_SHORT).show();
+                android.support.v7.app.AlertDialog.Builder builder = new
+                        android.support.v7.app.AlertDialog.Builder(DetailActivity.this);
+                builder.setTitle(R.string.dialog_delete_title);
+                builder.setNegativeButton(R.string.dialog_cancel, null);
+                builder.setPositiveButton(R.string.dialog_delete, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Log.i("Dialog", "Delete Rule");
+
+                        Snackbar.make(mRowContainer, "Delete Successfully", Snackbar.LENGTH_SHORT).show();
+                    }
+                });
+                builder.show();
             }
         });
     }

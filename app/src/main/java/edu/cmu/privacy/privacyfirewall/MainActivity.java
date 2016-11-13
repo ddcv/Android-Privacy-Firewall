@@ -15,6 +15,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -28,6 +29,7 @@ import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ProgressBar;
 
 import java.util.ArrayList;
@@ -39,8 +41,15 @@ import com.mikepenz.aboutlibraries.LibsBuilder;
 import edu.cmu.privacy.privacyfirewall.adapter.ApplicationAdapter;
 import edu.cmu.privacy.privacyfirewall.entity.AppInfo;
 import edu.cmu.privacy.privacyfirewall.itemanimator.CustomItemAnimator;
+
+import com.mikepenz.fontawesome_typeface_library.FontAwesome;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.interfaces.OnCheckedChangeListener;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.mikepenz.materialdrawer.model.SwitchDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 public class MainActivity extends AppCompatActivity {
@@ -106,23 +115,32 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        // Fab Button
+        mFabButton = (FloatingActionButton) findViewById(R.id.fab_normal);
+        mFabButton.setImageDrawable(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_add).color(Color.WHITE).actionBar());
+        mFabButton.setOnClickListener(new AddNewRuleListener(this, mRecyclerView));
+
         drawer = new DrawerBuilder(this)
                 .withToolbar(toolbar)
-                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
-                    @Override
-                    public boolean onItemClick(View view, int i, IDrawerItem drawerItem) {
-                        if (drawerItem.getIdentifier() == DRAWER_ITEM_OPEN_SOURCE) {
-                            new LibsBuilder()
-                                    .withFields(R.string.class.getFields())
-                                    .withVersionShown(true)
-                                    .withLicenseShown(true)
-                                    .withActivityTitle(getString(R.string.drawer_opensource))
-                                    .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
-                                    .start(MainActivity.this);
-                        }
-                        return false;
-                    }
-                })
+                .addDrawerItems(
+                        new SecondaryDrawerItem().withIcon(GoogleMaterial.Icon.gmd_settings).withName(R.string.drawer_title)
+                )
+                .addDrawerItems(
+                        new SwitchDrawerItem().withOnCheckedChangeListener(new OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(IDrawerItem drawerItem, CompoundButton compoundButton, boolean b) {
+                                if (b) {
+                                    Log.i("Switch", "click-on");
+                                    Snackbar.make(mRecyclerView, "VPN turn on",
+                                            Snackbar.LENGTH_SHORT).show();
+                                } else {
+                                    Log.i("Switch", "click-off");
+                                    Snackbar.make(mRecyclerView, "VPN turn off",
+                                            Snackbar.LENGTH_SHORT).show();
+                                }
+                            }
+                        }).withName(R.string.drawer_switch)
+                )
                 .withSelectedItem(-1)
                 .withSavedInstance(savedInstanceState)
                 .build();
