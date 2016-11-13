@@ -4,6 +4,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.io.ByteArrayOutputStream;
+
 /**
  * Created by YunfanW on 10/9/2016.
  */
@@ -34,9 +36,9 @@ public class DataBaseController implements DatabaseInterface {
         return ApplicationDatabase.getAllApplicationCursor(aDb.getReadableDatabase());
     }
 
-    public boolean insertApplication(String name, String description, int id) {
+    public boolean insertApplication(String name, String description, int id, ByteArrayOutputStream icon) {
         return ApplicationDatabase.insertApplication(aDb.getWritableDatabase(), name, description,
-                id);
+                id, icon);
     }
 
     public Cursor getApplicationCursorByName(String name) {
