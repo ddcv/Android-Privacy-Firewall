@@ -184,11 +184,14 @@ public class DetailActivity extends AppCompatActivity {
                         int ruleId;
                         Cursor ruleCur = Monitor.db.getRuleCursorByAdd(ip);
                         if (ruleCur.getCount() >= 1) {
+                            ruleCur.moveToFirst();
                             ruleId = ruleCur.getInt(ruleCur.getColumnIndex(RuleDatabase.FIELD_ID));
-                            
+                            Monitor.db.deleteConnectionByRuleId(ruleId);
+                            Monitor.db.deleteRuleById(ruleId);
 
                             Snackbar.make(mRowContainer, "Delete Successfully",
                                     Snackbar.LENGTH_SHORT).show();
+                            new InitializeConnection().execute();
                         } else {
                             Snackbar.make(mRowContainer, "Rule Is Not Exist!",
                                     Snackbar.LENGTH_SHORT).show();

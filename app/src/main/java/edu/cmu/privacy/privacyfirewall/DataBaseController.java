@@ -31,6 +31,10 @@ public class DataBaseController implements DatabaseInterface {
                                                     content, sensitive);
     }
 
+    public void deleteConnectionByRuleId(int ruleId) {
+        ConnectionDatabase.deleteConnectionByRuleId(cDb.getWritableDatabase(), ruleId);
+    }
+
     /** Application Database Interface */
     public Cursor getAllApplicationCursor() {
         return ApplicationDatabase.getAllApplicationCursor(aDb.getReadableDatabase());
@@ -72,5 +76,9 @@ public class DataBaseController implements DatabaseInterface {
 
     public int getNewRuleId() {
         return RuleDatabase.getNewRuleId(rDb.getReadableDatabase());
+    }
+
+    public void deleteRuleById(int id) {
+        RuleDatabase.deleteRuleById(rDb.getWritableDatabase(), id);
     }
 }

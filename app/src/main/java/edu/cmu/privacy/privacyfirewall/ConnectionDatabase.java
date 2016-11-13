@@ -70,4 +70,8 @@ public class ConnectionDatabase extends SQLiteOpenHelper{
          * */
         return db.query(TABLE_NAME, null, FIELD_APP + " = " + appId, null, null, null, null);
     }
+
+    public static void deleteConnectionByRuleId(SQLiteDatabase db, int ruleId) {
+        db.delete(TABLE_NAME, FIELD_RULE + "=?", new String[] {String.valueOf(ruleId)});
+    }
 }

@@ -12,6 +12,7 @@ import java.io.ByteArrayOutputStream;
 public interface DatabaseInterface {
     public Cursor getConnectionCursorByAppId(int appId);
     public boolean insertConnection(int appId, int ruleId, String content, int sensitive);
+    public void deleteConnectionByRuleId(int ruleId);
     public Cursor getAllApplicationCursor();
     public Cursor getApplicationCursorByName(String name);
     public Cursor getApplicationCursorById(int id);
@@ -22,4 +23,5 @@ public interface DatabaseInterface {
     public boolean updateAction(int id, int action);
     public boolean insertRule(String ipAdd, String ipOwner, int action);
     public int getNewRuleId();
+    public void deleteRuleById(int id);
 }

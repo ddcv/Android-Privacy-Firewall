@@ -96,4 +96,8 @@ public class RuleDatabase extends SQLiteOpenHelper {
             return false;
         }
     }
+
+    public static void deleteRuleById(SQLiteDatabase db, int id) {
+        db.delete(TABLE_NAME, FIELD_ID + "=?", new String[] {String.valueOf(id)});
+    }
 }
