@@ -76,12 +76,12 @@ public class MainActivity extends AppCompatActivity {
         /** VPN Part Demo Start */
 
         /** Start VPN */
-//        serviceIntent = VpnTestService.prepare(getApplicationContext());
-//        if (serviceIntent != null) {
-//            startActivityForResult(serviceIntent, VPN_REQUEST_CODE);
-//        } else {
-//            onActivityResult(VPN_REQUEST_CODE, RESULT_OK, null);
-//        }
+        serviceIntent = VpnTestService.prepare(getApplicationContext());
+        if (serviceIntent != null) {
+            startActivityForResult(serviceIntent, VPN_REQUEST_CODE);
+        } else {
+            onActivityResult(VPN_REQUEST_CODE, RESULT_OK, null);
+        }
         /** VPN Part Demo End   */
 
         /** Load Application info into Database */

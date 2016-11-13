@@ -97,6 +97,7 @@ public class DetailActivity extends AppCompatActivity {
                     String ip = "Not Known";
                     String recipient = "Not Know";
                     if (ruleCur.getCount() >= 1) {
+                        ruleCur.moveToFirst();
                         ip = ruleCur.getString(ruleCur.getColumnIndex(RuleDatabase.FIELD_IP_ADD));
                         recipient = ruleCur.getString(ruleCur.getColumnIndex(
                                 RuleDatabase.FIELD_ID_OWNER));
