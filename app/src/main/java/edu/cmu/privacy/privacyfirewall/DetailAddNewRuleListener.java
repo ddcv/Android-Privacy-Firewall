@@ -42,7 +42,6 @@ public class DetailAddNewRuleListener implements View.OnClickListener {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String addrStr = ipaddr.getText().toString();
-                Log.i("Dialog", "IP Addr: " + addrStr);
 
                 if (Monitor.checkIPAddr(addrStr)) {
                     int ruleId = -1;

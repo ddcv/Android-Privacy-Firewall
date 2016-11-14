@@ -3,11 +3,21 @@ package edu.cmu.privacy.privacyfirewall;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.View;
 
-import java.nio.CharBuffer;
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by YunfanW on 9/30/2016.

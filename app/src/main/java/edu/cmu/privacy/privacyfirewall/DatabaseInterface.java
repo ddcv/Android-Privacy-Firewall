@@ -22,6 +22,7 @@ public interface DatabaseInterface {
     public Cursor getRuleCursorByAdd(String ipAdd);
     public Cursor getRuleCursorById(int id);
     public boolean updateAction(int id, int action);
+    public boolean updateRegistrant(int id, String registrant);
     public boolean insertRule(String ipAdd, String ipOwner, int action);
     public int getNewRuleId();
     public void deleteRuleById(int id);

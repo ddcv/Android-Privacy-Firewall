@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import 	android.database.DatabaseUtils;
+import android.util.Log;
 
 /**
  * Created by YunfanW on 10/9/2016.
@@ -44,6 +45,7 @@ public class RuleDatabase extends SQLiteOpenHelper {
         v.put(FIELD_ID_OWNER, ipOwner);
         v.put(FIELD_ACTION, action);
         if (db.insert(TABLE_NAME, "null", v) != -1) {
+            Log.i("Rule", "insert rule");
             return true;
         } else {
             return false;
@@ -95,6 +97,26 @@ public class RuleDatabase extends SQLiteOpenHelper {
         } else {
             return false;
         }
+    }
+
+    public static boolean updateRegistrant(SQLiteDatabase db, int id, String registrant) {
+        Cursor c = db.query(TABLE_NAME, null, FIELD_ID + " = " + id, null, null, null, null);
+        Log.i("Rule", "update rule");
+        if (c.getCount() >= 1) {
+            ContentValues v = new ContentValues();
+            c.moveToFirst();
+
+            DatabaseUtils.cursorRowToContentValues(c, v);
+            v.put(FIELD_ID_OWNER, registrant);
+            c.close();
+            if (db.replace(TABLE_NAME, "null", v) != -1) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        return false;
     }
 
     public static void deleteRuleById(SQLiteDatabase db, int id) {

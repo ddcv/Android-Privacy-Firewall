@@ -72,11 +72,19 @@ public class DataBaseController implements DatabaseInterface {
     }
 
     public boolean updateAction(int id, int action) {
-        return RuleDatabase.updateAction(rDb.getReadableDatabase(), id, action);
+        return RuleDatabase.updateAction(rDb.getWritableDatabase(), id, action);
+    }
+
+    public boolean updateRegistrant(int id, String registrant) {
+        return RuleDatabase.updateRegistrant(rDb.getWritableDatabase(), id, registrant);
     }
 
     public boolean insertRule(String ipAdd, String ipOwner, int action) {
-        return RuleDatabase.insertRule(rDb.getWritableDatabase(), ipAdd, ipOwner, action);
+        int ruleId = getNewRuleId();
+        boolean res = RuleDatabase.insertRule(rDb.getWritableDatabase(), ipAdd, ipOwner, action);
+        traceIPAddr t = new traceIPAddr(ipAdd);
+        t.execute();
+        return res;
     }
 
     public int getNewRuleId() {
