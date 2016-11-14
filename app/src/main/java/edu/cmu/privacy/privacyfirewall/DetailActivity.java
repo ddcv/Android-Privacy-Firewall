@@ -152,44 +152,66 @@ public class DetailActivity extends AppCompatActivity {
      * @param recipient
      * @param sensitive
      */
-    public void fillConnection(View view, final String ip, final String recipient,
-                               final String sensitive) {
+    public void fillConnection(View view, final String ip, final String recipient, final String country,
+                               final String sensitive, final int appId, final int action) {
         String line;
 
         TextView titleView = (TextView) view.findViewById(R.id.dest_ip_address);
         line = "IP Address: " + ip;
         titleView.setText(line);
 
-        line = "Recipient: " + recipient;
+        line = "Organization: " + recipient;
         TextView descriptionView = (TextView) view.findViewById(R.id.recipient);
         descriptionView.setText(line);
+
+        line = "Country: " + country;
+        TextView countryView = (TextView) view.findViewById(R.id.country);
+        countryView.setText(line);
 
         line = "Sensitive Info: " + sensitive;
         TextView sensitiveView = (TextView) view.findViewById(R.id.sensitive);
         sensitiveView.setText(line);
+
+        line = "Action: " + (action == ConnectionDatabase.ACTION_ALOW ? "Allow" : "Deny");
+        TextView actionView = (TextView) view.findViewById(R.id.action);
+        actionView.setText(line);
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 android.support.v7.app.AlertDialog.Builder builder = new
                         android.support.v7.app.AlertDialog.Builder(DetailActivity.this);
-                builder.setTitle(R.string.dialog_delete_title);
-                builder.setNegativeButton(R.string.dialog_cancel, null);
-                builder.setPositiveButton(R.string.dialog_delete,
+
+                /** Set Notification */
+                if (action == ConnectionDatabase.ACTION_ALOW) {
+                    builder.setTitle(R.string.dialog_title_allow);
+                } else {
+                    builder.setTitle(R.string.dialog_title_deny);
+                }
+
+                builder.setNegativeButton(R.string.dialog_no, null);
+                builder.setPositiveButton(R.string.dialog_yes,
                         new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Log.i("Dialog", "Delete Rule");
 
                         int ruleId;
                         Cursor ruleCur = Monitor.db.getRuleCursorByAdd(ip);
                         if (ruleCur.getCount() >= 1) {
                             ruleCur.moveToFirst();
                             ruleId = ruleCur.getInt(ruleCur.getColumnIndex(RuleDatabase.FIELD_ID));
-                            Monitor.db.deleteConnectionByRuleId(ruleId);
-                            Monitor.db.deleteRuleById(ruleId);
 
-                            Snackbar.make(mRowContainer, "Delete Successfully",
+                            /** set new action */
+                            int new_action;
+                            if (action == ConnectionDatabase.ACTION_ALOW) {
+                                new_action = ConnectionDatabase.ACTION_DENY;
+                            } else {
+                                new_action = ConnectionDatabase.ACTION_ALOW;
+                            }
+
+                            Monitor.db.updateAction(appId, ruleId, new_action);
+
+                            Snackbar.make(mRowContainer, "Update Action Successfully",
                                     Snackbar.LENGTH_SHORT).show();
                             new InitializeConnection().execute();
                         } else {
@@ -199,6 +221,42 @@ public class DetailActivity extends AppCompatActivity {
                     }
                 });
                 builder.show();
+            }
+        });
+
+        view.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                android.support.v7.app.AlertDialog.Builder builder = new
+                        android.support.v7.app.AlertDialog.Builder(DetailActivity.this);
+
+                builder.setTitle(R.string.dialog_title_delete);
+
+                builder.setNegativeButton(R.string.dialog_no, null);
+                builder.setPositiveButton(R.string.dialog_yes,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                int ruleId;
+                                Cursor ruleCur = Monitor.db.getRuleCursorByAdd(ip);
+                                if (ruleCur.getCount() >= 1) {
+                                    ruleCur.moveToFirst();
+                                    ruleId = ruleCur.getInt(ruleCur.getColumnIndex(RuleDatabase.FIELD_ID));
+
+                                    Monitor.db.deleteConnectionByAppIdRuleId(appId, ruleId);
+
+                                    Snackbar.make(mRowContainer, "Delete " + ip + " Successfully",
+                                            Snackbar.LENGTH_SHORT).show();
+                                    new InitializeConnection().execute();
+                                } else {
+                                    Snackbar.make(mRowContainer, "Rule Is Not Exist!",
+                                            Snackbar.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                builder.show();
+                return true;
             }
         });
     }
@@ -240,41 +298,47 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     public void loadConnection() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (mAppInfo != null) {
-                    int appId = Monitor.db.getApplicationIdByPackagename(mAppInfo.getPackageName());
-                    LayoutInflater inflater = getLayoutInflater();
-                    if (appId != -1) {
-                        Cursor conCur = Monitor.db.getConnectionCursorByAppId(appId);
-                        for (conCur.moveToFirst(); !conCur.isAfterLast(); conCur.moveToNext()) {
-                            String sensitive = conCur.getString(conCur.getColumnIndex(
-                                    ConnectionDatabase.FIELD_CONTENT));
-                            Cursor ruleCur = Monitor.db.getRuleCursorById(conCur.getInt(
-                                    conCur.getColumnIndex(ConnectionDatabase.FIELD_RULE)));
-                            String ip = "Not Known";
-                            String recipient = "Not Know";
-                            if (ruleCur.getCount() >= 1) {
-                                ruleCur.moveToFirst();
-                                ip = ruleCur.getString(ruleCur.getColumnIndex(RuleDatabase.FIELD_IP_ADD));
-                                recipient = ruleCur.getString(ruleCur.getColumnIndex(
-                                        RuleDatabase.FIELD_ID_OWNER));
-                            }
-                            inflater.inflate(R.layout.row_detailconnection, mRowContainer, true);
-                            fillConnection(mRowContainer.getChildAt(mRowContainer.getChildCount() - 1),
-                                    ip, recipient, sensitive);
-                        }
-                    }
-                }
-                for (int i = 1; i < mRowContainer.getChildCount(); i++) {
-                    View rowView = mRowContainer.getChildAt(i);
-                    rowView.animate().setStartDelay(100 + i * SCALE_DELAY).scaleX(1).scaleY(1);
-                }
+        if (mAppInfo != null) {
+            int appId = Monitor.db.getApplicationIdByPackagename(mAppInfo.getPackageName());
+            LayoutInflater inflater = getLayoutInflater();
+            if (appId != -1) {
+                Cursor conCur = Monitor.db.getConnectionCursorByAppId(appId);
+                for (conCur.moveToFirst(); !conCur.isAfterLast(); conCur.moveToNext()) {
+                    String ip = "Not Known";
+                    String recipient = RuleDatabase.ORG_DEFAULT;
+                    String country = RuleDatabase.COUNTRY_DEFAULT;
+                    String sensitive = conCur.getString(conCur.getColumnIndex(
+                            ConnectionDatabase.FIELD_CONTENT));
+                    int action = conCur.getInt(conCur.getColumnIndex(
+                            ConnectionDatabase.FIELD_ACTION));
+                    int ruleId =conCur.getInt(conCur.getColumnIndex(
+                            ConnectionDatabase.FIELD_RULE));
+                    Log.i("Fill Connection", "rule Id: " + ruleId);
 
-                mSwipeRefreshLayout.setRefreshing(false);
+                            Cursor ruleCur = Monitor.db.getRuleCursorById(ruleId);
+                    if (ruleCur.getCount() >= 1) {
+                        ruleCur.moveToFirst();
+                        ip = ruleCur.getString(ruleCur.getColumnIndex(
+                                RuleDatabase.FIELD_IP_ADD));
+                        recipient = ruleCur.getString(ruleCur.getColumnIndex(
+                                RuleDatabase.FIELD_ORG));
+                        country = ruleCur.getString(ruleCur.getColumnIndex(
+                                RuleDatabase.FIELD_COUNTRY));
+                        Log.i("Fill Connection", "ip: " + ip + ", recipient: " + recipient +
+                                ", country: " + country);
+                    }
+                    inflater.inflate(R.layout.row_detailconnection, mRowContainer, true);
+                    fillConnection(mRowContainer.getChildAt(mRowContainer.getChildCount() - 1),
+                            ip, recipient, country, sensitive, appId, action);
+                }
             }
-        });
+        }
+        for (int i = 1; i < mRowContainer.getChildCount(); i++) {
+            View rowView = mRowContainer.getChildAt(i);
+            rowView.animate().setStartDelay(100 + i * SCALE_DELAY).scaleX(1).scaleY(1);
+        }
+
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     public void clearConnection() {
@@ -294,13 +358,14 @@ public class DetailActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            loadConnection();
+
 
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result) {
+            loadConnection();
             //handle visibility
             mRowContainer.setVisibility(View.VISIBLE);
             mSwipeRefreshLayout.setRefreshing(false);

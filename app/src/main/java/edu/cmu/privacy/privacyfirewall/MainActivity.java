@@ -169,15 +169,6 @@ public class MainActivity extends AppCompatActivity {
         mProgressBar.setVisibility(View.VISIBLE);
 
         /** UI End */
-
-        /** Add Fake Data */
-        int fakeAppId = Monitor.db.getApplicationIdByPackagename("com.android.browser");
-        if (fakeAppId != -1) {
-            Cursor FakeCur = Monitor.db.getConnectionCursorByAppId(fakeAppId);
-            if (FakeCur.getCount() < 1) {
-                Monitor.db.insertConnection(fakeAppId, 0, "FakeData", 0);
-            }
-        }
     }
 
 

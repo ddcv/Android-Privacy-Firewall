@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.support.design.widget.Snackbar;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -30,67 +31,69 @@ public class DetailAddNewRuleListener implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
+        /** build dialog */
         android.support.v7.app.AlertDialog.Builder builder = new
                 android.support.v7.app.AlertDialog.Builder(activity);
         builder.setTitle(R.string.dialog_title);
         builder.setMessage(R.string.dialog_addr);
         final EditText ipaddr = new EditText(activity);
+        ipaddr.setHint(R.string.dialog_addr_hint);
+        ipaddr.setInputType(InputType.TYPE_CLASS_PHONE);
         builder.setView(ipaddr);
         builder.setNegativeButton(R.string.dialog_cancel, null);
         final View parentView = view;
+
+        /** set onClick event */
         builder.setPositiveButton(R.string.dialog_add, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String addrStr = ipaddr.getText().toString();
 
                 if (Monitor.checkIPAddr(addrStr)) {
-                    int ruleId = -1;
+                    int ruleId;
                     Cursor ruleCur = Monitor.db.getRuleCursorByAdd(addrStr);
+
+                    /** find rule id */
                     if (ruleCur.getCount() >= 1) {
                         ruleCur.moveToFirst();
                         ruleId = ruleCur.getInt(ruleCur.getColumnIndex(RuleDatabase.FIELD_ID));
+                    } else {
+                        /** add rule if not exist */
+                        ruleId = Monitor.db.getNewRuleId();
+                        Monitor.db.insertRule(addrStr, RuleDatabase.ORG_DEFAULT,
+                                RuleDatabase.COUNTRY_DEFAULT);
                     }
 
+                    /** find app id */
                     int appId = -1;
                     if (packagename != null) {
                         appId = Monitor.db.getApplicationIdByPackagename(packagename);
                     }
 
                     if (appId != -1) {
-                        if (ruleId != -1) {
-                            Cursor conCur = Monitor.db.getConnectionCursorByAppId(appId);
+                        Cursor conCur = Monitor.db.getConnectionCursorByAppIdRuleId(appId, ruleId);
 
-                            boolean existFlag = false;
-                            for (conCur.moveToFirst(); !conCur.isAfterLast(); conCur.moveToNext()) {
-                                int existRuleId = conCur.getInt(conCur.getColumnIndex(
-                                        ConnectionDatabase.FIELD_RULE));
-                                if (existRuleId == ruleId) {
-                                    existFlag = true;
-                                    break;
-                                }
-                            }
+                        /** update action */
+                        if (conCur.getCount() >= 1) {
+                            Monitor.db.updateAction(appId, ruleId, ConnectionDatabase.ACTION_DENY);
+                            Snackbar.make(parentView, "Update " + addrStr + " Successfully",
+                                    Snackbar.LENGTH_SHORT).show();
+                        }
 
-                            if (existFlag) {
-                                Snackbar.make(parentView, "Rule " + addrStr + " Duplicated in Database",
-                                        Snackbar.LENGTH_SHORT).show();
-                            } else {
-                                Monitor.db.insertConnection(appId, ruleId, "New Rule", 0);
-                                Snackbar.make(parentView, "Add " + addrStr + " Successfully",
-                                        Snackbar.LENGTH_SHORT).show();
-                                activity.clearConnection();
-                                activity.loadConnection();
-                            }
-                        } else {
-                            int newRuleId = Monitor.db.getNewRuleId();
-                            Monitor.db.insertRule(addrStr, "New Recipient", 0);
-                            Monitor.db.insertConnection(appId, newRuleId, "New Rule", 0);
+                        /** insert action */
+                        else {
+                            Monitor.db.insertConnection(appId, ruleId,
+                                    ConnectionDatabase.ACTION_DENY,
+                                    ConnectionDatabase.CONTENT_DEFAULT,
+                                    ConnectionDatabase.NON_SENSITIVE);
                             Snackbar.make(parentView, "Add " + addrStr + " Successfully",
                                     Snackbar.LENGTH_SHORT).show();
-                            activity.clearConnection();
-                            activity.loadConnection();
+
                         }
+                        activity.clearConnection();
+                        activity.loadConnection();
                     } else {
-                        Snackbar.make(parentView, "Application ID is not exist!",
+                        Snackbar.make(parentView, "App ID is not exist!",
                                 Snackbar.LENGTH_SHORT).show();
                     }
                 } else {

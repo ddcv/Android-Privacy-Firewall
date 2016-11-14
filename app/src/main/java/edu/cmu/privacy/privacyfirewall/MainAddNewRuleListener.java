@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.support.design.widget.Snackbar;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -26,14 +27,19 @@ public class MainAddNewRuleListener implements View.OnClickListener{
 
     @Override
     public void onClick(View view) {
+        /** build dialog */
         android.support.v7.app.AlertDialog.Builder builder = new
                     android.support.v7.app.AlertDialog.Builder(context);
         builder.setTitle(R.string.dialog_main_title);
         builder.setMessage(R.string.dialog_addr);
         final EditText ipaddr = new EditText(context);
+        ipaddr.setHint(R.string.dialog_addr_hint);
+        ipaddr.setInputType(InputType.TYPE_CLASS_PHONE);
         builder.setView(ipaddr);
         builder.setNegativeButton(R.string.dialog_cancel, null);
         final View parentView = view;
+
+        /** set onClick event */
         builder.setPositiveButton(R.string.dialog_add, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -52,7 +58,8 @@ public class MainAddNewRuleListener implements View.OnClickListener{
                     } else {
                         /** add new rule */
                         ruleId = Monitor.db.getNewRuleId();
-                        Monitor.db.insertRule(addrStr, "New Rule", 0);
+                        Monitor.db.insertRule(addrStr, RuleDatabase.ORG_DEFAULT,
+                                RuleDatabase.COUNTRY_DEFAULT);
                     }
 
                     /** for all application */
@@ -65,7 +72,12 @@ public class MainAddNewRuleListener implements View.OnClickListener{
                         /** add rule if not exist */
                         Cursor conCur = Monitor.db.getConnectionCursorByAppIdRuleId(appId, ruleId);
                         if (conCur.getCount() < 1) {
-                            Monitor.db.insertConnection(appId, ruleId, "New Global Rule", 0);
+                            Monitor.db.insertConnection(appId, ruleId,
+                                    ConnectionDatabase.ACTION_DENY,
+                                    ConnectionDatabase.CONTENT_DEFAULT,
+                                    ConnectionDatabase.NON_SENSITIVE);
+                        } else {
+                            Monitor.db.updateAction(appId, ruleId, ConnectionDatabase.ACTION_DENY);
                         }
                     }
 

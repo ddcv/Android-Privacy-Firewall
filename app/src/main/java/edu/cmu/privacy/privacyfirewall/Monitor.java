@@ -46,7 +46,8 @@ public class Monitor {
         if (c.isAfterLast()) {
             // TODO: trace recipient
             //String recipient = aux.traceRecipient(p.ip4Header.destinationAddress);
-            db.insertRule(p.ip4Header.destinationAddress.getHostAddress(), "recipient", 1);
+            db.insertRule(p.ip4Header.destinationAddress.getHostAddress(), RuleDatabase.ORG_DEFAULT,
+                    RuleDatabase.COUNTRY_DEFAULT);
             c = db.getRuleCursorByAdd(p.ip4Header.destinationAddress.getHostAddress());
             Log.d(MONITOR_TAG, "Add new filter rule: " + p.ip4Header.destinationAddress.getHostAddress());
         }
@@ -55,7 +56,7 @@ public class Monitor {
         c.moveToFirst();
         ContentValues rVal = new ContentValues();
         DatabaseUtils.cursorRowToContentValues(c, rVal);
-        action = rVal.getAsInteger(RuleDatabase.FIELD_ACTION);
+        action = ConnectionDatabase.ACTION_ALOW;
         rId = rVal.getAsInteger(RuleDatabase.FIELD_ID);
 
         int port = -1;
@@ -82,7 +83,7 @@ public class Monitor {
 
                 /** Create Connection */
                 String sensitiveContent = plaintext;
-                int sensitive = 0;
+                int sensitive = ConnectionDatabase.NON_SENSITIVE;
 
                 // TODO: scan sensitive content
 //                sensitiveContent = aux.scanSensitive(plaintext);
@@ -104,7 +105,8 @@ public class Monitor {
 
                 Log.d(MONITOR_TAG, "exist = " + exist);
                 if (exist == false) {
-                    db.insertConnection(uid, rId, sensitiveContent, sensitive);
+                    db.insertConnection(uid, rId, ConnectionDatabase.ACTION_ALOW,
+                            sensitiveContent, sensitive);
                     Log.d(MONITOR_TAG, "uid = " + uid);
                     Log.d(MONITOR_TAG, "rId = " + rId);
                     Log.d(MONITOR_TAG, "AppName = " + appName);
@@ -117,7 +119,7 @@ public class Monitor {
             }
         }
 
-        if (action == 1) {
+        if (action == ConnectionDatabase.ACTION_ALOW) {
             return p;
         } else {
             return null;

@@ -31,13 +31,14 @@ public class DataBaseController implements DatabaseInterface {
                 appId, ruleId);
     }
 
-    public boolean insertConnection(int appId, int ruleId, String content, int sensitive) {
-        return ConnectionDatabase.insertConnection(cDb.getWritableDatabase(), appId, ruleId,
+    public boolean insertConnection(int appId, int ruleId, int action, String content,
+                                    int sensitive) {
+        return ConnectionDatabase.insertConnection(cDb.getWritableDatabase(), appId, ruleId, action,
                                                     content, sensitive);
     }
 
-    public void deleteConnectionByRuleId(int ruleId) {
-        ConnectionDatabase.deleteConnectionByRuleId(cDb.getWritableDatabase(), ruleId);
+    public void deleteConnectionByAppIdRuleId(int appId, int ruleId) {
+        ConnectionDatabase.deleteConnectionByAppIdRuleId(cDb.getWritableDatabase(), appId, ruleId);
     }
 
     /** Application Database Interface */
@@ -71,17 +72,17 @@ public class DataBaseController implements DatabaseInterface {
         return RuleDatabase.getRuleCursorById(rDb.getReadableDatabase(), id);
     }
 
-    public boolean updateAction(int id, int action) {
-        return RuleDatabase.updateAction(rDb.getWritableDatabase(), id, action);
+    public boolean updateAction(int appId, int ruleId, int action) {
+        return ConnectionDatabase.updateAction(cDb.getWritableDatabase(), appId, ruleId, action);
     }
 
-    public boolean updateRegistrant(int id, String registrant) {
-        return RuleDatabase.updateRegistrant(rDb.getWritableDatabase(), id, registrant);
+    public boolean updateRegistrant(int id, String registrant, String country) {
+        return RuleDatabase.updateRegistrant(rDb.getWritableDatabase(), id, registrant, country);
     }
 
-    public boolean insertRule(String ipAdd, String ipOwner, int action) {
-        int ruleId = getNewRuleId();
-        boolean res = RuleDatabase.insertRule(rDb.getWritableDatabase(), ipAdd, ipOwner, action);
+    public boolean insertRule(String ipAdd, String organization, String country) {
+        boolean res = RuleDatabase.insertRule(rDb.getWritableDatabase(), ipAdd, organization,
+                country);
         traceIPAddr t = new traceIPAddr(ipAdd);
         t.execute();
         return res;

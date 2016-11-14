@@ -10,14 +10,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * A simple AsyncTask to load the list of applications and display them
  */
-public class traceIPAddr extends AsyncTask<Void, Void, String> {
+public class traceIPAddr extends AsyncTask<Void, Void, Void> {
     private String ipaddr;
 
     public traceIPAddr(String _ipaddr) {
@@ -26,12 +23,11 @@ public class traceIPAddr extends AsyncTask<Void, Void, String> {
     }
 
     @Override
-    protected String doInBackground(Void... params) {
-        String recipient = "";
+    protected Void doInBackground(Void... params) {
+        String recipient = "Not Known";
+        String country = "Not Known";
         String path = "http://www.whoisxmlapi.com/whoisserver/WhoisService?domainName=" +
                 ipaddr + "&username=daiker0330&password=infosec2016&outputFormat=JSON";
-        List<Map<String, String>> list = new ArrayList<Map<String, String>>();
-        Map<String, String> map = null;
 
         try {
             URL url = new URL(path);
@@ -44,29 +40,38 @@ public class traceIPAddr extends AsyncTask<Void, Void, String> {
                 byte[] data = readStream(is);
                 String json = new String(data);
                 JSONObject jsonObject = new JSONObject(json);
-                jsonObject = jsonObject.getJSONObject("WhoisRecord");
-                jsonObject = jsonObject.getJSONObject("registrant");
-                recipient = jsonObject.getString("organization");
+                if (!jsonObject.isNull("WhoisRecord")) {
+                    jsonObject = jsonObject.getJSONObject("WhoisRecord");
+                    if (!jsonObject.isNull("registrant")) {
+                        jsonObject = jsonObject.getJSONObject("registrant");
+                        if (!jsonObject.isNull("name")) {
+                            recipient = jsonObject.getString("name");
+                        } else if (!jsonObject.isNull("organization")) {
+                            recipient = jsonObject.getString("organization");
+                        }
+
+                        if (!jsonObject.isNull("country")) {
+                            country = jsonObject.getString("country");
+                        }
+                    }
+                }
+
+                Cursor cur = Monitor.db.getRuleCursorByAdd(ipaddr);
+                if (cur.getCount() >= 1) {
+                    cur.moveToFirst();
+                    int ruleId = cur.getInt(cur.getColumnIndex(RuleDatabase.FIELD_ID));
+                    Monitor.db.updateRegistrant(ruleId, recipient, country);
+                    Log.i("Trace", "Trace " + ipaddr + " to " + recipient + "Success!");
+                } else {
+                    Log.i("Trace", "No such rule");
+                }
+
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return recipient;
-    }
-
-    @Override
-    protected void onPostExecute(String result) {
-        Cursor cur = Monitor.db.getRuleCursorByAdd(ipaddr);
-        if (cur.getCount() >= 1) {
-            cur.moveToFirst();
-            int ruleId = cur.getInt(cur.getColumnIndex(RuleDatabase.FIELD_ID));
-            Monitor.db.updateRegistrant(ruleId, result);
-            Log.i("Trace", "Trace " + ipaddr + " to " + result + "Success!");
-        } else {
-            Log.i("Trace", "No such rule");
-        }
-
+        return null;
     }
 
     private static byte[] readStream(InputStream inputStream) throws Exception {
