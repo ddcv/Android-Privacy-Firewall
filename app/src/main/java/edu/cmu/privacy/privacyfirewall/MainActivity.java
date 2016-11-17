@@ -1,17 +1,43 @@
 package edu.cmu.privacy.privacyfirewall;
 
-import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
-import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.graphics.Color;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.ProgressBar;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+
+import edu.cmu.privacy.privacyfirewall.adapter.ApplicationAdapter;
+import edu.cmu.privacy.privacyfirewall.entity.AppInfo;
+import edu.cmu.privacy.privacyfirewall.itemanimator.CustomItemAnimator;
+
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.interfaces.OnCheckedChangeListener;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.mikepenz.materialdrawer.model.SwitchDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,88 +46,129 @@ public class MainActivity extends AppCompatActivity {
     private Intent serviceIntent;    /* The VPN Service Intent */
     /** VPN Part Variables End   */
 
+    /** UI Variables Start */
+    private static final int DRAWER_ITEM_SWITCH = 1;
+    private static final int DRAWER_ITEM_OPEN_SOURCE = 10;
+
+    private List<AppInfo> applicationList = new ArrayList<AppInfo>();
+
+    private Drawer drawer;
+
+    private ApplicationAdapter mAdapter;
+    private FloatingActionButton mFabButton;
+    private RecyclerView mRecyclerView;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private ProgressBar mProgressBar;
+    /** UI Variables End */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        /** Database Demo Start */
-        
-//        // init database
-//        DatabaseInterface db = new DataBaseController(MainActivity.this);
-//
-//        // write data
-//        db.insertApplication("Amazon", "Online Shopping");
-//        db.insertApplication("BestBuy", "Online Shopping");
-//        db.insertRule("192.168.0.1", "Host", 1);
-//        db.insertRule("4.4.4.4", "Evil", 0);
-//        db.insertRule("8.8.8.8", "Good guy", 1);
-//        db.insertConnection(1, 1, "Good data", 0);
-//        db.insertConnection(1, 2, "Evil data", 1);
-//        db.insertConnection(2, 1, "General data", 0);
-//
-//        // print all the application, its connection and action
-//
-//        // For each Application
-//        Cursor appCur = db.getAllApplicationCursor();
-//        for (appCur.moveToFirst(); !appCur.isAfterLast(); appCur.moveToNext()) {
-//            ContentValues appVal = new ContentValues();
-//            DatabaseUtils.cursorRowToContentValues(appCur, appVal);
-//            Log.i(ApplicationDatabase.DATABASE_TAG, "Output-Application: " +
-//                    "id = " + appVal.getAsString(ApplicationDatabase.FIELD_ID) +
-//                    ", name = " + appVal.getAsString(ApplicationDatabase.FIELD_NAME) +
-//                    ", description = " + appVal.getAsString(ApplicationDatabase.FIELD_DESC));
-//
-//            // For each connection of the application
-//            Cursor cntCur = db.getConnectionCursorByAppId(
-//                                                appVal.getAsInteger(ApplicationDatabase.FIELD_ID));
-//            for (cntCur.moveToFirst(); !cntCur.isAfterLast(); cntCur.moveToNext()) {
-//                ContentValues cntVal = new ContentValues();
-//                DatabaseUtils.cursorRowToContentValues(cntCur, cntVal);
-//                Log.i(ConnectionDatabase.DATABASE_TAG, "\tConnection: " +
-//                        "id = " + cntVal.getAsInteger(ConnectionDatabase.FIELD_ID) +
-//                        ", content = " + cntVal.getAsString(ConnectionDatabase.FIELD_CONTENT) +
-//                        ", sensitive = " + cntVal.getAsInteger(ConnectionDatabase.FIELD_SENSITIVE));
-//                Cursor ruleCur = db.getRuleCursorById(
-//                                                cntVal.getAsInteger(ConnectionDatabase.FIELD_RULE));
-//
-//                // For each rule of the connection
-//                for (ruleCur.moveToFirst(); !ruleCur.isAfterLast(); ruleCur.moveToNext()) {
-//                    ContentValues ruleVal = new ContentValues();
-//                    DatabaseUtils.cursorRowToContentValues(ruleCur, ruleVal);
-//                    Log.i(RuleDatabase.DATABASE_TAG, "\t\t\t\tRule: " +
-//                            "id = " + ruleVal.getAsInteger(RuleDatabase.FIELD_ID) +
-//                            ", ipAdd = " + ruleVal.getAsString(RuleDatabase.FIELD_IP_ADD) +
-//                            ", ipOwner = " + ruleVal.getAsString(RuleDatabase.FIELD_ID_OWNER) +
-//                            ", action = " + ruleVal.getAsInteger(RuleDatabase.FIELD_ACTION));
-//                }
-//            }
-//        }
+        /** init database */
+        Monitor.db = new DataBaseController(MainActivity.this);
 
-        /** Database Demo End */
-
-        /** VPN Part Demo Start */
-
-        /* Start VPN */
-//        serviceIntent = VpnTestService.prepare(getApplicationContext());
-//        if (serviceIntent != null) {
-//            startActivityForResult(serviceIntent, VPN_REQUEST_CODE);
-//        } else {
-//            onActivityResult(VPN_REQUEST_CODE, RESULT_OK, null);
-//        }
-
+        /** Load Application info into Database */
         final PackageManager packageManager = getPackageManager();
         List<ApplicationInfo> installedApplications =
                 packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
 
-        for (ApplicationInfo appInfo : installedApplications)
-        {
-            Log.d("OUTPUT", "Package name : " + appInfo.packageName);
-            Log.d("OUTPUT", "Name: " + appInfo.loadLabel(packageManager));
+        for (ApplicationInfo appInfo : installedApplications) {
+            Cursor c = Monitor.db.getApplicationCursorById(appInfo.uid);
 
+            /** Not exist */
+            if (c.isAfterLast()) {
+                Monitor.db.insertApplication(appInfo.loadLabel(packageManager).toString(),
+                        appInfo.packageName, appInfo.uid);
+            }
         }
 
-        /** VPN Part Demo End   */
+        /** UI Start */
+
+        /** Handle Toolbar */
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        // Fab Button
+        mFabButton = (FloatingActionButton) findViewById(R.id.fab_normal);
+        mFabButton.setImageDrawable(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_add)
+                .color(Color.WHITE).actionBar());
+        mFabButton.setOnClickListener(new MainAddNewRuleListener(this));
+
+        // Build Drawer
+        drawer = new DrawerBuilder(this)
+                .withToolbar(toolbar)
+                .addDrawerItems(
+                        new SecondaryDrawerItem().withIcon(GoogleMaterial.Icon.gmd_settings)
+                                .withName(R.string.drawer_title)
+                )
+                .addDrawerItems(
+                        new SwitchDrawerItem().withOnCheckedChangeListener(
+                                new OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(IDrawerItem drawerItem,
+                                                         CompoundButton compoundButton, boolean b) {
+                                if (b) {
+                                    Log.i("Switch", "click-on");
+
+                                    /** VPN Part Demo Start */
+
+                                    /** Start VPN */
+                                    serviceIntent = VpnTestService.prepare(getApplicationContext());
+                                    if (serviceIntent != null) {
+                                        startActivityForResult(serviceIntent, VPN_REQUEST_CODE);
+                                    } else {
+                                        onActivityResult(VPN_REQUEST_CODE, RESULT_OK, null);
+                                    }
+
+                                    /** VPN Part Demo End   */
+
+                                    Snackbar.make(mRecyclerView, "VPN turn on",
+                                            Snackbar.LENGTH_SHORT).show();
+                                } else {
+                                    Log.i("Switch", "click-off");
+                                    Snackbar.make(mRecyclerView, "VPN turn off",
+                                            Snackbar.LENGTH_SHORT).show();
+                                }
+                            }
+                        }).withName(R.string.drawer_switch)
+                )
+                .withSelectedItem(-1)
+                .withSavedInstance(savedInstanceState)
+                .build();
+
+        // Handle ProgressBar
+        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+
+        // Handle RecyclerView
+        mRecyclerView = (RecyclerView) findViewById(R.id.list);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setItemAnimator(new CustomItemAnimator());
+
+        mAdapter = new ApplicationAdapter(new ArrayList<AppInfo>(), R.layout.row_application,
+                                                                                MainActivity.this);
+        mRecyclerView.setAdapter(mAdapter);
+
+        // Handle Refresh
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+        mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.theme_accent));
+        mSwipeRefreshLayout.setRefreshing(true);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new InitializeApplicationsTask().execute();
+            }
+        });
+
+        new InitializeApplicationsTask().execute();
+
+        //show progress
+        mRecyclerView.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.VISIBLE);
+
+        /** UI End */
     }
 
 
@@ -122,5 +189,72 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /** VPN Part Functions End   */
+
+    /** UI Part Functions Start */
+
+    /**
+     * helper class to start the new detailActivity animated
+     *
+     * @param appInfo
+     * @param appIcon
+     */
+    public void animateActivity(AppInfo appInfo, View appIcon) {
+        Intent i = new Intent(this, DetailActivity.class);
+        i.putExtra("appInfo", appInfo.getComponentName());
+
+        ActivityOptionsCompat transitionActivityOptions =
+                ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        this, Pair.create(appIcon, "appIcon"));
+        startActivity(i, transitionActivityOptions.toBundle());
+    }
+
+    /**
+     * A simple AsyncTask to load the list of applications and display them
+     */
+    private class InitializeApplicationsTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            mAdapter.clearApplications();
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            applicationList.clear();
+
+            //Query the applications
+            final Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+            mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+
+            List<ResolveInfo> ril = getPackageManager().queryIntentActivities(mainIntent, 0);
+            for (ResolveInfo ri : ril) {
+                applicationList.add(new AppInfo(MainActivity.this, ri));
+            }
+            Collections.sort(applicationList);
+
+            for (AppInfo appInfo : applicationList) {
+                //load icons before shown. so the list is smoother
+                appInfo.getIcon();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            //handle visibility
+            mRecyclerView.setVisibility(View.VISIBLE);
+            mProgressBar.setVisibility(View.GONE);
+
+            //set data for list
+            mAdapter.addApplications(applicationList);
+            mSwipeRefreshLayout.setRefreshing(false);
+
+            super.onPostExecute(result);
+        }
+    }
+
+    /** UI Part Functions End */
 
 }
