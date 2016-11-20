@@ -15,13 +15,18 @@ import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
 import java.nio.channels.FileChannel;
+import java.nio.channels.Selector;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by Billdqu on 9/30/16.
  */
 
-public class VpnTestService extends VpnService {
+public class FirewallVpnService extends VpnService {
 
+    /* VPN Configures */
     private static final String TAG = "VPNService";
     public static final String VPN_ADDRESS = "10.0.0.2";
     private static final String VPN_ROUTE = "0.0.0.0";
@@ -30,7 +35,11 @@ public class VpnTestService extends VpnService {
 
     private PendingIntent pendingIntent;
 
-    private Thread mThread;
+    private BlockingQueue<IPPacket> outputPacketsQueue;
+    private BlockingQueue<ByteBuffer> inputPacketsQueue;
+    private ExecutorService executorService;
+
+    private Selector selector;
 
     @Override
     public void onCreate() {
@@ -39,20 +48,31 @@ public class VpnTestService extends VpnService {
         /* Configure VPN and get the interface */
         if (vpnInterface == null) {
             Builder builder = new Builder();
-            vpnInterface = builder.setSession("MyTestVPNService")
+            vpnInterface = builder.setSession("MyVPNService")
                     .addAddress(VPN_ADDRESS, 32)
                     .addDnsServer("8.8.8.8")
                     .addRoute(VPN_ROUTE, 0)
                     .setConfigureIntent(pendingIntent).establish();
         }
 
+        /* Selector */
+        try {
+            selector = Selector.open();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e(TAG, "Selector Creation Error!!");
+            return;
+        }
+
+        /* Create thread pool */
+        executorService = Executors.newFixedThreadPool(3);
+        // start VPN Thread Runnable
+        executorService.submit(new VPNThreadRunnable(vpnInterface.getFileDescriptor()));
+        executorService.submit(new TrafficInRunnable(inputPacketsQueue, selector));
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        mThread = new Thread(new VPNThreadFunction(vpnInterface.getFileDescriptor()));
-
-        mThread.start();
         return Service.START_STICKY;
     }
 
@@ -64,14 +84,12 @@ public class VpnTestService extends VpnService {
     }
 
 
-    private class VPNThreadFunction implements Runnable {
+    private class VPNThreadRunnable implements Runnable {
 
         private FileDescriptor vpnFileDescriptor;
 
-        public VPNThreadFunction(FileDescriptor vpnFileDescriptor) {
+        public VPNThreadRunnable(FileDescriptor vpnFileDescriptor) {
             this.vpnFileDescriptor = vpnFileDescriptor;
-
-
         }
 
         @Override
@@ -85,12 +103,10 @@ public class VpnTestService extends VpnService {
                 /* The UDP channel can be used to pass/get ip package to/from server */
                 DatagramChannel tunnel = DatagramChannel.open();
                 /* Connect to localhost */
-                tunnel.connect(new InetSocketAddress("127.0.0.1", 8087));
+                tunnel.connect(new InetSocketAddress("10.0.0.2", 8087));
                 /* Protect this socket,
                    so package send by it will not be feedback to the vpn service. */
                 protect(tunnel.socket());
-
-
 
                 Log.d(TAG, "run: ready to run");
                 // Use a loop to pass packets.
@@ -101,11 +117,25 @@ public class VpnTestService extends VpnService {
                     int bytes = vpnInput.read(bufferToNetwork);
 //                    Log.d(TAG, "run: " + bytes);
 
+                    bufferToNetwork.flip();
+                    while (bufferToNetwork.hasRemaining()) {
+                        vpnOutput.write(bufferToNetwork);
+                    }
+
                     if (bytes > 0) {
                         bufferToNetwork.flip();
                         IPPacket packet = new IPPacket(bufferToNetwork);
-                        Monitor.filter(packet);
-                        //Log.d(TAG, "run: " + packet);
+
+                        // do the filtering
+                        packet = Monitor.filter(packet);
+
+                        // if packet == null for any reason(mostly filtered by our rule), continue
+                        if (packet == null) continue;
+
+                        outputPacketsQueue.offer(packet);
+
+                        Log.d(TAG, "run: " + packet);
+
                     }
 //                    bufferToNetwork.flip();
 ////                    tunnel.write(bufferToNetwork);

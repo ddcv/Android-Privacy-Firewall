@@ -113,17 +113,8 @@ public class MainActivity extends AppCompatActivity {
                                 if (b) {
                                     Log.i("Switch", "click-on");
 
-                                    /** VPN Part Demo Start */
-
                                     /** Start VPN */
-                                    serviceIntent = VpnTestService.prepare(getApplicationContext());
-                                    if (serviceIntent != null) {
-                                        startActivityForResult(serviceIntent, VPN_REQUEST_CODE);
-                                    } else {
-                                        onActivityResult(VPN_REQUEST_CODE, RESULT_OK, null);
-                                    }
-
-                                    /** VPN Part Demo End   */
+                                    startVPN();
 
                                     Snackbar.make(mRecyclerView, "VPN turn on",
                                             Snackbar.LENGTH_SHORT).show();
@@ -175,15 +166,27 @@ public class MainActivity extends AppCompatActivity {
     /** VPN Part Functions Start */
 
     /**
-     *
+     * Start the VPNService
+     */
+    public void startVPN() {
+        serviceIntent = FirewallVpnService.prepare(getApplicationContext());
+        if (serviceIntent != null) {
+            startActivityForResult(serviceIntent, VPN_REQUEST_CODE);
+        } else {
+            onActivityResult(VPN_REQUEST_CODE, RESULT_OK, null);
+        }
+    }
+
+    /**
+     * OnActivityResult
      * @param requestCode
      * @param resultCode
      * @param data
      */
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == VPN_REQUEST_CODE && resultCode == RESULT_OK) {
-            Intent intent = new Intent(this, VpnTestService.class);
+            Intent intent = new Intent(this, FirewallVpnService.class);
             startService(intent);
         }
     }
