@@ -19,6 +19,7 @@ import java.nio.channels.Selector;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Created by Billdqu on 9/30/16.
@@ -35,7 +36,8 @@ public class FirewallVpnService extends VpnService {
 
     private PendingIntent pendingIntent;
 
-    private BlockingQueue<IPPacket> outputPacketsQueue;
+    private BlockingQueue<IPPacket> outputUDPPacketsQueue;
+    private BlockingQueue<IPPacket> outputTCPPacketsQueue;
     private BlockingQueue<ByteBuffer> inputPacketsQueue;
     private ExecutorService executorService;
 
@@ -55,7 +57,7 @@ public class FirewallVpnService extends VpnService {
                     .setConfigureIntent(pendingIntent).establish();
         }
 
-        /* Selector */
+        /* Init Selector */
         try {
             selector = Selector.open();
         } catch (IOException e) {
@@ -64,11 +66,16 @@ public class FirewallVpnService extends VpnService {
             return;
         }
 
+        /* Init BlockingQueue */
+        outputUDPPacketsQueue = new LinkedBlockingQueue<>();
+        outputTCPPacketsQueue = new LinkedBlockingQueue<>();
+        inputPacketsQueue = new LinkedBlockingQueue<>();
+
         /* Create thread pool */
-        executorService = Executors.newFixedThreadPool(3);
+        executorService = Executors.newFixedThreadPool(1);
         // start VPN Thread Runnable
         executorService.submit(new VPNThreadRunnable(vpnInterface.getFileDescriptor()));
-        executorService.submit(new TrafficInRunnable(inputPacketsQueue, selector));
+//        executorService.submit(new TrafficInRunnable(inputPacketsQueue, selector));
     }
 
     @Override
@@ -81,6 +88,13 @@ public class FirewallVpnService extends VpnService {
         super.onDestroy();
         // TODO: Close All Threads
 
+        executorService.shutdown();
+
+        try {
+            selector.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -100,14 +114,6 @@ public class FirewallVpnService extends VpnService {
 
             try {
 
-                /* The UDP channel can be used to pass/get ip package to/from server */
-                DatagramChannel tunnel = DatagramChannel.open();
-                /* Connect to localhost */
-                tunnel.connect(new InetSocketAddress("10.0.0.2", 8087));
-                /* Protect this socket,
-                   so package send by it will not be feedback to the vpn service. */
-                protect(tunnel.socket());
-
                 Log.d(TAG, "run: ready to run");
                 // Use a loop to pass packets.
                 while (true) {
@@ -115,12 +121,6 @@ public class FirewallVpnService extends VpnService {
 
                     //get packet with in
                     int bytes = vpnInput.read(bufferToNetwork);
-//                    Log.d(TAG, "run: " + bytes);
-
-                    bufferToNetwork.flip();
-                    while (bufferToNetwork.hasRemaining()) {
-                        vpnOutput.write(bufferToNetwork);
-                    }
 
                     if (bytes > 0) {
                         bufferToNetwork.flip();
@@ -132,47 +132,29 @@ public class FirewallVpnService extends VpnService {
                         // if packet == null for any reason(mostly filtered by our rule), continue
                         if (packet == null) continue;
 
-                        outputPacketsQueue.offer(packet);
+                        if (packet.isTCP()) {
+                            outputTCPPacketsQueue.offer(packet);
+                        } else if (packet.isUDP()) {
+                            outputUDPPacketsQueue.offer(packet);
+                        } else {
+                            // TODO: Exception
+                        }
 
                         Log.d(TAG, "run: " + packet);
 
                     }
-//                    bufferToNetwork.flip();
-////                    tunnel.write(bufferToNetwork);
-//                    while (bufferToNetwork.hasRemaining()) {
-//                        vpnOutput.write(bufferToNetwork);
-//                    }
 
-                    //put packet to tunnel
-//                    tunnel.write(bufferToNetwork);
+                    ByteBuffer bufferFromNetwork = inputPacketsQueue.poll();
+                    if (bufferFromNetwork != null)
+                    {
+                        bufferFromNetwork.flip();
+                        while (bufferFromNetwork.hasRemaining())
+                            vpnOutput.write(bufferFromNetwork);
+                    }
 
-                    //get packet form tunnel
-                    //return packet with out
                     //sleep is a must
-                    Thread.sleep(100);
+                    Thread.sleep(10);
                 }
-
-//                while (!Thread.interrupted()) {
-//
-//                    /* Read the bytes from inner network to buffer */
-//                    ByteBuffer bufferToNetwork = null;
-//
-//                    // TODO: acquire buffer
-////                    bufferToNetwork;
-//
-//                    int readBytes = vpnInput.read(bufferToNetwork);
-//                    if (readBytes > 0) {
-//                        /* Send the read bytes to outer network */
-//                        bufferToNetwork.flip();
-//                        // TODO: Send
-//                    }
-//                    else {
-//
-//                    }
-//
-//
-//                }
-
             } catch (IOException e) {
                 Log.w(TAG, e.toString(), e);
             } catch (InterruptedException e) {
