@@ -1,5 +1,7 @@
 package edu.cmu.privacy.privacyfirewall;
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -13,14 +15,16 @@ import java.util.concurrent.BlockingQueue;
  * Created by Billdqu on 11/17/16.
  */
 
-public class TrafficOutRunnable implements Runnable {
+public class UDPTrafficOutRunnable implements Runnable {
+
+    private static final String TAG = "UDPOUT";
 
     private Selector selector;
-    private BlockingQueue<IPPacket> outputPacketsQueue;
+    private BlockingQueue<IPPacket> UDPPacketsOutputQueue;
     private FirewallVpnService firewallVpnService;
 
-    public TrafficOutRunnable(BlockingQueue<IPPacket> bq, Selector s, FirewallVpnService vpn) {
-        this.outputPacketsQueue = bq;
+    public UDPTrafficOutRunnable(BlockingQueue<IPPacket> bq, Selector s, FirewallVpnService vpn) {
+        this.UDPPacketsOutputQueue = bq;
         this.selector = s;
         this.firewallVpnService = vpn;
     }
@@ -29,7 +33,7 @@ public class TrafficOutRunnable implements Runnable {
     public void run() {
         try {
             while (true) {
-                IPPacket packet = outputPacketsQueue.take();
+                IPPacket packet = UDPPacketsOutputQueue.take();
 
                 InetAddress destinationAddress = packet.ip4Header.destinationAddress;
                 int destinationPort = packet.udpHeader.destinationPort;
@@ -41,10 +45,15 @@ public class TrafficOutRunnable implements Runnable {
                 outputChannel.connect(new InetSocketAddress(destinationAddress, destinationPort));
                 outputChannel.configureBlocking(false);
 
-                //packet.swapSourceAndDestination();
+                packet.swapSourceAndDestination();
+
+                Log.d(TAG, packet.ip4Header.sourceAddress + ":" + packet.udpHeader.sourcePort
+                        + "  -->  " + packet.ip4Header.destinationAddress + ":" + packet.udpHeader.destinationPort);
 
                 selector.wakeup();
                 outputChannel.register(selector, SelectionKey.OP_READ, packet);
+
+                Log.d(TAG, "registered");
 
                 firewallVpnService.protect(outputChannel.socket());
 

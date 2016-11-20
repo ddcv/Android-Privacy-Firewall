@@ -13,12 +13,12 @@ import java.util.concurrent.BlockingQueue;
  * Created by Billdqu on 11/17/16.
  */
 
-public class TrafficInRunnable implements Runnable {
+public class UDPTrafficInRunnable implements Runnable {
 
     private Selector selector;
     private BlockingQueue<ByteBuffer> outputPacketsQueue;
 
-    public TrafficInRunnable(BlockingQueue<ByteBuffer> queue, Selector s) {
+    public UDPTrafficInRunnable(BlockingQueue<ByteBuffer> queue, Selector s) {
         this.selector = s;
         this.outputPacketsQueue = queue;
     }
