@@ -11,9 +11,7 @@ import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
-import java.nio.channels.DatagramChannel;
 import java.nio.channels.FileChannel;
 import java.nio.channels.Selector;
 import java.util.concurrent.BlockingQueue;
@@ -41,7 +39,8 @@ public class FirewallVpnService extends VpnService {
     private BlockingQueue<ByteBuffer> inputPacketsQueue;
     private ExecutorService executorService;
 
-    private Selector selector;
+    private Selector UDPSelector;
+    private Selector TCPSelector;
 
     @Override
     public void onCreate() {
@@ -59,7 +58,8 @@ public class FirewallVpnService extends VpnService {
 
         /* Init Selector */
         try {
-            selector = Selector.open();
+            UDPSelector = Selector.open();
+            TCPSelector = Selector.open();
         } catch (IOException e) {
             e.printStackTrace();
             Log.e(TAG, "Selector Creation Error!!");
@@ -72,10 +72,11 @@ public class FirewallVpnService extends VpnService {
         inputPacketsQueue = new LinkedBlockingQueue<>();
 
         /* Create thread pool */
-        executorService = Executors.newFixedThreadPool(1);
+        executorService = Executors.newFixedThreadPool(5);
         // start VPN Thread Runnable
         executorService.submit(new VPNThreadRunnable(vpnInterface.getFileDescriptor()));
-//        executorService.submit(new TrafficInRunnable(inputPacketsQueue, selector));
+        executorService.submit(new UDPTrafficOutRunnable(outputUDPPacketsQueue, UDPSelector, this));
+        executorService.submit(new UDPTrafficInRunnable(inputPacketsQueue, UDPSelector));
     }
 
     @Override
@@ -91,7 +92,8 @@ public class FirewallVpnService extends VpnService {
         executorService.shutdown();
 
         try {
-            selector.close();
+            UDPSelector.close();
+            TCPSelector.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

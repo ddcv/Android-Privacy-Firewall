@@ -69,6 +69,26 @@ public class IPPacket {
         return isUDP;
     }
 
+    public void swapSourceAndDestination()
+    {
+        InetAddress newSourceAddress = ip4Header.destinationAddress;
+        ip4Header.destinationAddress = ip4Header.sourceAddress;
+        ip4Header.sourceAddress = newSourceAddress;
+
+        if (isUDP)
+        {
+            int newSourcePort = udpHeader.destinationPort;
+            udpHeader.destinationPort = udpHeader.sourcePort;
+            udpHeader.sourcePort = newSourcePort;
+        }
+        else if (isTCP)
+        {
+            int newSourcePort = tcpHeader.destinationPort;
+            tcpHeader.destinationPort = tcpHeader.sourcePort;
+            tcpHeader.sourcePort = newSourcePort;
+        }
+    }
+
     /**
      * Class for IPv4 Header
      */
