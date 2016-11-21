@@ -160,6 +160,11 @@ public class MainActivity extends AppCompatActivity {
         mProgressBar.setVisibility(View.VISIBLE);
 
         /** UI End */
+
+
+
+        /** TEST */
+        startVPN();
     }
 
 

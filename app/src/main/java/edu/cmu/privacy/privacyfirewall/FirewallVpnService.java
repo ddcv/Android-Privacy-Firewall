@@ -14,10 +14,9 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.Selector;
-import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Created by Billdqu on 9/30/16.
@@ -34,13 +33,13 @@ public class FirewallVpnService extends VpnService {
 
     private PendingIntent pendingIntent;
 
-    private BlockingQueue<IPPacket> outputUDPPacketsQueue;
-    private BlockingQueue<IPPacket> outputTCPPacketsQueue;
-    private BlockingQueue<ByteBuffer> inputPacketsQueue;
+    private ConcurrentLinkedQueue<IPPacket> deviceToNetworkUDPQueue;
+    private ConcurrentLinkedQueue<IPPacket> deviceToNetworkTCPQueue;
+    private ConcurrentLinkedQueue<ByteBuffer> networkToDeviceQueue;
     private ExecutorService executorService;
 
-    private Selector UDPSelector;
-    private Selector TCPSelector;
+    private Selector udpSelector;
+    private Selector tcpSelector;
 
     @Override
     public void onCreate() {
@@ -58,8 +57,8 @@ public class FirewallVpnService extends VpnService {
 
         /* Init Selector */
         try {
-            UDPSelector = Selector.open();
-            TCPSelector = Selector.open();
+            udpSelector = Selector.open();
+            tcpSelector = Selector.open();
         } catch (IOException e) {
             e.printStackTrace();
             Log.e(TAG, "Selector Creation Error!!");
@@ -67,16 +66,19 @@ public class FirewallVpnService extends VpnService {
         }
 
         /* Init BlockingQueue */
-        outputUDPPacketsQueue = new LinkedBlockingQueue<>();
-        outputTCPPacketsQueue = new LinkedBlockingQueue<>();
-        inputPacketsQueue = new LinkedBlockingQueue<>();
+        deviceToNetworkUDPQueue = new ConcurrentLinkedQueue<>();
+        deviceToNetworkTCPQueue = new ConcurrentLinkedQueue<>();
+        networkToDeviceQueue = new ConcurrentLinkedQueue<>();
 
         /* Create thread pool */
         executorService = Executors.newFixedThreadPool(5);
         // start VPN Thread Runnable
-        executorService.submit(new VPNThreadRunnable(vpnInterface.getFileDescriptor()));
-        executorService.submit(new UDPTrafficOutRunnable(outputUDPPacketsQueue, UDPSelector, this));
-        executorService.submit(new UDPTrafficInRunnable(inputPacketsQueue, UDPSelector));
+        executorService.submit(new UDPInput(networkToDeviceQueue, udpSelector));
+        executorService.submit(new UDPOutput(deviceToNetworkUDPQueue, udpSelector, this));
+        executorService.submit(new TCPInput(networkToDeviceQueue, tcpSelector));
+        executorService.submit(new TCPOutput(deviceToNetworkTCPQueue, networkToDeviceQueue, tcpSelector, this));
+        executorService.submit(new VPNThreadRunnable(vpnInterface.getFileDescriptor(),
+                deviceToNetworkUDPQueue, deviceToNetworkTCPQueue, networkToDeviceQueue));
     }
 
     @Override
@@ -91,21 +93,36 @@ public class FirewallVpnService extends VpnService {
 
         executorService.shutdown();
 
+        ByteBufferPool.clear();
+
         try {
-            UDPSelector.close();
-            TCPSelector.close();
+            vpnInterface.close();
+            udpSelector.close();
+            tcpSelector.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
 
-    private class VPNThreadRunnable implements Runnable {
+    private static class VPNThreadRunnable implements Runnable {
 
+        private static final String TAG = VPNThreadRunnable.class.getSimpleName();
         private FileDescriptor vpnFileDescriptor;
 
-        public VPNThreadRunnable(FileDescriptor vpnFileDescriptor) {
+        private ConcurrentLinkedQueue<IPPacket> deviceToNetworkUDPQueue;
+        private ConcurrentLinkedQueue<IPPacket> deviceToNetworkTCPQueue;
+        private ConcurrentLinkedQueue<ByteBuffer> networkToDeviceQueue;
+
+        public VPNThreadRunnable(FileDescriptor vpnFileDescriptor,
+                           ConcurrentLinkedQueue<IPPacket> deviceToNetworkUDPQueue,
+                           ConcurrentLinkedQueue<IPPacket> deviceToNetworkTCPQueue,
+                           ConcurrentLinkedQueue<ByteBuffer> networkToDeviceQueue)
+        {
             this.vpnFileDescriptor = vpnFileDescriptor;
+            this.deviceToNetworkUDPQueue = deviceToNetworkUDPQueue;
+            this.deviceToNetworkTCPQueue = deviceToNetworkTCPQueue;
+            this.networkToDeviceQueue = networkToDeviceQueue;
         }
 
         @Override
@@ -117,14 +134,22 @@ public class FirewallVpnService extends VpnService {
             try {
 
                 Log.d(TAG, "run: ready to run");
+
+                ByteBuffer bufferToNetwork = null;
+                boolean dataSent = true;
+                boolean dataReceived;
+
                 // Use a loop to pass packets.
                 while (true) {
-                    ByteBuffer bufferToNetwork = ByteBuffer.allocateDirect(1 << 10);
+                    if (dataSent)
+                        bufferToNetwork = ByteBufferPool.acquire();
+                    else
+                        bufferToNetwork.clear();
 
-                    //get packet with in
-                    int bytes = vpnInput.read(bufferToNetwork);
-
-                    if (bytes > 0) {
+                    int readBytes = vpnInput.read(bufferToNetwork);
+                    if (readBytes > 0)
+                    {
+                        dataSent = true;
                         bufferToNetwork.flip();
                         IPPacket packet = new IPPacket(bufferToNetwork);
 
@@ -132,35 +157,52 @@ public class FirewallVpnService extends VpnService {
                         packet = Monitor.filter(packet);
 
                         // if packet == null for any reason(mostly filtered by our rule), continue
-                        if (packet == null) continue;
-
-                        if (packet.isTCP()) {
-                            outputTCPPacketsQueue.offer(packet);
-                        } else if (packet.isUDP()) {
-                            outputUDPPacketsQueue.offer(packet);
-                        } else {
-                            // TODO: Exception
+                        if (packet != null) {
+                            if (packet.isUDP()) {
+                                deviceToNetworkUDPQueue.offer(packet);
+                            } else if (packet.isTCP()) {
+                                deviceToNetworkTCPQueue.offer(packet);
+                            } else {
+                                Log.w(TAG, "Unknown packet type");
+                                Log.w(TAG, packet.ip4Header.toString());
+                                dataSent = false;
+                            }
                         }
-
-                        Log.d(TAG, "run: " + packet);
-
+                    }
+                    else
+                    {
+                        dataSent = false;
                     }
 
-                    ByteBuffer bufferFromNetwork = inputPacketsQueue.poll();
+                    ByteBuffer bufferFromNetwork = networkToDeviceQueue.poll();
                     if (bufferFromNetwork != null)
                     {
                         bufferFromNetwork.flip();
                         while (bufferFromNetwork.hasRemaining())
                             vpnOutput.write(bufferFromNetwork);
+                        dataReceived = true;
+
+                        ByteBufferPool.release(bufferFromNetwork);
+                    }
+                    else
+                    {
+                        dataReceived = false;
                     }
 
-                    //sleep is a must
-                    Thread.sleep(10);
+                    if (!dataSent && !dataReceived)
+                        Thread.sleep(10);
                 }
             } catch (IOException e) {
                 Log.w(TAG, e.toString(), e);
             } catch (InterruptedException e) {
                 e.printStackTrace();
+            } finally {
+                try {
+                    vpnInput.close();
+                    vpnOutput.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
         }
