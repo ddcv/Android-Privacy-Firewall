@@ -71,11 +71,15 @@ public class FirewallVpnService extends VpnService {
         networkToDeviceQueue = new ConcurrentLinkedQueue<>();
 
         /* Create thread pool */
-        executorService = Executors.newFixedThreadPool(5);
+        executorService = Executors.newFixedThreadPool(20);
         // start VPN Thread Runnable
         executorService.submit(new UDPInput(networkToDeviceQueue, udpSelector));
         executorService.submit(new UDPOutput(deviceToNetworkUDPQueue, udpSelector, this));
         executorService.submit(new TCPInput(networkToDeviceQueue, tcpSelector));
+        executorService.submit(new TCPOutput(deviceToNetworkTCPQueue, networkToDeviceQueue, tcpSelector, this));
+        executorService.submit(new TCPOutput(deviceToNetworkTCPQueue, networkToDeviceQueue, tcpSelector, this));
+        executorService.submit(new TCPOutput(deviceToNetworkTCPQueue, networkToDeviceQueue, tcpSelector, this));
+        executorService.submit(new TCPOutput(deviceToNetworkTCPQueue, networkToDeviceQueue, tcpSelector, this));
         executorService.submit(new TCPOutput(deviceToNetworkTCPQueue, networkToDeviceQueue, tcpSelector, this));
         executorService.submit(new VPNThreadRunnable(vpnInterface.getFileDescriptor(),
                 deviceToNetworkUDPQueue, deviceToNetworkTCPQueue, networkToDeviceQueue));
