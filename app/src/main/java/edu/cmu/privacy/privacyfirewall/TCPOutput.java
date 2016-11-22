@@ -12,21 +12,21 @@ import java.nio.channels.SocketChannel;
 import java.util.Random;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import edu.cmu.privacy.privacyfirewall.Packet.TCPHeader;
+import edu.cmu.privacy.privacyfirewall.IPPacket.TCPHeader;
 import edu.cmu.privacy.privacyfirewall.TCB.TCBStatus;
 
 public class TCPOutput implements Runnable
 {
     private static final String TAG = TCPOutput.class.getSimpleName();
 
-    private LocalVPNService vpnService;
-    private ConcurrentLinkedQueue<Packet> inputQueue;
+    private FireWallVPNService vpnService;
+    private ConcurrentLinkedQueue<IPPacket> inputQueue;
     private ConcurrentLinkedQueue<ByteBuffer> outputQueue;
     private Selector selector;
 
     private Random random = new Random();
-    public TCPOutput(ConcurrentLinkedQueue<Packet> inputQueue, ConcurrentLinkedQueue<ByteBuffer> outputQueue,
-                     Selector selector, LocalVPNService vpnService)
+    public TCPOutput(ConcurrentLinkedQueue<IPPacket> inputQueue, ConcurrentLinkedQueue<ByteBuffer> outputQueue,
+                     Selector selector, FireWallVPNService vpnService)
     {
         this.inputQueue = inputQueue;
         this.outputQueue = outputQueue;
@@ -44,7 +44,7 @@ public class TCPOutput implements Runnable
             Thread currentThread = Thread.currentThread();
             while (true)
             {
-                Packet currentPacket;
+                IPPacket currentPacket;
                 // TODO: Block when not connected
                 do
                 {
@@ -57,8 +57,8 @@ public class TCPOutput implements Runnable
                 if (currentThread.isInterrupted())
                     break;
 
-                ByteBuffer payloadBuffer = currentPacket.backingBuffer;
-                currentPacket.backingBuffer = null;
+                ByteBuffer payloadBuffer = currentPacket.contentBuffer;
+                currentPacket.contentBuffer = null;
                 ByteBuffer responseBuffer = ByteBufferPool.acquire();
 
                 InetAddress destinationAddress = currentPacket.ip4Header.destinationAddress;
@@ -103,7 +103,7 @@ public class TCPOutput implements Runnable
     }
 
     private void initializeConnection(String ipAndPort, InetAddress destinationAddress, int destinationPort,
-                                      Packet currentPacket, TCPHeader tcpHeader, ByteBuffer responseBuffer)
+                                      IPPacket currentPacket, TCPHeader tcpHeader, ByteBuffer responseBuffer)
             throws IOException
     {
         currentPacket.swapSourceAndDestination();
@@ -168,7 +168,7 @@ public class TCPOutput implements Runnable
     {
         synchronized (tcb)
         {
-            Packet referencePacket = tcb.referencePacket;
+            IPPacket referencePacket = tcb.referencePacket;
             tcb.myAcknowledgementNum = tcpHeader.sequenceNumber + 1;
             tcb.theirAcknowledgementNum = tcpHeader.acknowledgementNumber;
 
@@ -235,7 +235,7 @@ public class TCPOutput implements Runnable
             // TODO: We don't expect out-of-order packets, but verify
             tcb.myAcknowledgementNum = tcpHeader.sequenceNumber + payloadSize;
             tcb.theirAcknowledgementNum = tcpHeader.acknowledgementNumber;
-            Packet referencePacket = tcb.referencePacket;
+            IPPacket referencePacket = tcb.referencePacket;
             referencePacket.updateTCPBuffer(responseBuffer, (byte) TCPHeader.ACK, tcb.mySequenceNum, tcb.myAcknowledgementNum, 0);
         }
         outputQueue.offer(responseBuffer);

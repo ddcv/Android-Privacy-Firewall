@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public void startVPN() {
 //        serviceIntent = FirewallVpnService.prepare(getApplicationContext());
-        serviceIntent = LocalVPNService.prepare(getApplicationContext());
+        serviceIntent = FireWallVPNService.prepare(getApplicationContext());
         if (serviceIntent != null) {
             startActivityForResult(serviceIntent, VPN_REQUEST_CODE);
         } else {
@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == VPN_REQUEST_CODE && resultCode == RESULT_OK) {
 //            Intent intent = new Intent(this, FirewallVpnService.class);
-            Intent intent = new Intent(this, LocalVPNService.class);
+            Intent intent = new Intent(this, FireWallVPNService.class);
             startService(intent);
         }
     }

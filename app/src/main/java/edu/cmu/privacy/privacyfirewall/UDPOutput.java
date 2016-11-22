@@ -19,8 +19,8 @@ public class UDPOutput implements Runnable
 
     private static final String TAG = UDPOutput.class.getSimpleName();
 
-    private LocalVPNService vpnService;
-    private ConcurrentLinkedQueue<Packet> inputQueue;
+    private FireWallVPNService vpnService;
+    private ConcurrentLinkedQueue<IPPacket> inputQueue;
     private Selector selector;
 
     private static final int MAX_CACHE_SIZE = 50;
@@ -34,7 +34,7 @@ public class UDPOutput implements Runnable
                 }
             });
 
-    public UDPOutput(ConcurrentLinkedQueue<Packet> inputQueue, Selector selector, LocalVPNService vpnService)
+    public UDPOutput(ConcurrentLinkedQueue<IPPacket> inputQueue, Selector selector, FireWallVPNService vpnService)
     {
         this.inputQueue = inputQueue;
         this.selector = selector;
@@ -51,7 +51,7 @@ public class UDPOutput implements Runnable
             Thread currentThread = Thread.currentThread();
             while (true)
             {
-                Packet currentPacket;
+                IPPacket currentPacket;
                 // TODO: Block when not connected
                 do
                 {
@@ -80,7 +80,7 @@ public class UDPOutput implements Runnable
                     {
                         Log.e(TAG, "Connection error: " + ipAndPort, e);
                         closeChannel(outputChannel);
-                        ByteBufferPool.release(currentPacket.backingBuffer);
+                        ByteBufferPool.release(currentPacket.contentBuffer);
                         continue;
                     }
                     outputChannel.configureBlocking(false);
@@ -96,7 +96,7 @@ public class UDPOutput implements Runnable
 
                 try
                 {
-                    ByteBuffer payloadBuffer = currentPacket.backingBuffer;
+                    ByteBuffer payloadBuffer = currentPacket.contentBuffer;
                     while (payloadBuffer.hasRemaining())
                         outputChannel.write(payloadBuffer);
 
@@ -110,7 +110,7 @@ public class UDPOutput implements Runnable
                     channelCache.remove(ipAndPort);
                     closeChannel(outputChannel);
                 }
-                ByteBufferPool.release(currentPacket.backingBuffer);
+                ByteBufferPool.release(currentPacket.contentBuffer);
             }
         }
         catch (InterruptedException e)

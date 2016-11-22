@@ -17,7 +17,7 @@ public class UDPInput implements Runnable
     private int count;
 
     private static final String TAG = UDPInput.class.getSimpleName();
-    private static final int HEADER_SIZE = Packet.IP4_HEADER_SIZE + Packet.UDP_HEADER_SIZE;
+    private static final int HEADER_SIZE = IPPacket.IP4_HEADER_SIZE + IPPacket.UDP_HEADER_SIZE;
 
     private Selector selector;
     private ConcurrentLinkedQueue<ByteBuffer> outputQueue;
@@ -62,7 +62,7 @@ public class UDPInput implements Runnable
                         // but that probably won't happen with UDP
                         int readBytes = inputChannel.read(receiveBuffer);
 
-                        Packet referencePacket = (Packet) key.attachment();
+                        IPPacket referencePacket = (IPPacket) key.attachment();
                         referencePacket.updateUDPBuffer(receiveBuffer, readBytes);
                         receiveBuffer.position(HEADER_SIZE + readBytes);
 

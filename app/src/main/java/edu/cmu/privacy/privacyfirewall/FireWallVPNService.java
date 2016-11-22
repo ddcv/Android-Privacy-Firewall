@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.net.VpnService;
 import android.os.ParcelFileDescriptor;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.format.Time;
 import android.util.Log;
 
 import java.io.Closeable;
@@ -35,9 +36,9 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class LocalVPNService extends VpnService
+public class FireWallVPNService extends VpnService
 {
-    private static final String TAG = LocalVPNService.class.getSimpleName();
+    private static final String TAG = FireWallVPNService.class.getSimpleName();
     public static final String VPN_ADDRESS = "10.0.0.2"; // Only IPv4 support for now
     private static final String VPN_ROUTE = "0.0.0.0"; // Intercept everything
 
@@ -49,8 +50,8 @@ public class LocalVPNService extends VpnService
 
     private PendingIntent pendingIntent;
 
-    private ConcurrentLinkedQueue<Packet> deviceToNetworkUDPQueue;
-    private ConcurrentLinkedQueue<Packet> deviceToNetworkTCPQueue;
+    private ConcurrentLinkedQueue<IPPacket> deviceToNetworkUDPQueue;
+    private ConcurrentLinkedQueue<IPPacket> deviceToNetworkTCPQueue;
     private ConcurrentLinkedQueue<ByteBuffer> networkToDeviceQueue;
     private ExecutorService executorService;
 
@@ -153,13 +154,13 @@ public class LocalVPNService extends VpnService
 
         private FileDescriptor vpnFileDescriptor;
 
-        private ConcurrentLinkedQueue<Packet> deviceToNetworkUDPQueue;
-        private ConcurrentLinkedQueue<Packet> deviceToNetworkTCPQueue;
+        private ConcurrentLinkedQueue<IPPacket> deviceToNetworkUDPQueue;
+        private ConcurrentLinkedQueue<IPPacket> deviceToNetworkTCPQueue;
         private ConcurrentLinkedQueue<ByteBuffer> networkToDeviceQueue;
 
         public VPNRunnable(FileDescriptor vpnFileDescriptor,
-                           ConcurrentLinkedQueue<Packet> deviceToNetworkUDPQueue,
-                           ConcurrentLinkedQueue<Packet> deviceToNetworkTCPQueue,
+                           ConcurrentLinkedQueue<IPPacket> deviceToNetworkUDPQueue,
+                           ConcurrentLinkedQueue<IPPacket> deviceToNetworkTCPQueue,
                            ConcurrentLinkedQueue<ByteBuffer> networkToDeviceQueue)
         {
             this.vpnFileDescriptor = vpnFileDescriptor;
@@ -194,26 +195,24 @@ public class LocalVPNService extends VpnService
                     {
                         dataSent = true;
                         bufferToNetwork.flip();
-                        Packet packet = new Packet(bufferToNetwork);
+                        IPPacket packet = new IPPacket(bufferToNetwork);
 
 //                        Log.d(TAG, packet.toString());
+//                        Monitor.filter(packet);
 
+                        if (packet != null) {
 
-                        if (packet.isUDP())
-                        {
-                            Log.d(TAG, "UDP in Queue: " + packet.ip4Header.sourceAddress + "-->" + packet.ip4Header.destinationAddress);
-                            deviceToNetworkUDPQueue.offer(packet);
-                        }
-                        else if (packet.isTCP())
-                        {
-                            Log.d(TAG, "TCP in Queue: " + packet.ip4Header.sourceAddress + "-->" + packet.ip4Header.destinationAddress);
-                            deviceToNetworkTCPQueue.offer(packet);
-                        }
-                        else
-                        {
-                            Log.w(TAG, "Unknown packet type");
-                            Log.w(TAG, packet.ip4Header.toString());
-                            dataSent = false;
+                            if (packet.isUDP()) {
+                                Log.d(TAG, "UDP in Queue: " + packet.ip4Header.sourceAddress + "-->" + packet.ip4Header.destinationAddress);
+                                deviceToNetworkUDPQueue.offer(packet);
+                            } else if (packet.isTCP()) {
+                                Log.d(TAG, "TCP in Queue: " + packet.ip4Header.sourceAddress + "-->" + packet.ip4Header.destinationAddress);
+                                deviceToNetworkTCPQueue.offer(packet);
+                            } else {
+                                Log.w(TAG, "Unknown packet type");
+                                Log.w(TAG, packet.ip4Header.toString());
+                                dataSent = false;
+                            }
                         }
                     }
                     else
