@@ -27,7 +27,7 @@ public class TCB
         LAST_ACK,
     }
 
-    public IPPacket referencePacket;
+    public Packet referencePacket;
 
     public SocketChannel channel;
     public boolean waitingForNetworkData;
@@ -61,7 +61,7 @@ public class TCB
     }
 
     public TCB(String ipAndPort, long mySequenceNum, long theirSequenceNum, long myAcknowledgementNum, long theirAcknowledgementNum,
-               SocketChannel channel, IPPacket referencePacket)
+               SocketChannel channel, Packet referencePacket)
     {
         this.ipAndPort = ipAndPort;
 

@@ -1,19 +1,3 @@
-/*
-** Copyright 2015, Mohamed Naufal
-**
-** Licensed under the Apache License, Version 2.0 (the "License");
-** you may not use this file except in compliance with the License.
-** You may obtain a copy of the License at
-**
-**     http://www.apache.org/licenses/LICENSE-2.0
-**
-** Unless required by applicable law or agreed to in writing, software
-** distributed under the License is distributed on an "AS IS" BASIS,
-** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-** See the License for the specific language governing permissions and
-** limitations under the License.
-*/
-
 package edu.cmu.privacy.privacyfirewall;
 
 import android.util.Log;
@@ -28,21 +12,21 @@ import java.nio.channels.SocketChannel;
 import java.util.Random;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import edu.cmu.privacy.privacyfirewall.IPPacket.TCPHeader;
+import edu.cmu.privacy.privacyfirewall.Packet.TCPHeader;
 import edu.cmu.privacy.privacyfirewall.TCB.TCBStatus;
 
 public class TCPOutput implements Runnable
 {
     private static final String TAG = TCPOutput.class.getSimpleName();
 
-    private FirewallVpnService vpnService;
-    private ConcurrentLinkedQueue<IPPacket> inputQueue;
+    private LocalVPNService vpnService;
+    private ConcurrentLinkedQueue<Packet> inputQueue;
     private ConcurrentLinkedQueue<ByteBuffer> outputQueue;
     private Selector selector;
 
     private Random random = new Random();
-    public TCPOutput(ConcurrentLinkedQueue<IPPacket> inputQueue, ConcurrentLinkedQueue<ByteBuffer> outputQueue,
-                     Selector selector, FirewallVpnService vpnService)
+    public TCPOutput(ConcurrentLinkedQueue<Packet> inputQueue, ConcurrentLinkedQueue<ByteBuffer> outputQueue,
+                     Selector selector, LocalVPNService vpnService)
     {
         this.inputQueue = inputQueue;
         this.outputQueue = outputQueue;
@@ -60,7 +44,7 @@ public class TCPOutput implements Runnable
             Thread currentThread = Thread.currentThread();
             while (true)
             {
-                IPPacket currentPacket;
+                Packet currentPacket;
                 // TODO: Block when not connected
                 do
                 {
@@ -73,8 +57,8 @@ public class TCPOutput implements Runnable
                 if (currentThread.isInterrupted())
                     break;
 
-                ByteBuffer payloadBuffer = currentPacket.contentBuffer;
-                currentPacket.contentBuffer = null;
+                ByteBuffer payloadBuffer = currentPacket.backingBuffer;
+                currentPacket.backingBuffer = null;
                 ByteBuffer responseBuffer = ByteBufferPool.acquire();
 
                 InetAddress destinationAddress = currentPacket.ip4Header.destinationAddress;
@@ -119,7 +103,7 @@ public class TCPOutput implements Runnable
     }
 
     private void initializeConnection(String ipAndPort, InetAddress destinationAddress, int destinationPort,
-                                      IPPacket currentPacket, TCPHeader tcpHeader, ByteBuffer responseBuffer)
+                                      Packet currentPacket, TCPHeader tcpHeader, ByteBuffer responseBuffer)
             throws IOException
     {
         currentPacket.swapSourceAndDestination();
@@ -184,7 +168,7 @@ public class TCPOutput implements Runnable
     {
         synchronized (tcb)
         {
-            IPPacket referencePacket = tcb.referencePacket;
+            Packet referencePacket = tcb.referencePacket;
             tcb.myAcknowledgementNum = tcpHeader.sequenceNumber + 1;
             tcb.theirAcknowledgementNum = tcpHeader.acknowledgementNumber;
 
@@ -251,7 +235,7 @@ public class TCPOutput implements Runnable
             // TODO: We don't expect out-of-order packets, but verify
             tcb.myAcknowledgementNum = tcpHeader.sequenceNumber + payloadSize;
             tcb.theirAcknowledgementNum = tcpHeader.acknowledgementNumber;
-            IPPacket referencePacket = tcb.referencePacket;
+            Packet referencePacket = tcb.referencePacket;
             referencePacket.updateTCPBuffer(responseBuffer, (byte) TCPHeader.ACK, tcb.mySequenceNum, tcb.myAcknowledgementNum, 0);
         }
         outputQueue.offer(responseBuffer);

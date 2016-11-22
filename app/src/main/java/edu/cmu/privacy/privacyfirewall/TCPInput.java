@@ -15,8 +15,11 @@ import edu.cmu.privacy.privacyfirewall.TCB.TCBStatus;
 
 public class TCPInput implements Runnable
 {
+
+    private int count;
+
     private static final String TAG = TCPInput.class.getSimpleName();
-    private static final int HEADER_SIZE = IPPacket.IP4_HEADER_SIZE + IPPacket.TCP_HEADER_SIZE;
+    private static final int HEADER_SIZE = Packet.IP4_HEADER_SIZE + Packet.TCP_HEADER_SIZE;
 
     private ConcurrentLinkedQueue<ByteBuffer> outputQueue;
     private Selector selector;
@@ -71,7 +74,7 @@ public class TCPInput implements Runnable
     private void processConnect(SelectionKey key, Iterator<SelectionKey> keyIterator)
     {
         TCB tcb = (TCB) key.attachment();
-        IPPacket referencePacket = tcb.referencePacket;
+        Packet referencePacket = tcb.referencePacket;
         try
         {
             if (tcb.channel.finishConnect())
@@ -81,7 +84,7 @@ public class TCPInput implements Runnable
 
                 // TODO: Set MSS for receiving larger packets from the device
                 ByteBuffer responseBuffer = ByteBufferPool.acquire();
-                referencePacket.updateTCPBuffer(responseBuffer, (byte) (IPPacket.TCPHeader.SYN | IPPacket.TCPHeader.ACK),
+                referencePacket.updateTCPBuffer(responseBuffer, (byte) (Packet.TCPHeader.SYN | Packet.TCPHeader.ACK),
                         tcb.mySequenceNum, tcb.myAcknowledgementNum, 0);
                 outputQueue.offer(responseBuffer);
 
@@ -93,7 +96,7 @@ public class TCPInput implements Runnable
         {
             Log.e(TAG, "Connection error: " + tcb.ipAndPort, e);
             ByteBuffer responseBuffer = ByteBufferPool.acquire();
-            referencePacket.updateTCPBuffer(responseBuffer, (byte) IPPacket.TCPHeader.RST, 0, tcb.myAcknowledgementNum, 0);
+            referencePacket.updateTCPBuffer(responseBuffer, (byte) Packet.TCPHeader.RST, 0, tcb.myAcknowledgementNum, 0);
             outputQueue.offer(responseBuffer);
             TCB.closeTCB(tcb);
         }
@@ -109,7 +112,7 @@ public class TCPInput implements Runnable
         TCB tcb = (TCB) key.attachment();
         synchronized (tcb)
         {
-            IPPacket referencePacket = tcb.referencePacket;
+            Packet referencePacket = tcb.referencePacket;
             SocketChannel inputChannel = (SocketChannel) key.channel();
             int readBytes;
             try
@@ -119,7 +122,7 @@ public class TCPInput implements Runnable
             catch (IOException e)
             {
                 Log.e(TAG, "Network read error: " + tcb.ipAndPort, e);
-                referencePacket.updateTCPBuffer(receiveBuffer, (byte) IPPacket.TCPHeader.RST, 0, tcb.myAcknowledgementNum, 0);
+                referencePacket.updateTCPBuffer(receiveBuffer, (byte) Packet.TCPHeader.RST, 0, tcb.myAcknowledgementNum, 0);
                 outputQueue.offer(receiveBuffer);
                 TCB.closeTCB(tcb);
                 return;
@@ -138,13 +141,13 @@ public class TCPInput implements Runnable
                 }
 
                 tcb.status = TCBStatus.LAST_ACK;
-                referencePacket.updateTCPBuffer(receiveBuffer, (byte) IPPacket.TCPHeader.FIN, tcb.mySequenceNum, tcb.myAcknowledgementNum, 0);
+                referencePacket.updateTCPBuffer(receiveBuffer, (byte) Packet.TCPHeader.FIN, tcb.mySequenceNum, tcb.myAcknowledgementNum, 0);
                 tcb.mySequenceNum++; // FIN counts as a byte
             }
             else
             {
                 // XXX: We should ideally be splitting segments by MTU/MSS, but this seems to work without
-                referencePacket.updateTCPBuffer(receiveBuffer, (byte) (IPPacket.TCPHeader.PSH | IPPacket.TCPHeader.ACK),
+                referencePacket.updateTCPBuffer(receiveBuffer, (byte) (Packet.TCPHeader.PSH | Packet.TCPHeader.ACK),
                         tcb.mySequenceNum, tcb.myAcknowledgementNum, readBytes);
                 tcb.mySequenceNum += readBytes; // Next sequence number
                 receiveBuffer.position(HEADER_SIZE + readBytes);
