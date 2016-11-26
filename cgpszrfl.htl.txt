@@ -1,0 +1,32 @@
+﻿Revert "Merge branch 'VPNService'"
+
+This reverts commit 268956b8bbbb7cc23ac4779cc8821955e946c525, reversing
+changes made to 7b510fc1386062d87d0ff57c4f2d7fb3c2d734de.
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Your branch is ahead of 'origin/master' by 3 commits.
+#   (use "git push" to publish your local commits)
+#
+# Changes to be committed:
+#	modified:   app/src/main/AndroidManifest.xml
+#	deleted:    app/src/main/java/edu/cmu/privacy/privacyfirewall/FireWallVPNService.java
+#	new file:   app/src/main/java/edu/cmu/privacy/privacyfirewall/FirewallVpnService.java
+#	modified:   app/src/main/java/edu/cmu/privacy/privacyfirewall/IPPacket.java
+#	modified:   app/src/main/java/edu/cmu/privacy/privacyfirewall/LRUCache.java
+#	modified:   app/src/main/java/edu/cmu/privacy/privacyfirewall/MainActivity.java
+#	modified:   app/src/main/java/edu/cmu/privacy/privacyfirewall/Monitor.java
+#	modified:   app/src/main/java/edu/cmu/privacy/privacyfirewall/NetUtils.java
+#	modified:   app/src/main/java/edu/cmu/privacy/privacyfirewall/TCPInput.java
+#	modified:   app/src/main/java/edu/cmu/privacy/privacyfirewall/TCPOutput.java
+#	modified:   app/src/main/java/edu/cmu/privacy/privacyfirewall/UDPInput.java
+#	modified:   app/src/main/java/edu/cmu/privacy/privacyfirewall/UDPOutput.java
+#
+# Untracked files:
+#	midyix04.uc4.txt
+#	tspmir2h.ykw.txt
+#	yjmi3gc5.kss.txt
+#
+
+Revert 268956b8bbbb7cc23ac4779cc8821955e946c525

@@ -1,0 +1,18 @@
+﻿Revert "update"
+
+This reverts commit 61f106805734163d542c854d0bd9169a95060df8.
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Your branch is ahead of 'origin/master' by 1 commit.
+#   (use "git push" to publish your local commits)
+#
+# Changes to be committed:
+#	modified:   .gitignore
+#
+# Untracked files:
+#	yjmi3gc5.kss.txt
+#
+
+Revert 61f106805734163d542c854d0bd9169a95060df8
