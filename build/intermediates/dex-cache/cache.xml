@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="/Users/Billdqu/Desktop/infosec/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="09b462bbcb77650284bd6614f1a32f360ef369f8">
+        <dex dex="/Users/Billdqu/Desktop/infosec/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-media-compat-24.2.1_e0e5ba51ac18541396502dd17f027f5d2278593a/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/Billdqu/Desktop/infosec/app/build/intermediates/exploded-aar/co.dift.ui.swipetoaction/library/1.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="91580cd057a26c49c7f8a2abf985bd931bdc446d">
+        <dex dex="/Users/Billdqu/Desktop/infosec/app/build/intermediates/transforms/dex/debug/folders/1000/10/co.dift.ui.swipetoaction-library-1.1_58230d039b9d4d65eb6c2f06184f3e5527309211/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/Billdqu/Desktop/infosec/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/24.2.1/jars/libs/internal_impl-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="fbf8da429efd5ad21e02e3e5ecaa1efc4167878d">
+        <dex dex="/Users/Billdqu/Desktop/infosec/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.1_278e2166277858d8eae5e96317a3debcfa17fd1f/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/Billdqu/Desktop/infosec/app/build/intermediates/exploded-aar/com.mikepenz/google-material-typeface/2.1.0.1.original/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="e0cf0253b06ae679e60476827c56d54a53f2e390">
+        <dex dex="/Users/Billdqu/Desktop/infosec/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.mikepenz-google-material-typeface-2.1.0.1.original_e5223565d0c948aa6b2fdfe32f4106da7b32e500/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/Billdqu/Desktop/infosec/app/build/intermediates/exploded-aar/com.mikepenz/materialdrawer/4.5.9/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="68d556257ab6141d5f88d8580a37f421d29303c0">
+        <dex dex="/Users/Billdqu/Desktop/infosec/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.mikepenz-materialdrawer-4.5.9_9b175658307a49dc6d71481a6860fbd5b55ef24f/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/Billdqu/Desktop/infosec/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="43b2dba6b5a0b14527961b75329d0b90025f15ea">
+        <dex dex="/Users/Billdqu/Desktop/infosec/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-appcompat-v7-24.2.1_f8fb352b42db6dd53f0781ba7e541c4da5738d02/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/Billdqu/Desktop/infosec/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="7521486d9bfd2cd9e756e0cf75ed7d97f2ce2d3b">
+        <dex dex="/Users/Billdqu/Desktop/infosec/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-recyclerview-v7-24.2.1_b088b71f9b6a62dca319c451c990f2e006a820d8/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/Billdqu/Desktop/infosec/app/build/intermediates/exploded-aar/com.mikepenz/materialize/0.5.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="25e8af11fff99ad02250f52f2436e25f60cc1bbe">
+        <dex dex="/Users/Billdqu/Desktop/infosec/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.mikepenz-materialize-0.5.1_7c09e440293fb65e0ea87127bf11109a113a3d7b/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/Billdqu/Desktop/infosec/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/24.2.1/jars/libs/internal_impl-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="867dad63c33388ff8c7644b236579355036d075f">
+        <dex dex="/Users/Billdqu/Desktop/infosec/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.1_39d393f513b84abc3c618c0a74b87d86520492eb/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/Billdqu/Desktop/infosec/app/build/intermediates/exploded-aar/com.android.support/design/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="e03f47f3d1017a093bb3239d4ec47c3447f40744">
+        <dex dex="/Users/Billdqu/Desktop/infosec/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-design-24.2.1_020d6f65f402d6da40794b6ead80b1cf7c71503b/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/Billdqu/Desktop/infosec/app/build/intermediates/exploded-aar/com.android.support/support-compat/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="0ecb4b595fa0f0f8018a149ace3ea6525624f94e">
+        <dex dex="/Users/Billdqu/Desktop/infosec/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-compat-24.2.1_bf61dd4125e31d2fe5bd226f2a5e7e2596594e97/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/Billdqu/Desktop/infosec/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="2478d93dcca955bd5b962daf8d711948c724fe53">
+        <dex dex="/Users/Billdqu/Desktop/infosec/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_ae62af7ead574aeedf8a67aa8345410523f28381/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/Billdqu/Desktop/infosec/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="e7f3132168957eefc46229fc32c3bd464642b71e">
+        <dex dex="/Users/Billdqu/Desktop/infosec/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-core-ui-24.2.1_acd1fa1e3e2293b408c73a4b77da0059054a9031/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/Billdqu/Desktop/infosec/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="d5c731fc64c03dfe04d51134955b483551c35849">
+        <dex dex="/Users/Billdqu/Desktop/infosec/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-vector-drawable-24.2.1_bb9ffc4d284b3111f2b0a07f47e14abce8ebc15e/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/Billdqu/Desktop/infosec/app/build/intermediates/exploded-aar/com.mikepenz/iconics-core/2.5.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="39424478261a9f98810223352349ea3e0e6d3691">
+        <dex dex="/Users/Billdqu/Desktop/infosec/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.mikepenz-iconics-core-2.5.1_42ae2963dd69798a92124f84f3954cc82d496cdd/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/Billdqu/Desktop/infosec/app/build/intermediates/exploded-aar/com.android.support/support-compat/24.2.1/jars/libs/internal_impl-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="7e4389bd133359a2ff88623ff1e4ff93d6e6f780">
+        <dex dex="/Users/Billdqu/Desktop/infosec/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.1_0783e6532d6236ef8c261acb5c67a4d66026f5f9/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/Billdqu/Desktop/infosec/app/build/intermediates/exploded-aar/com.mikepenz/aboutlibraries/5.3.4/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="3cce058d07b5db663d497381bc8ca20d5599311f">
+        <dex dex="/Users/Billdqu/Desktop/infosec/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.mikepenz-aboutlibraries-5.3.4_38720c83c7488106b51cee3ae472653321a0f1f1/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/Billdqu/.gradle/caches/modules-2/files-2.1/com.facebook.rebound/rebound/0.3.8/c8b90640dddaf1e7ad75d7cb00b09a44b3788f7e/rebound-0.3.8.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="c8b90640dddaf1e7ad75d7cb00b09a44b3788f7e">
+        <dex dex="/Users/Billdqu/Desktop/infosec/app/build/intermediates/transforms/dex/debug/folders/1000/10/rebound-0.3.8_453ea7d633daaf3efad27c39ef1892611ba77517/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/Billdqu/Desktop/infosec/app/build/intermediates/exploded-aar/com.android.support/support-fragment/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="b9a1ac78ad7ef3abedc4a4b30cd92bcacb939d1f">
+        <dex dex="/Users/Billdqu/Desktop/infosec/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-fragment-24.2.1_7e6e665f984373e9e3550e1b91431c4ffde453b6/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/Billdqu/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/24.2.1/support-annotations-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="8de3aafecbdf98a61db6427f008f2d515bcd2544">
+        <dex dex="/Users/Billdqu/Desktop/infosec/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-24.2.1_f44b3fe4791d23d3594a9e901a209da629176dc9/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/Billdqu/Desktop/infosec/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/24.2.1/jars/libs/internal_impl-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="935a969265b2a166b2d20415423f5f6e90fe16e0">
+        <dex dex="/Users/Billdqu/Desktop/infosec/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.1_53c6bac8066f1c6fdca19b1f3218978adc519019/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/Billdqu/Desktop/infosec/app/build/intermediates/exploded-aar/com.android.support/support-fragment/24.2.1/jars/libs/internal_impl-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="5f64d657e838e8375135c0f6057a7ff8fab6a50e">
+        <dex dex="/Users/Billdqu/Desktop/infosec/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.1_bae90ab31f8e8704e4eeed724bf6065cfbe3aec9/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/Billdqu/Desktop/infosec/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="94bc1dfb84dcc8b6f6f8f7cc726d7b2dd39c1574">
+        <dex dex="/Users/Billdqu/Desktop/infosec/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-animated-vector-drawable-24.2.1_9909d8d463e4743e92eeb522161342f3491790f8/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/Billdqu/Desktop/infosec/app/build/intermediates/exploded-aar/com.mikepenz/fontawesome-typeface/4.5.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="9ec06b192478fcc1acd79f399926c48444c02f86">
+        <dex dex="/Users/Billdqu/Desktop/infosec/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.mikepenz-fontawesome-typeface-4.5.0.1_8869b985b96ff81e8e30ff6031cc6c1280ec625d/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/Billdqu/Desktop/infosec/app/build/intermediates/exploded-aar/com.android.support/cardview-v7/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="c5e6490573cd2cc8018417f60ddd251138b6ed61">
+        <dex dex="/Users/Billdqu/Desktop/infosec/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-cardview-v7-24.2.1_b9f72e9e0aa6de8664d1f78d4d3d5802ea628897/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/Billdqu/Desktop/infosec/app/build/intermediates/exploded-aar/com.android.support/support-v4/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="/Users/Billdqu/Desktop/infosec/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-v4-24.2.1_419f17c850af7e7d6df7f654031d178816ac4f50/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/Billdqu/Desktop/infosec/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="9c4c3bc902450c39ed54de170db4fb12aea20a35">
+        <dex dex="/Users/Billdqu/Desktop/infosec/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-core-utils-24.2.1_9f3d84f295eadc4a4384e4e2b96b1f23b098cb09/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/Billdqu/Desktop/infosec/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="b8ca18586997f6c8e1c32e797ad8b8b9454e485b">
+        <dex dex="/Users/Billdqu/Desktop/infosec/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_297b7a5da172397eaca776c750b8bfde670a636c/classes.dex" />
+    </item>
+
+</items>
