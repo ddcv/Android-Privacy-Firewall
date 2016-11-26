@@ -43,14 +43,14 @@ public class Monitor {
 
         /** Filter packet */
         c = db.getRuleCursorByAdd(p.ip4Header.destinationAddress.getHostAddress());
-//        if (c.isAfterLast()) {
-//            // TODO: trace recipient
-//            //String recipient = aux.traceRecipient(p.ip4Header.destinationAddress);
-//            db.insertRule(p.ip4Header.destinationAddress.getHostAddress(), RuleDatabase.ORG_DEFAULT,
-//                    RuleDatabase.COUNTRY_DEFAULT);
-//            c = db.getRuleCursorByAdd(p.ip4Header.destinationAddress.getHostAddress());
-//            Log.d(MONITOR_TAG, "Add new filter rule: " + p.ip4Header.destinationAddress.getHostAddress());
-//        }
+        if (c.isAfterLast()) {
+            // TODO: trace recipient
+            //String recipient = aux.traceRecipient(p.ip4Header.destinationAddress);
+            db.insertRule(p.ip4Header.destinationAddress.getHostAddress(), RuleDatabase.ORG_DEFAULT,
+                    RuleDatabase.COUNTRY_DEFAULT);
+            c = db.getRuleCursorByAdd(p.ip4Header.destinationAddress.getHostAddress());
+            Log.d(MONITOR_TAG, "Add new filter rule: " + p.ip4Header.destinationAddress.getHostAddress());
+        }
 
         /** Get action & rId */
         c.moveToFirst();
@@ -110,7 +110,7 @@ public class Monitor {
                     Log.d(MONITOR_TAG, "uid = " + uid);
                     Log.d(MONITOR_TAG, "rId = " + rId);
                     Log.d(MONITOR_TAG, "AppName = " + appName);
-                    Log.d(MONITOR_TAG, "IPPacket = " + p.toString());
+                    Log.d(MONITOR_TAG, "Packet = " + p.toString());
                     Log.d(MONITOR_TAG, "DestAddr = " + p.ip4Header.destinationAddress.getHostAddress());
                     Log.d(MONITOR_TAG, "plaintext = " + plaintext);
                 }

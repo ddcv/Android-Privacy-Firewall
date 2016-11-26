@@ -5,24 +5,33 @@ import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 
 /**
- * Representation of an IP IPPacket
+ * Created by Billdqu on 10/6/16.
  */
-// TODO: Reduce public mutability
-public class IPPacket
-{
+
+public class IPPacket {
+
+    /* Static Variables */
     public static final int IP4_HEADER_SIZE = 20;
     public static final int TCP_HEADER_SIZE = 20;
     public static final int UDP_HEADER_SIZE = 8;
 
+    /* IPv4 Header */
     public IP4Header ip4Header;
+    /* TCP or UDP Header */
     public TCPHeader tcpHeader;
     public UDPHeader udpHeader;
+    /* Content buffer */
     public ByteBuffer contentBuffer;
 
+    /* Is the packet a TCP or UDP packet */
     private boolean isTCP;
     private boolean isUDP;
 
-    public IPPacket(ByteBuffer buffer) throws UnknownHostException {
+    /**
+     * Constructor, parse the byte to IP packet
+     * @param buffer the byte buffer of the network packet
+     */
+    public IPPacket(ByteBuffer buffer) {
         this.ip4Header = new IP4Header(buffer);
         if (this.ip4Header.protocol == IP4Header.TransportProtocol.TCP) {
             this.tcpHeader = new TCPHeader(buffer);
@@ -34,10 +43,14 @@ public class IPPacket
         this.contentBuffer = buffer;
     }
 
+    /**
+     * Display all the information in IPPacket, Debug or Log usage.
+     * @return
+     */
     @Override
     public String toString()
     {
-        final StringBuilder sb = new StringBuilder("IPPacket{");
+        final StringBuilder sb = new StringBuilder("Packet{");
         sb.append("ip4Header=").append(ip4Header);
         if (isTCP) sb.append(", tcpHeader=").append(tcpHeader);
         else if (isUDP) sb.append(", udpHeader=").append(udpHeader);
@@ -125,7 +138,6 @@ public class IPPacket
 
         updateIP4Checksum();
     }
-
     private void updateIP4Checksum()
     {
         ByteBuffer buffer = contentBuffer.duplicate();
@@ -193,7 +205,9 @@ public class IPPacket
         else if (isTCP)
             tcpHeader.fillHeader(buffer);
     }
-
+    /**
+     * Class for IPv4 Header
+     */
     public static class IP4Header
     {
         public byte version;
@@ -243,7 +257,11 @@ public class IPPacket
             }
         }
 
-        private IP4Header(ByteBuffer buffer) throws UnknownHostException
+        /**
+         * Constructor, parse the byte to IPv4 header
+         * @param buffer the byte buffer of the network packet
+         */
+        private IP4Header(ByteBuffer buffer)
         {
             byte versionAndIHL = buffer.get();
             this.version = (byte) (versionAndIHL >> 4);
@@ -261,13 +279,15 @@ public class IPPacket
             this.headerChecksum = BitUtils.getUnsignedShort(buffer.getShort());
 
             byte[] addressBytes = new byte[4];
-            buffer.get(addressBytes, 0, 4);
-            this.sourceAddress = InetAddress.getByAddress(addressBytes);
+            try {
+                buffer.get(addressBytes, 0, 4);
+                this.sourceAddress = InetAddress.getByAddress(addressBytes);
 
-            buffer.get(addressBytes, 0, 4);
-            this.destinationAddress = InetAddress.getByAddress(addressBytes);
-
-            //this.optionsAndPadding = buffer.getInt();
+                buffer.get(addressBytes, 0, 4);
+                this.destinationAddress = InetAddress.getByAddress(addressBytes);
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            }
         }
 
         public void fillHeader(ByteBuffer buffer)
@@ -286,6 +306,11 @@ public class IPPacket
             buffer.put(this.destinationAddress.getAddress());
         }
 
+
+        /**
+         * Display all the information in IPv4 Header, Debug or Log usage.
+         * @return
+         */
         @Override
         public String toString()
         {
@@ -305,6 +330,9 @@ public class IPPacket
         }
     }
 
+    /**
+     * Class for TCP header
+     */
     public static class TCPHeader
     {
         public static final int FIN = 0x01;
@@ -330,6 +358,10 @@ public class IPPacket
 
         public byte[] optionsAndPadding;
 
+        /**
+         * Constructor, parse the byte to TCP packet
+         * @param buffer the byte buffer of the network packet
+         */
         private TCPHeader(ByteBuffer buffer)
         {
             this.sourcePort = BitUtils.getUnsignedShort(buffer.getShort());
@@ -400,6 +432,10 @@ public class IPPacket
             buffer.putShort((short) urgentPointer);
         }
 
+        /**
+         * Display all the information in TCP Header, Debug or Log usage.
+         * @return
+         */
         @Override
         public String toString()
         {
@@ -423,6 +459,9 @@ public class IPPacket
         }
     }
 
+    /**
+     * Class for UDP header
+     */
     public static class UDPHeader
     {
         public int sourcePort;
@@ -431,8 +470,7 @@ public class IPPacket
         public int length;
         public int checksum;
 
-        private UDPHeader(ByteBuffer buffer)
-        {
+        private UDPHeader(ByteBuffer buffer) {
             this.sourcePort = BitUtils.getUnsignedShort(buffer.getShort());
             this.destinationPort = BitUtils.getUnsignedShort(buffer.getShort());
 
@@ -449,6 +487,10 @@ public class IPPacket
             buffer.putShort((short) this.checksum);
         }
 
+        /**
+         * Display all the information in UDP Header, Debug or Log usage.
+         * @return
+         */
         @Override
         public String toString()
         {
@@ -462,6 +504,9 @@ public class IPPacket
         }
     }
 
+    /**
+     * Helper class for bit operations
+     */
     private static class BitUtils
     {
         private static short getUnsignedByte(byte value)
@@ -479,4 +524,5 @@ public class IPPacket
             return value & 0xFFFFFFFFL;
         }
     }
+
 }

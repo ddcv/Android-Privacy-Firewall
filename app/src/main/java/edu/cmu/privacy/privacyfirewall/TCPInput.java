@@ -15,9 +15,6 @@ import edu.cmu.privacy.privacyfirewall.TCB.TCBStatus;
 
 public class TCPInput implements Runnable
 {
-
-    private int count;
-
     private static final String TAG = TCPInput.class.getSimpleName();
     private static final int HEADER_SIZE = IPPacket.IP4_HEADER_SIZE + IPPacket.TCP_HEADER_SIZE;
 

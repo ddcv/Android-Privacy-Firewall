@@ -74,8 +74,7 @@ public class NetUtils {
                 + Integer.valueOf(localAddr[0].substring(2,4), 16) + "."
                 + Integer.valueOf(localAddr[0].substring(0,2), 16);
 
-//        if(!ip.equals(FirewallVpnService.VPN_ADDRESS)){
-        if(!ip.equals(FireWallVPNService.VPN_ADDRESS)){
+        if(!ip.equals(FirewallVpnService.VPN_ADDRESS)){
             return -1;
         }
 

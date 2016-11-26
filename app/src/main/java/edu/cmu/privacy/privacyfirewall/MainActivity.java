@@ -42,7 +42,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 public class MainActivity extends AppCompatActivity {
 
     /** VPN Part Variables Start */
-    private static final int VPN_REQUEST_CODE = 0x0F;    /* VPN Request code, used when start VPN */
+    private static final int VPN_REQUEST_CODE = 0x0;    /* VPN Request code, used when start VPN */
     private Intent serviceIntent;    /* The VPN Service Intent */
     /** VPN Part Variables End   */
 
@@ -174,8 +174,7 @@ public class MainActivity extends AppCompatActivity {
      * Start the VPNService
      */
     public void startVPN() {
-//        serviceIntent = FirewallVpnService.prepare(getApplicationContext());
-        serviceIntent = FireWallVPNService.prepare(getApplicationContext());
+        serviceIntent = FirewallVpnService.prepare(getApplicationContext());
         if (serviceIntent != null) {
             startActivityForResult(serviceIntent, VPN_REQUEST_CODE);
         } else {
@@ -192,8 +191,7 @@ public class MainActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == VPN_REQUEST_CODE && resultCode == RESULT_OK) {
-//            Intent intent = new Intent(this, FirewallVpnService.class);
-            Intent intent = new Intent(this, FireWallVPNService.class);
+            Intent intent = new Intent(this, FirewallVpnService.class);
             startService(intent);
         }
     }
