@@ -69,142 +69,6 @@ public class IPPacket {
         return isUDP;
     }
 
-    public void swapSourceAndDestination()
-    {
-        InetAddress newSourceAddress = ip4Header.destinationAddress;
-        ip4Header.destinationAddress = ip4Header.sourceAddress;
-        ip4Header.sourceAddress = newSourceAddress;
-
-        if (isUDP)
-        {
-            int newSourcePort = udpHeader.destinationPort;
-            udpHeader.destinationPort = udpHeader.sourcePort;
-            udpHeader.sourcePort = newSourcePort;
-        }
-        else if (isTCP)
-        {
-            int newSourcePort = tcpHeader.destinationPort;
-            tcpHeader.destinationPort = tcpHeader.sourcePort;
-            tcpHeader.sourcePort = newSourcePort;
-        }
-    }
-
-    public void updateTCPBuffer(ByteBuffer buffer, byte flags, long sequenceNum, long ackNum, int payloadSize)
-    {
-        buffer.position(0);
-        fillHeader(buffer);
-        contentBuffer = buffer;
-
-        tcpHeader.flags = flags;
-        contentBuffer.put(IP4_HEADER_SIZE + 13, flags);
-
-        tcpHeader.sequenceNumber = sequenceNum;
-        contentBuffer.putInt(IP4_HEADER_SIZE + 4, (int) sequenceNum);
-
-        tcpHeader.acknowledgementNumber = ackNum;
-        contentBuffer.putInt(IP4_HEADER_SIZE + 8, (int) ackNum);
-
-        // Reset header size, since we don't need options
-        byte dataOffset = (byte) (TCP_HEADER_SIZE << 2);
-        tcpHeader.dataOffsetAndReserved = dataOffset;
-        contentBuffer.put(IP4_HEADER_SIZE + 12, dataOffset);
-
-        updateTCPChecksum(payloadSize);
-
-        int ip4TotalLength = IP4_HEADER_SIZE + TCP_HEADER_SIZE + payloadSize;
-        contentBuffer.putShort(2, (short) ip4TotalLength);
-        ip4Header.totalLength = ip4TotalLength;
-
-        updateIP4Checksum();
-    }
-
-    public void updateUDPBuffer(ByteBuffer buffer, int payloadSize)
-    {
-        buffer.position(0);
-        fillHeader(buffer);
-        contentBuffer = buffer;
-
-        int udpTotalLength = UDP_HEADER_SIZE + payloadSize;
-        contentBuffer.putShort(IP4_HEADER_SIZE + 4, (short) udpTotalLength);
-        udpHeader.length = udpTotalLength;
-
-        // Disable UDP checksum validation
-        contentBuffer.putShort(IP4_HEADER_SIZE + 6, (short) 0);
-        udpHeader.checksum = 0;
-
-        int ip4TotalLength = IP4_HEADER_SIZE + udpTotalLength;
-        contentBuffer.putShort(2, (short) ip4TotalLength);
-        ip4Header.totalLength = ip4TotalLength;
-
-        updateIP4Checksum();
-    }
-    private void updateIP4Checksum()
-    {
-        ByteBuffer buffer = contentBuffer.duplicate();
-        buffer.position(0);
-
-        // Clear previous checksum
-        buffer.putShort(10, (short) 0);
-
-        int ipLength = ip4Header.headerLength;
-        int sum = 0;
-        while (ipLength > 0)
-        {
-            sum += BitUtils.getUnsignedShort(buffer.getShort());
-            ipLength -= 2;
-        }
-        while (sum >> 16 > 0)
-            sum = (sum & 0xFFFF) + (sum >> 16);
-
-        sum = ~sum;
-        ip4Header.headerChecksum = sum;
-        contentBuffer.putShort(10, (short) sum);
-    }
-
-    private void updateTCPChecksum(int payloadSize)
-    {
-        int sum = 0;
-        int tcpLength = TCP_HEADER_SIZE + payloadSize;
-
-        // Calculate pseudo-header checksum
-        ByteBuffer buffer = ByteBuffer.wrap(ip4Header.sourceAddress.getAddress());
-        sum = BitUtils.getUnsignedShort(buffer.getShort()) + BitUtils.getUnsignedShort(buffer.getShort());
-
-        buffer = ByteBuffer.wrap(ip4Header.destinationAddress.getAddress());
-        sum += BitUtils.getUnsignedShort(buffer.getShort()) + BitUtils.getUnsignedShort(buffer.getShort());
-
-        sum += IP4Header.TransportProtocol.TCP.getNumber() + tcpLength;
-
-        buffer = contentBuffer.duplicate();
-        // Clear previous checksum
-        buffer.putShort(IP4_HEADER_SIZE + 16, (short) 0);
-
-        // Calculate TCP segment checksum
-        buffer.position(IP4_HEADER_SIZE);
-        while (tcpLength > 1)
-        {
-            sum += BitUtils.getUnsignedShort(buffer.getShort());
-            tcpLength -= 2;
-        }
-        if (tcpLength > 0)
-            sum += BitUtils.getUnsignedByte(buffer.get()) << 8;
-
-        while (sum >> 16 > 0)
-            sum = (sum & 0xFFFF) + (sum >> 16);
-
-        sum = ~sum;
-        tcpHeader.checksum = sum;
-        contentBuffer.putShort(IP4_HEADER_SIZE + 16, (short) sum);
-    }
-
-    private void fillHeader(ByteBuffer buffer)
-    {
-        ip4Header.fillHeader(buffer);
-        if (isUDP)
-            udpHeader.fillHeader(buffer);
-        else if (isTCP)
-            tcpHeader.fillHeader(buffer);
-    }
     /**
      * Class for IPv4 Header
      */
@@ -289,23 +153,6 @@ public class IPPacket {
                 e.printStackTrace();
             }
         }
-
-        public void fillHeader(ByteBuffer buffer)
-        {
-            buffer.put((byte) (this.version << 4 | this.IHL));
-            buffer.put((byte) this.typeOfService);
-            buffer.putShort((short) this.totalLength);
-
-            buffer.putInt(this.identificationAndFlagsAndFragmentOffset);
-
-            buffer.put((byte) this.TTL);
-            buffer.put((byte) this.protocol.getNumber());
-            buffer.putShort((short) this.headerChecksum);
-
-            buffer.put(this.sourceAddress.getAddress());
-            buffer.put(this.destinationAddress.getAddress());
-        }
-
 
         /**
          * Display all the information in IPv4 Header, Debug or Log usage.
@@ -416,22 +263,6 @@ public class IPPacket {
             return (flags & URG) == URG;
         }
 
-        private void fillHeader(ByteBuffer buffer)
-        {
-            buffer.putShort((short) sourcePort);
-            buffer.putShort((short) destinationPort);
-
-            buffer.putInt((int) sequenceNumber);
-            buffer.putInt((int) acknowledgementNumber);
-
-            buffer.put(dataOffsetAndReserved);
-            buffer.put(flags);
-            buffer.putShort((short) window);
-
-            buffer.putShort((short) checksum);
-            buffer.putShort((short) urgentPointer);
-        }
-
         /**
          * Display all the information in TCP Header, Debug or Log usage.
          * @return
@@ -476,15 +307,6 @@ public class IPPacket {
 
             this.length = BitUtils.getUnsignedShort(buffer.getShort());
             this.checksum = BitUtils.getUnsignedShort(buffer.getShort());
-        }
-
-        private void fillHeader(ByteBuffer buffer)
-        {
-            buffer.putShort((short) this.sourcePort);
-            buffer.putShort((short) this.destinationPort);
-
-            buffer.putShort((short) this.length);
-            buffer.putShort((short) this.checksum);
         }
 
         /**
