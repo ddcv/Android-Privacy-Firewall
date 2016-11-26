@@ -40,3 +40,6 @@ Thumbs.db
 build/intermediates/dex-cache/cache.xml
 build.gradle
 build/generated/mockable-android-24.jar
+.idea/copyright/
+.idea/modules/
+app/libs/
