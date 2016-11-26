@@ -1,9 +1,13 @@
 package edu.cmu.infosec.privacyfirewall;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.TextView;
+import android.util.Log;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -13,9 +17,31 @@ public class MainActivity extends AppCompatActivity {
     private static final int VPN_REQUEST_CODE = 0x0F;    /* VPN Request code, used when start VPN */
     private Intent serviceIntent;    /* The VPN Service Intent */
 
+//    boolean isBindWithService = false;
+//    FireWallVPNService myService;
+//    public ServiceConnection mServiceConn = new ServiceConnection() {
+//        public void onServiceConnected(ComponentName className, IBinder binder) {
+//            Log.d("ServiceConnection","connected");
+//            myService = ((FireWallVPNService.LocalBinder) binder).getService();
+//            isBindWithService = true;
+//        }
+//
+//        public void onServiceDisconnected(ComponentName className) {
+//            Log.d("ServiceConnection","disconnected");
+//            myService = null;
+//            isBindWithService = false;
+//        }
+//    };
+
     /**
      * VPN Part Variables End
      */
+
+
+    // Used to load the 'native-lib' library on application startup.
+    static {
+        System.loadLibrary("native-lib");
+    }
 
 
     @Override
@@ -26,10 +52,17 @@ public class MainActivity extends AppCompatActivity {
         startVPN();
     }
 
-    // Used to load the 'native-lib' library on application startup.
-    static {
-        System.loadLibrary("native-lib");
-    }
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        doBindService();
+//    }
+//
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+//        doUnbindService();
+//    }
 
     /**
      * Start the VPNService
@@ -43,10 +76,23 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public static void add(int i) {
-        System.out.print("asdasdas");
-    }
+//    public void stopVPN(){
+//        if (isBindWithService) {
+//            myService.stopVPN();
+//        }
+//    }
 
+//    private void doUnbindService() {
+//        unbindService(mServiceConn);
+//        isBindWithService = false;
+//    }
+//
+//    private void doBindService() {
+//        if (isBindWithService) {
+//            Intent bindIntent = new Intent(this, FireWallVPNService.class);
+//            isBindWithService = bindService(bindIntent, mServiceConn, Context.BIND_AUTO_CREATE);
+//        }
+//    }
     /**
      * OnActivityResult
      *
@@ -60,6 +106,9 @@ public class MainActivity extends AppCompatActivity {
 //            Intent intent = new Intent(this, FirewallVpnService.class);
             Intent intent = new Intent(this, FireWallVPNService.class);
             startService(intent);
+
+//            bindService(new Intent("edu.cmu.infosec.privacy.FireWallVPNService.BIND"),
+//                    mServiceConn, Context.BIND_AUTO_CREATE);
         }
     }
 }

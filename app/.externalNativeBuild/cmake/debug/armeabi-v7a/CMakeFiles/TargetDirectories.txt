@@ -1,3 +1,0 @@
-/Users/Billdqu/Desktop/infosec/app/.externalNativeBuild/cmake/debug/armeabi-v7a/CMakeFiles/edit_cache.dir
-/Users/Billdqu/Desktop/infosec/app/.externalNativeBuild/cmake/debug/armeabi-v7a/CMakeFiles/rebuild_cache.dir
-/Users/Billdqu/Desktop/infosec/app/.externalNativeBuild/cmake/debug/armeabi-v7a/CMakeFiles/native-lib.dir

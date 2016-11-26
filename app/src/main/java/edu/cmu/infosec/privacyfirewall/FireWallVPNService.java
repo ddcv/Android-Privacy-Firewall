@@ -2,10 +2,10 @@ package edu.cmu.infosec.privacyfirewall;
 
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.VpnService;
+import android.os.Binder;
+import android.os.IBinder;
 import android.os.ParcelFileDescriptor;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import java.io.Closeable;
@@ -14,7 +14,6 @@ import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.ExecutorService;
 
 public class FireWallVPNService extends VpnService {
     private static final String TAG = FireWallVPNService.class.getSimpleName();
@@ -27,11 +26,11 @@ public class FireWallVPNService extends VpnService {
 
     private PendingIntent pendingIntent;
 
-    // TODO: Scan, Record the IPPackets in this Queue
+    private final IBinder mBinder = new LocalBinder();
+
     public static ConcurrentLinkedQueue<IPPacket> packetQueue = new ConcurrentLinkedQueue<>();
 
-    // TODO: Add IPs into this Map, VPN will block those IPs in this List
-    public static ConcurrentHashMap<String, Boolean> blockingIPList = new ConcurrentHashMap<>();
+    public static ConcurrentHashMap<String, Boolean> blockingIPMap = new ConcurrentHashMap<>();
 
     private native void jni_init();
 
@@ -59,11 +58,13 @@ public class FireWallVPNService extends VpnService {
         setupVPN();
 
         startNative(vpnInterface);
+
+        Thread consumer = new Thread(new VPNRunnable());
+        consumer.start();
     }
 
     /**
      * Called from native code
-     *
      * @param buffer
      * @param length
      * @return
@@ -101,6 +102,15 @@ public class FireWallVPNService extends VpnService {
         }
     }
 
+    public void stopVPN() {
+        Log.i(TAG, "Stopping");
+        try {
+            vpnInterface.close();
+        } catch (IOException ex) {
+            Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
+        }
+    }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         return START_STICKY;
@@ -134,6 +144,7 @@ public class FireWallVPNService extends VpnService {
         super.onDestroy();
         isRunning = false;
         cleanup();
+        stopNative(vpnInterface, true);
         Log.i(TAG, "Stopped");
     }
 
@@ -154,17 +165,55 @@ public class FireWallVPNService extends VpnService {
 
     /**
      * Called from native code
-     *
      * @param packet
      * @return
      */
     private Allowed isAddressAllowed(Packet packet) {
 
-        if (blockingIPList.containsKey(packet.daddr)) return null;
+        if (blockingIPMap.containsKey(packet.daddr)) return null;
 
         Log.d(TAG, packet.daddr);
 
         return new Allowed();
     }
 
+    private class VPNRunnable implements Runnable {
+
+        @Override
+        public void run() {
+            try {
+                Thread currentThread = Thread.currentThread();
+                while (true) {
+                    IPPacket currentPacket;
+                    do {
+                        currentPacket = FireWallVPNService.packetQueue.poll();
+                        if (currentPacket != null)
+                            break;
+                        Thread.sleep(10);
+                    } while (!currentThread.isInterrupted());
+
+                    if (currentThread.isInterrupted())
+                        break;
+
+                    // TODO: do scan and record on currentPacket
+                    // TODO: Add IPs into Block Map, VPN will block those IPs
+                    // Monitor.filter(currentPacket);
+
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * Class for clients to access.  Because we know this service always
+     * runs in the same process as its clients, we don't need to deal with
+     * IPC.
+     */
+    public class LocalBinder extends Binder {
+        FireWallVPNService getService() {
+            return FireWallVPNService.this;
+        }
+    }
 }
