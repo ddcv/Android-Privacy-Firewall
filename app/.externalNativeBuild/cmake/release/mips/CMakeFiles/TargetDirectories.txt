@@ -1,0 +1,3 @@
+/Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/.externalNativeBuild/cmake/release/mips/CMakeFiles/edit_cache.dir
+/Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/.externalNativeBuild/cmake/release/mips/CMakeFiles/rebuild_cache.dir
+/Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/.externalNativeBuild/cmake/release/mips/CMakeFiles/native-lib.dir

@@ -1,0 +1,92 @@
+
+{
+	"buildFiles" : [ "/Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/CMakeLists.txt" ],
+	"cFileExtensions" : [ "c" ],
+	"cleanCommands" : 
+	[
+		"/Users/Billdqu/Library/Android/sdk/cmake/3.6.3155560/bin/cmake --build /Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/.externalNativeBuild/cmake/debug/mips64 --target clean"
+	],
+	"libraries" : 
+	{
+		"native-lib-Debug-mips64" : 
+		{
+			"abi" : "mips64",
+			"artifactName" : "native-lib",
+			"buildCommand" : "/Users/Billdqu/Library/Android/sdk/cmake/3.6.3155560/bin/cmake --build /Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/.externalNativeBuild/cmake/debug/mips64 --target native-lib",
+			"buildType" : "debug",
+			"files" : 
+			[
+				
+				{
+					"flags" : "  -target mips64el-none-linux-android -gcc-toolchain /Users/Billdqu/Library/Android/sdk/ndk-bundle/toolchains/mips64el-linux-android-4.9/prebuilt/darwin-x86_64 --sysroot=/Users/Billdqu/Library/Android/sdk/ndk-bundle/platforms/android-21/arch-mips64 -Dnative_lib_EXPORTS  -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security  -O0 -fno-limit-debug-info -O0 -fno-limit-debug-info  -fPIC      -c ",
+					"src" : "/Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/src/main/cpp/network/netguard.c",
+					"workingDirectory" : "/Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/.externalNativeBuild/cmake/debug/mips64"
+				},
+				
+				{
+					"flags" : "  -target mips64el-none-linux-android -gcc-toolchain /Users/Billdqu/Library/Android/sdk/ndk-bundle/toolchains/mips64el-linux-android-4.9/prebuilt/darwin-x86_64 --sysroot=/Users/Billdqu/Library/Android/sdk/ndk-bundle/platforms/android-21/arch-mips64 -Dnative_lib_EXPORTS  -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security  -O0 -fno-limit-debug-info -O0 -fno-limit-debug-info  -fPIC      -c ",
+					"src" : "/Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/src/main/cpp/network/ip.c",
+					"workingDirectory" : "/Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/.externalNativeBuild/cmake/debug/mips64"
+				},
+				
+				{
+					"flags" : "  -target mips64el-none-linux-android -gcc-toolchain /Users/Billdqu/Library/Android/sdk/ndk-bundle/toolchains/mips64el-linux-android-4.9/prebuilt/darwin-x86_64 --sysroot=/Users/Billdqu/Library/Android/sdk/ndk-bundle/platforms/android-21/arch-mips64 -Dnative_lib_EXPORTS  -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security  -O0 -fno-limit-debug-info -O0 -fno-limit-debug-info  -fPIC      -c ",
+					"src" : "/Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/src/main/cpp/network/tcp.c",
+					"workingDirectory" : "/Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/.externalNativeBuild/cmake/debug/mips64"
+				},
+				
+				{
+					"flags" : "  -target mips64el-none-linux-android -gcc-toolchain /Users/Billdqu/Library/Android/sdk/ndk-bundle/toolchains/mips64el-linux-android-4.9/prebuilt/darwin-x86_64 --sysroot=/Users/Billdqu/Library/Android/sdk/ndk-bundle/platforms/android-21/arch-mips64 -Dnative_lib_EXPORTS  -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security  -O0 -fno-limit-debug-info -O0 -fno-limit-debug-info  -fPIC      -c ",
+					"src" : "/Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/src/main/cpp/network/udp.c",
+					"workingDirectory" : "/Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/.externalNativeBuild/cmake/debug/mips64"
+				},
+				
+				{
+					"flags" : "  -target mips64el-none-linux-android -gcc-toolchain /Users/Billdqu/Library/Android/sdk/ndk-bundle/toolchains/mips64el-linux-android-4.9/prebuilt/darwin-x86_64 --sysroot=/Users/Billdqu/Library/Android/sdk/ndk-bundle/platforms/android-21/arch-mips64 -Dnative_lib_EXPORTS  -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security  -O0 -fno-limit-debug-info -O0 -fno-limit-debug-info  -fPIC      -c ",
+					"src" : "/Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/src/main/cpp/network/session.c",
+					"workingDirectory" : "/Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/.externalNativeBuild/cmake/debug/mips64"
+				},
+				
+				{
+					"flags" : "  -target mips64el-none-linux-android -gcc-toolchain /Users/Billdqu/Library/Android/sdk/ndk-bundle/toolchains/mips64el-linux-android-4.9/prebuilt/darwin-x86_64 --sysroot=/Users/Billdqu/Library/Android/sdk/ndk-bundle/platforms/android-21/arch-mips64 -Dnative_lib_EXPORTS  -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security  -O0 -fno-limit-debug-info -O0 -fno-limit-debug-info  -fPIC      -c ",
+					"src" : "/Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/src/main/cpp/network/pcap.c",
+					"workingDirectory" : "/Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/.externalNativeBuild/cmake/debug/mips64"
+				},
+				
+				{
+					"flags" : "  -target mips64el-none-linux-android -gcc-toolchain /Users/Billdqu/Library/Android/sdk/ndk-bundle/toolchains/mips64el-linux-android-4.9/prebuilt/darwin-x86_64 --sysroot=/Users/Billdqu/Library/Android/sdk/ndk-bundle/platforms/android-21/arch-mips64 -Dnative_lib_EXPORTS  -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security  -O0 -fno-limit-debug-info -O0 -fno-limit-debug-info  -fPIC      -c ",
+					"src" : "/Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/src/main/cpp/network/util.c",
+					"workingDirectory" : "/Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/.externalNativeBuild/cmake/debug/mips64"
+				},
+				
+				{
+					"flags" : "  -target mips64el-none-linux-android -gcc-toolchain /Users/Billdqu/Library/Android/sdk/ndk-bundle/toolchains/mips64el-linux-android-4.9/prebuilt/darwin-x86_64 --sysroot=/Users/Billdqu/Library/Android/sdk/ndk-bundle/platforms/android-21/arch-mips64 -Dnative_lib_EXPORTS  -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security  -O0 -fno-limit-debug-info -O0 -fno-limit-debug-info  -fPIC      -c ",
+					"src" : "/Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/src/main/cpp/network/icmp.c",
+					"workingDirectory" : "/Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/.externalNativeBuild/cmake/debug/mips64"
+				},
+				
+				{
+					"flags" : "  -target mips64el-none-linux-android -gcc-toolchain /Users/Billdqu/Library/Android/sdk/ndk-bundle/toolchains/mips64el-linux-android-4.9/prebuilt/darwin-x86_64 --sysroot=/Users/Billdqu/Library/Android/sdk/ndk-bundle/platforms/android-21/arch-mips64 -Dnative_lib_EXPORTS  -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security  -O0 -fno-limit-debug-info -O0 -fno-limit-debug-info  -fPIC      -c ",
+					"src" : "/Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/src/main/cpp/network/dns.c",
+					"workingDirectory" : "/Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/.externalNativeBuild/cmake/debug/mips64"
+				},
+				
+				{
+					"flags" : "  -target mips64el-none-linux-android -gcc-toolchain /Users/Billdqu/Library/Android/sdk/ndk-bundle/toolchains/mips64el-linux-android-4.9/prebuilt/darwin-x86_64 --sysroot=/Users/Billdqu/Library/Android/sdk/ndk-bundle/platforms/android-21/arch-mips64 -Dnative_lib_EXPORTS  -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security  -O0 -fno-limit-debug-info -O0 -fno-limit-debug-info  -fPIC      -c ",
+					"src" : "/Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/src/main/cpp/network/dhcp.c",
+					"workingDirectory" : "/Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/.externalNativeBuild/cmake/debug/mips64"
+				}
+			],
+			"output" : "/Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/.externalNativeBuild/cmake/debug/obj/mips64/libnative-lib.so",
+			"toolchain" : "790986853266657576"
+		}
+	},
+	"toolchains" : 
+	{
+		"790986853266657576" : 
+		{
+			"cCompilerExecutable" : "/Users/Billdqu/Library/Android/sdk/ndk-bundle/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang",
+			"cppCompilerExecutable" : "/Users/Billdqu/Library/Android/sdk/ndk-bundle/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++"
+		}
+	}
+}
