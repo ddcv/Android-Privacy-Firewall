@@ -45,6 +45,15 @@ public class DataBaseController implements DatabaseInterface {
         ConnectionDatabase.deleteConnectionByAppIdRuleId(cDb.getWritableDatabase(), appId, ruleId);
     }
 
+    public boolean updateSensitive(int appId, int ruleId, String sensitive) {
+        return ConnectionDatabase.updateSensitive(cDb.getWritableDatabase(), appId, ruleId,
+                sensitive);
+    }
+
+    public boolean updateAction(int appId, int ruleId, int action) {
+        return ConnectionDatabase.updateAction(cDb.getWritableDatabase(), appId, ruleId, action);
+    }
+
     /** Application Database Interface */
     public Cursor getAllApplicationCursor() {
         return ApplicationDatabase.getAllApplicationCursor(aDb.getReadableDatabase());
@@ -84,10 +93,6 @@ public class DataBaseController implements DatabaseInterface {
 
     public Cursor getAllRuleCursor() {
         return RuleDatabase.getAllRuleCursor(rDb.getReadableDatabase());
-    }
-
-    public boolean updateAction(int appId, int ruleId, int action) {
-        return ConnectionDatabase.updateAction(cDb.getWritableDatabase(), appId, ruleId, action);
     }
 
     public boolean updateRegistrant(int id, String registrant, String country) {

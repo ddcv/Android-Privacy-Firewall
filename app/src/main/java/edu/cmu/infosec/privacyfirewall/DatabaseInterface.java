@@ -18,6 +18,7 @@ public interface DatabaseInterface {
                                     int sensitive);
     public void deleteConnectionByAppIdRuleId(int appId, int ruleId);
     public boolean updateAction(int appId, int ruleId, int action);
+    public boolean updateSensitive(int appId, int ruleId, String sensitive);
 
     /** Application */
     public Cursor getAllApplicationCursor();

@@ -21,6 +21,8 @@ public class ConnectionDatabase extends SQLiteOpenHelper{
     public final static String FIELD_RULE = "rid";
 
     public final static String CONTENT_DEFAULT = "NULL";
+    public final static String CONTENT_PHONE = "Phone number";
+    public final static String CONTENT_EMAIL = "Email";
     public final static int SENSITIVE = 1;
     public final static int NON_SENSITIVE = 0;
     public final static int ACTION_ALOW = 1;
@@ -110,6 +112,22 @@ public class ConnectionDatabase extends SQLiteOpenHelper{
         c.moveToFirst();
         DatabaseUtils.cursorRowToContentValues(c, v);
         v.put(FIELD_ACTION, action);
+        c.close();
+        if (db.replace(TABLE_NAME, "null", v) != -1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static boolean updateSensitive(SQLiteDatabase db, int appId, int ruleId,
+                                          String sensitive) {
+        Cursor c = db.query(TABLE_NAME, null, FIELD_APP + " = " + appId + " AND " + FIELD_RULE +
+                " = " + ruleId, null, null, null, null);
+        ContentValues v = new ContentValues();
+        c.moveToFirst();
+        DatabaseUtils.cursorRowToContentValues(c, v);
+        v.put(FIELD_CONTENT, sensitive);
         c.close();
         if (db.replace(TABLE_NAME, "null", v) != -1) {
             return true;

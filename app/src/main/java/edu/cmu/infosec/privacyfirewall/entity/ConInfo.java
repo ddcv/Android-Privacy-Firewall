@@ -51,12 +51,18 @@ public class ConInfo implements Comparable<Object> {
     @Override
     public int compareTo(Object o) {
         ConInfo f = (ConInfo) o;
-        if (!getSensitive().equals(ConnectionDatabase.CONTENT_DEFAULT) &&
-                f.getSensitive().equals(ConnectionDatabase.CONTENT_DEFAULT)) {
+        if (!getSensitive().contains(ConnectionDatabase.CONTENT_DEFAULT) &&
+                f.getSensitive().contains(ConnectionDatabase.CONTENT_DEFAULT)) {
             return -1;
+        } else if (getSensitive().contains(ConnectionDatabase.CONTENT_DEFAULT) &&
+                !f.getSensitive().contains(ConnectionDatabase.CONTENT_DEFAULT)) {
+            return 1;
         } else if (getAction() == ConnectionDatabase.ACTION_DENY &&
                     f.getAction() == ConnectionDatabase.ACTION_ALOW) {
             return -1;
+        } else if (getAction() == ConnectionDatabase.ACTION_ALOW &&
+                f.getAction() == ConnectionDatabase.ACTION_DENY) {
+            return 1;
         } else {
             return getIp().compareTo(f.getIp());
         }

@@ -58,8 +58,8 @@ public class AppInfo implements Comparable<Object> {
 
             int sensitiveSum = 0;
             for (conCur.moveToFirst(); !conCur.isAfterLast(); conCur.moveToNext()) {
-                if (conCur.getInt(conCur.getColumnIndex(ConnectionDatabase.FIELD_SENSITIVE)) ==
-                        ConnectionDatabase.SENSITIVE) {
+                if (!conCur.getString(conCur.getColumnIndex(ConnectionDatabase.FIELD_CONTENT))
+                        .contains(ConnectionDatabase.CONTENT_DEFAULT)) {
                     ++sensitiveSum;
                 }
             }

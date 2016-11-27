@@ -133,13 +133,16 @@ public class MainActivity extends AppCompatActivity {
         /** Cache filter rule */
         Cursor conCur = Monitor.db.getAllConnectionCursor();
         for (conCur.moveToFirst(); !conCur.isAfterLast(); conCur.moveToNext()) {
-            int rId = conCur.getInt(conCur.getColumnIndex(ConnectionDatabase.FIELD_RULE));
-            Cursor ruleCur = Monitor.db.getRuleCursorById(rId);
-            if (ruleCur.getCount() > 0) {
-                ruleCur.moveToFirst();
-                FireWallVPNService.blockingIPMap.add(Pair.create(
-                        ruleCur.getString(ruleCur.getColumnIndex(RuleDatabase.FIELD_IP_ADD)),
-                        conCur.getInt(conCur.getColumnIndex(ConnectionDatabase.FIELD_APP))));
+            if (conCur.getInt(conCur.getColumnIndex(ConnectionDatabase.FIELD_ACTION)) ==
+                    ConnectionDatabase.ACTION_DENY) {
+                int rId = conCur.getInt(conCur.getColumnIndex(ConnectionDatabase.FIELD_RULE));
+                Cursor ruleCur = Monitor.db.getRuleCursorById(rId);
+                if (ruleCur.getCount() > 0) {
+                    ruleCur.moveToFirst();
+                    FireWallVPNService.blockingIPMap.add(Pair.create(
+                            ruleCur.getString(ruleCur.getColumnIndex(RuleDatabase.FIELD_IP_ADD)),
+                            conCur.getInt(conCur.getColumnIndex(ConnectionDatabase.FIELD_APP))));
+                }
             }
         }
 
