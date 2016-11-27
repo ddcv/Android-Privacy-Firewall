@@ -1,10 +1,13 @@
 
 {
-	"buildFiles" : [ "/Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/CMakeLists.txt" ],
+	"buildFiles" : 
+	[
+		"F:/Project/Fall2016_InfoSecProject_VPN/Fall2016_InfoSecProject/app/CMakeLists.txt"
+	],
 	"cFileExtensions" : [ "c" ],
 	"cleanCommands" : 
 	[
-		"/Users/Billdqu/Library/Android/sdk/cmake/3.6.3155560/bin/cmake --build /Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/.externalNativeBuild/cmake/release/mips --target clean"
+		"E:\\AppData\\Local\\Android\\Sdk\\cmake\\3.6.3155560\\bin\\cmake.exe --build F:\\Project\\Fall2016_InfoSecProject_VPN\\Fall2016_InfoSecProject\\app\\.externalNativeBuild\\cmake\\release\\mips --target clean"
 	],
 	"libraries" : 
 	{
@@ -12,81 +15,81 @@
 		{
 			"abi" : "mips",
 			"artifactName" : "native-lib",
-			"buildCommand" : "/Users/Billdqu/Library/Android/sdk/cmake/3.6.3155560/bin/cmake --build /Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/.externalNativeBuild/cmake/release/mips --target native-lib",
+			"buildCommand" : "E:\\AppData\\Local\\Android\\Sdk\\cmake\\3.6.3155560\\bin\\cmake.exe --build F:\\Project\\Fall2016_InfoSecProject_VPN\\Fall2016_InfoSecProject\\app\\.externalNativeBuild\\cmake\\release\\mips --target native-lib",
 			"buildType" : "release",
 			"files" : 
 			[
 				
 				{
-					"flags" : "  -target mipsel-none-linux-android -gcc-toolchain /Users/Billdqu/Library/Android/sdk/ndk-bundle/toolchains/mipsel-linux-android-4.9/prebuilt/darwin-x86_64 --sysroot=/Users/Billdqu/Library/Android/sdk/ndk-bundle/platforms/android-15/arch-mips -Dnative_lib_EXPORTS  -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mips32 -Wa,--noexecstack -Wformat -Werror=format-security -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mips32 -Wa,--noexecstack -Wformat -Werror=format-security  -O2 -DNDEBUG -O2 -DNDEBUG  -fPIC      -c ",
-					"src" : "/Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/src/main/cpp/network/netguard.c",
-					"workingDirectory" : "/Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/.externalNativeBuild/cmake/release/mips"
+					"flags" : "  -target mipsel-none-linux-android -gcc-toolchain E:/AppData/Local/Android/Sdk/ndk-bundle/toolchains/mipsel-linux-android-4.9/prebuilt/windows-x86_64 --sysroot=E:/AppData/Local/Android/Sdk/ndk-bundle/platforms/android-19/arch-mips -Dnative_lib_EXPORTS  -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mips32 -Wa,--noexecstack -Wformat -Werror=format-security  -O2 -DNDEBUG  -fPIC      -c ",
+					"src" : "F:/Project/Fall2016_InfoSecProject_VPN/Fall2016_InfoSecProject/app/src/main/cpp/network/netguard.c",
+					"workingDirectory" : "F:/Project/Fall2016_InfoSecProject_VPN/Fall2016_InfoSecProject/app/.externalNativeBuild/cmake/release/mips"
 				},
 				
 				{
-					"flags" : "  -target mipsel-none-linux-android -gcc-toolchain /Users/Billdqu/Library/Android/sdk/ndk-bundle/toolchains/mipsel-linux-android-4.9/prebuilt/darwin-x86_64 --sysroot=/Users/Billdqu/Library/Android/sdk/ndk-bundle/platforms/android-15/arch-mips -Dnative_lib_EXPORTS  -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mips32 -Wa,--noexecstack -Wformat -Werror=format-security -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mips32 -Wa,--noexecstack -Wformat -Werror=format-security  -O2 -DNDEBUG -O2 -DNDEBUG  -fPIC      -c ",
-					"src" : "/Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/src/main/cpp/network/ip.c",
-					"workingDirectory" : "/Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/.externalNativeBuild/cmake/release/mips"
+					"flags" : "  -target mipsel-none-linux-android -gcc-toolchain E:/AppData/Local/Android/Sdk/ndk-bundle/toolchains/mipsel-linux-android-4.9/prebuilt/windows-x86_64 --sysroot=E:/AppData/Local/Android/Sdk/ndk-bundle/platforms/android-19/arch-mips -Dnative_lib_EXPORTS  -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mips32 -Wa,--noexecstack -Wformat -Werror=format-security  -O2 -DNDEBUG  -fPIC      -c ",
+					"src" : "F:/Project/Fall2016_InfoSecProject_VPN/Fall2016_InfoSecProject/app/src/main/cpp/network/ip.c",
+					"workingDirectory" : "F:/Project/Fall2016_InfoSecProject_VPN/Fall2016_InfoSecProject/app/.externalNativeBuild/cmake/release/mips"
 				},
 				
 				{
-					"flags" : "  -target mipsel-none-linux-android -gcc-toolchain /Users/Billdqu/Library/Android/sdk/ndk-bundle/toolchains/mipsel-linux-android-4.9/prebuilt/darwin-x86_64 --sysroot=/Users/Billdqu/Library/Android/sdk/ndk-bundle/platforms/android-15/arch-mips -Dnative_lib_EXPORTS  -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mips32 -Wa,--noexecstack -Wformat -Werror=format-security -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mips32 -Wa,--noexecstack -Wformat -Werror=format-security  -O2 -DNDEBUG -O2 -DNDEBUG  -fPIC      -c ",
-					"src" : "/Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/src/main/cpp/network/tcp.c",
-					"workingDirectory" : "/Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/.externalNativeBuild/cmake/release/mips"
+					"flags" : "  -target mipsel-none-linux-android -gcc-toolchain E:/AppData/Local/Android/Sdk/ndk-bundle/toolchains/mipsel-linux-android-4.9/prebuilt/windows-x86_64 --sysroot=E:/AppData/Local/Android/Sdk/ndk-bundle/platforms/android-19/arch-mips -Dnative_lib_EXPORTS  -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mips32 -Wa,--noexecstack -Wformat -Werror=format-security  -O2 -DNDEBUG  -fPIC      -c ",
+					"src" : "F:/Project/Fall2016_InfoSecProject_VPN/Fall2016_InfoSecProject/app/src/main/cpp/network/tcp.c",
+					"workingDirectory" : "F:/Project/Fall2016_InfoSecProject_VPN/Fall2016_InfoSecProject/app/.externalNativeBuild/cmake/release/mips"
 				},
 				
 				{
-					"flags" : "  -target mipsel-none-linux-android -gcc-toolchain /Users/Billdqu/Library/Android/sdk/ndk-bundle/toolchains/mipsel-linux-android-4.9/prebuilt/darwin-x86_64 --sysroot=/Users/Billdqu/Library/Android/sdk/ndk-bundle/platforms/android-15/arch-mips -Dnative_lib_EXPORTS  -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mips32 -Wa,--noexecstack -Wformat -Werror=format-security -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mips32 -Wa,--noexecstack -Wformat -Werror=format-security  -O2 -DNDEBUG -O2 -DNDEBUG  -fPIC      -c ",
-					"src" : "/Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/src/main/cpp/network/udp.c",
-					"workingDirectory" : "/Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/.externalNativeBuild/cmake/release/mips"
+					"flags" : "  -target mipsel-none-linux-android -gcc-toolchain E:/AppData/Local/Android/Sdk/ndk-bundle/toolchains/mipsel-linux-android-4.9/prebuilt/windows-x86_64 --sysroot=E:/AppData/Local/Android/Sdk/ndk-bundle/platforms/android-19/arch-mips -Dnative_lib_EXPORTS  -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mips32 -Wa,--noexecstack -Wformat -Werror=format-security  -O2 -DNDEBUG  -fPIC      -c ",
+					"src" : "F:/Project/Fall2016_InfoSecProject_VPN/Fall2016_InfoSecProject/app/src/main/cpp/network/udp.c",
+					"workingDirectory" : "F:/Project/Fall2016_InfoSecProject_VPN/Fall2016_InfoSecProject/app/.externalNativeBuild/cmake/release/mips"
 				},
 				
 				{
-					"flags" : "  -target mipsel-none-linux-android -gcc-toolchain /Users/Billdqu/Library/Android/sdk/ndk-bundle/toolchains/mipsel-linux-android-4.9/prebuilt/darwin-x86_64 --sysroot=/Users/Billdqu/Library/Android/sdk/ndk-bundle/platforms/android-15/arch-mips -Dnative_lib_EXPORTS  -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mips32 -Wa,--noexecstack -Wformat -Werror=format-security -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mips32 -Wa,--noexecstack -Wformat -Werror=format-security  -O2 -DNDEBUG -O2 -DNDEBUG  -fPIC      -c ",
-					"src" : "/Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/src/main/cpp/network/session.c",
-					"workingDirectory" : "/Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/.externalNativeBuild/cmake/release/mips"
+					"flags" : "  -target mipsel-none-linux-android -gcc-toolchain E:/AppData/Local/Android/Sdk/ndk-bundle/toolchains/mipsel-linux-android-4.9/prebuilt/windows-x86_64 --sysroot=E:/AppData/Local/Android/Sdk/ndk-bundle/platforms/android-19/arch-mips -Dnative_lib_EXPORTS  -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mips32 -Wa,--noexecstack -Wformat -Werror=format-security  -O2 -DNDEBUG  -fPIC      -c ",
+					"src" : "F:/Project/Fall2016_InfoSecProject_VPN/Fall2016_InfoSecProject/app/src/main/cpp/network/session.c",
+					"workingDirectory" : "F:/Project/Fall2016_InfoSecProject_VPN/Fall2016_InfoSecProject/app/.externalNativeBuild/cmake/release/mips"
 				},
 				
 				{
-					"flags" : "  -target mipsel-none-linux-android -gcc-toolchain /Users/Billdqu/Library/Android/sdk/ndk-bundle/toolchains/mipsel-linux-android-4.9/prebuilt/darwin-x86_64 --sysroot=/Users/Billdqu/Library/Android/sdk/ndk-bundle/platforms/android-15/arch-mips -Dnative_lib_EXPORTS  -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mips32 -Wa,--noexecstack -Wformat -Werror=format-security -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mips32 -Wa,--noexecstack -Wformat -Werror=format-security  -O2 -DNDEBUG -O2 -DNDEBUG  -fPIC      -c ",
-					"src" : "/Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/src/main/cpp/network/pcap.c",
-					"workingDirectory" : "/Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/.externalNativeBuild/cmake/release/mips"
+					"flags" : "  -target mipsel-none-linux-android -gcc-toolchain E:/AppData/Local/Android/Sdk/ndk-bundle/toolchains/mipsel-linux-android-4.9/prebuilt/windows-x86_64 --sysroot=E:/AppData/Local/Android/Sdk/ndk-bundle/platforms/android-19/arch-mips -Dnative_lib_EXPORTS  -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mips32 -Wa,--noexecstack -Wformat -Werror=format-security  -O2 -DNDEBUG  -fPIC      -c ",
+					"src" : "F:/Project/Fall2016_InfoSecProject_VPN/Fall2016_InfoSecProject/app/src/main/cpp/network/pcap.c",
+					"workingDirectory" : "F:/Project/Fall2016_InfoSecProject_VPN/Fall2016_InfoSecProject/app/.externalNativeBuild/cmake/release/mips"
 				},
 				
 				{
-					"flags" : "  -target mipsel-none-linux-android -gcc-toolchain /Users/Billdqu/Library/Android/sdk/ndk-bundle/toolchains/mipsel-linux-android-4.9/prebuilt/darwin-x86_64 --sysroot=/Users/Billdqu/Library/Android/sdk/ndk-bundle/platforms/android-15/arch-mips -Dnative_lib_EXPORTS  -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mips32 -Wa,--noexecstack -Wformat -Werror=format-security -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mips32 -Wa,--noexecstack -Wformat -Werror=format-security  -O2 -DNDEBUG -O2 -DNDEBUG  -fPIC      -c ",
-					"src" : "/Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/src/main/cpp/network/util.c",
-					"workingDirectory" : "/Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/.externalNativeBuild/cmake/release/mips"
+					"flags" : "  -target mipsel-none-linux-android -gcc-toolchain E:/AppData/Local/Android/Sdk/ndk-bundle/toolchains/mipsel-linux-android-4.9/prebuilt/windows-x86_64 --sysroot=E:/AppData/Local/Android/Sdk/ndk-bundle/platforms/android-19/arch-mips -Dnative_lib_EXPORTS  -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mips32 -Wa,--noexecstack -Wformat -Werror=format-security  -O2 -DNDEBUG  -fPIC      -c ",
+					"src" : "F:/Project/Fall2016_InfoSecProject_VPN/Fall2016_InfoSecProject/app/src/main/cpp/network/util.c",
+					"workingDirectory" : "F:/Project/Fall2016_InfoSecProject_VPN/Fall2016_InfoSecProject/app/.externalNativeBuild/cmake/release/mips"
 				},
 				
 				{
-					"flags" : "  -target mipsel-none-linux-android -gcc-toolchain /Users/Billdqu/Library/Android/sdk/ndk-bundle/toolchains/mipsel-linux-android-4.9/prebuilt/darwin-x86_64 --sysroot=/Users/Billdqu/Library/Android/sdk/ndk-bundle/platforms/android-15/arch-mips -Dnative_lib_EXPORTS  -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mips32 -Wa,--noexecstack -Wformat -Werror=format-security -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mips32 -Wa,--noexecstack -Wformat -Werror=format-security  -O2 -DNDEBUG -O2 -DNDEBUG  -fPIC      -c ",
-					"src" : "/Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/src/main/cpp/network/icmp.c",
-					"workingDirectory" : "/Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/.externalNativeBuild/cmake/release/mips"
+					"flags" : "  -target mipsel-none-linux-android -gcc-toolchain E:/AppData/Local/Android/Sdk/ndk-bundle/toolchains/mipsel-linux-android-4.9/prebuilt/windows-x86_64 --sysroot=E:/AppData/Local/Android/Sdk/ndk-bundle/platforms/android-19/arch-mips -Dnative_lib_EXPORTS  -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mips32 -Wa,--noexecstack -Wformat -Werror=format-security  -O2 -DNDEBUG  -fPIC      -c ",
+					"src" : "F:/Project/Fall2016_InfoSecProject_VPN/Fall2016_InfoSecProject/app/src/main/cpp/network/icmp.c",
+					"workingDirectory" : "F:/Project/Fall2016_InfoSecProject_VPN/Fall2016_InfoSecProject/app/.externalNativeBuild/cmake/release/mips"
 				},
 				
 				{
-					"flags" : "  -target mipsel-none-linux-android -gcc-toolchain /Users/Billdqu/Library/Android/sdk/ndk-bundle/toolchains/mipsel-linux-android-4.9/prebuilt/darwin-x86_64 --sysroot=/Users/Billdqu/Library/Android/sdk/ndk-bundle/platforms/android-15/arch-mips -Dnative_lib_EXPORTS  -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mips32 -Wa,--noexecstack -Wformat -Werror=format-security -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mips32 -Wa,--noexecstack -Wformat -Werror=format-security  -O2 -DNDEBUG -O2 -DNDEBUG  -fPIC      -c ",
-					"src" : "/Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/src/main/cpp/network/dns.c",
-					"workingDirectory" : "/Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/.externalNativeBuild/cmake/release/mips"
+					"flags" : "  -target mipsel-none-linux-android -gcc-toolchain E:/AppData/Local/Android/Sdk/ndk-bundle/toolchains/mipsel-linux-android-4.9/prebuilt/windows-x86_64 --sysroot=E:/AppData/Local/Android/Sdk/ndk-bundle/platforms/android-19/arch-mips -Dnative_lib_EXPORTS  -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mips32 -Wa,--noexecstack -Wformat -Werror=format-security  -O2 -DNDEBUG  -fPIC      -c ",
+					"src" : "F:/Project/Fall2016_InfoSecProject_VPN/Fall2016_InfoSecProject/app/src/main/cpp/network/dns.c",
+					"workingDirectory" : "F:/Project/Fall2016_InfoSecProject_VPN/Fall2016_InfoSecProject/app/.externalNativeBuild/cmake/release/mips"
 				},
 				
 				{
-					"flags" : "  -target mipsel-none-linux-android -gcc-toolchain /Users/Billdqu/Library/Android/sdk/ndk-bundle/toolchains/mipsel-linux-android-4.9/prebuilt/darwin-x86_64 --sysroot=/Users/Billdqu/Library/Android/sdk/ndk-bundle/platforms/android-15/arch-mips -Dnative_lib_EXPORTS  -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mips32 -Wa,--noexecstack -Wformat -Werror=format-security -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mips32 -Wa,--noexecstack -Wformat -Werror=format-security  -O2 -DNDEBUG -O2 -DNDEBUG  -fPIC      -c ",
-					"src" : "/Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/src/main/cpp/network/dhcp.c",
-					"workingDirectory" : "/Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/.externalNativeBuild/cmake/release/mips"
+					"flags" : "  -target mipsel-none-linux-android -gcc-toolchain E:/AppData/Local/Android/Sdk/ndk-bundle/toolchains/mipsel-linux-android-4.9/prebuilt/windows-x86_64 --sysroot=E:/AppData/Local/Android/Sdk/ndk-bundle/platforms/android-19/arch-mips -Dnative_lib_EXPORTS  -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mips32 -Wa,--noexecstack -Wformat -Werror=format-security  -O2 -DNDEBUG  -fPIC      -c ",
+					"src" : "F:/Project/Fall2016_InfoSecProject_VPN/Fall2016_InfoSecProject/app/src/main/cpp/network/dhcp.c",
+					"workingDirectory" : "F:/Project/Fall2016_InfoSecProject_VPN/Fall2016_InfoSecProject/app/.externalNativeBuild/cmake/release/mips"
 				}
 			],
-			"output" : "/Users/Billdqu/Desktop/Fall2016_InfoSecProject/app/.externalNativeBuild/cmake/release/obj/mips/libnative-lib.so",
-			"toolchain" : "790986853266657576"
+			"output" : "F:/Project/Fall2016_InfoSecProject_VPN/Fall2016_InfoSecProject/app/.externalNativeBuild/cmake/release/obj/mips/libnative-lib.so",
+			"toolchain" : "2851274769"
 		}
 	},
 	"toolchains" : 
 	{
-		"790986853266657576" : 
+		"2851274769" : 
 		{
-			"cCompilerExecutable" : "/Users/Billdqu/Library/Android/sdk/ndk-bundle/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang",
-			"cppCompilerExecutable" : "/Users/Billdqu/Library/Android/sdk/ndk-bundle/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++"
+			"cCompilerExecutable" : "E:/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/bin/clang.exe",
+			"cppCompilerExecutable" : "E:/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/bin/clang++.exe"
 		}
 	}
 }
