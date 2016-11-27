@@ -131,9 +131,9 @@ public class Monitor extends AsyncTask<Void, Void, Void> {
         return Patterns.IP_ADDRESS.matcher(ipaddr).matches();
     }
 
-    final static Pattern pattern_phone_general =
-            Pattern.compile("(?:.*)(\\(?([1]?[2-9]\\d{2})\\)?[\\s-]?([2-9]\\d{2})[\\s-]?([\\d]{4}))(?:.*)");
-    final static Pattern pattern_phone =
+//    final static Pattern pattern_phone_general =
+//            Pattern.compile("(?:.*)(\\(?([1]?[2-9]\\d{2})\\)?[\\s-]?([2-9]\\d{2})[\\s-]?([\\d]{4}))(?:.*)");
+    final static Pattern pattern_phone_url =
             Pattern.compile("(?:.*)(%28(\\d{3})%29(\\d{3})-(\\d{4}))(?:.*)");
 //    final static Pattern pattern_email =
 //            Pattern.compile("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])");
@@ -141,17 +141,29 @@ public class Monitor extends AsyncTask<Void, Void, Void> {
     private static String scanSensitive(String plaintext, String sensitive_org) {
         String result = sensitive_org;
 
-        Matcher m = pattern_phone.matcher(plaintext);
-        if (m.find() && !sensitive_org.contains(m.group(1))) {
+        Matcher m = pattern_phone_url.matcher(plaintext);
+        if (m.find()) {
             String append = ConnectionDatabase.CONTENT_PHONE + "(\"" + m.group(1) + "\")";
             append = append.replace("%28", "(");
             append = append.replace("%29", ")");
-            if (result.equals(ConnectionDatabase.CONTENT_DEFAULT)) {
+            if (result.contains(append)) {
+                ;
+            } else if (result.equals(ConnectionDatabase.CONTENT_DEFAULT)) {
                 result = append;
             } else {
                 result = result + ", " + append;
             }
         }
+
+//        m = pattern_phone_general.matcher(plaintext);
+//        if (m.find() && !sensitive_org.contains(m.group(1))) {
+//            String append = ConnectionDatabase.CONTENT_PHONE + "(\"" + m.group(1) + "\")";
+//            if (result.equals(ConnectionDatabase.CONTENT_DEFAULT)) {
+//                result = append;
+//            } else {
+//                result = result + ", " + append;
+//            }
+//        }
 
 //        m = pattern_email.matcher(plaintext);
 //        if (m.find() && !sensitive_org.contains(m.group(1))) {
