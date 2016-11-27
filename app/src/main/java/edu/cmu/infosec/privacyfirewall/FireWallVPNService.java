@@ -7,13 +7,16 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.os.ParcelFileDescriptor;
 import android.util.Log;
+import android.support.v4.util.Pair;
 
 import java.io.Closeable;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
+import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
+
 
 public class FireWallVPNService extends VpnService {
     private static final String TAG = FireWallVPNService.class.getSimpleName();
@@ -30,9 +33,8 @@ public class FireWallVPNService extends VpnService {
 
     public static ConcurrentLinkedQueue<IPPacket> packetQueue = new ConcurrentLinkedQueue<>();
 
-    public static ConcurrentHashMap<String, Integer> blockingIPMap = new ConcurrentHashMap<>();
-
-    public static ConcurrentHashMap<Integer, Integer> portAppMap = new ConcurrentHashMap<>();
+    public static ConcurrentLinkedQueue<Pair<String, Integer>>
+            blockingIPMap = new ConcurrentLinkedQueue<>();
 
     private native void jni_init();
 
@@ -172,8 +174,15 @@ public class FireWallVPNService extends VpnService {
      */
     private Allowed isAddressAllowed(Packet packet) {
 
-        if (blockingIPMap.containsKey(packet.daddr) && portAppMap.containsKey(packet.dport)
-                && blockingIPMap.get(packet.daddr) == portAppMap.get(packet.dport)) return null;
+        Iterator<Pair<String, Integer>> it = blockingIPMap.iterator();
+        while (it.hasNext()) {
+            Pair<String, Integer> p = it.next();
+            if (p.first.equals(packet.daddr)) {
+                if (p.second == NetUtils.readProcFile(packet.dport)) {
+                    return null;
+                }
+            }
+        }
 
         Log.d(TAG, packet.daddr);
 
@@ -198,9 +207,16 @@ public class FireWallVPNService extends VpnService {
                     if (currentThread.isInterrupted())
                         break;
 
+                    int pos = currentPacket.contentBuffer.position();
+                    currentPacket.contentBuffer.flip();
+
                     // TODO: do scan and record on currentPacket
                     // TODO: Add IPs into Block Map, VPN will block those IPs
-                    //Monitor.filter(currentPacket);
+                    Monitor monitorTask = new Monitor(currentPacket);
+                    monitorTask.execute();
+
+                    currentPacket.contentBuffer.position(pos);
+                    currentPacket.contentBuffer.flip();
 
                 }
             } catch (InterruptedException e) {

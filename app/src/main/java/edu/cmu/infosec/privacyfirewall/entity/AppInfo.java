@@ -9,11 +9,16 @@ import android.content.pm.ResolveInfo;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
 import java.util.Locale;
+
+import edu.cmu.infosec.privacyfirewall.ApplicationDatabase;
+import edu.cmu.infosec.privacyfirewall.ConnectionDatabase;
+import edu.cmu.infosec.privacyfirewall.Monitor;
 
 public class AppInfo implements Comparable<Object> {
 
@@ -22,19 +27,43 @@ public class AppInfo implements Comparable<Object> {
     private ComponentName componentName = null;
     private PackageInfo pi = null;
     private Drawable icon = null;
-
-    String name = null;
+    private int permissionCount = 0;
+    private int connectionCount = 0;
+    private int sensitiveCount = 0;
+    private String name = null;
 
     public AppInfo(Context ctx, ResolveInfo ri) {
         this.ctx = ctx;
         this.ri = ri;
 
-        this.componentName = new ComponentName(ri.activityInfo.applicationInfo.packageName, ri.activityInfo.name);
+        this.componentName =
+                new ComponentName(ri.activityInfo.applicationInfo.packageName, ri.activityInfo.name);
 
         try {
             pi = ctx.getPackageManager().getPackageInfo(getPackageName(), 0);
         } catch (NameNotFoundException e) {
             Log.i("AppInfo", "Error");
+        }
+
+        Cursor appCur = Monitor.db.getApplicationCursorByPackagename(
+                ri.activityInfo.applicationInfo.packageName);
+        if (appCur.getCount() > 0) {
+            appCur.moveToFirst();
+
+            permissionCount = appCur.getInt(appCur.getColumnIndex(ApplicationDatabase.FIELD_PER));
+
+            Cursor conCur = Monitor.db.getConnectionCursorByAppId(
+                    appCur.getInt(appCur.getColumnIndex(ApplicationDatabase.FIELD_ID)));
+            connectionCount = conCur.getCount();
+
+            int sensitiveSum = 0;
+            for (conCur.moveToFirst(); !conCur.isAfterLast(); conCur.moveToNext()) {
+                if (conCur.getInt(conCur.getColumnIndex(ConnectionDatabase.FIELD_SENSITIVE)) ==
+                        ConnectionDatabase.SENSITIVE) {
+                    ++sensitiveSum;
+                }
+            }
+            sensitiveCount = sensitiveSum;
         }
     }
 
@@ -48,6 +77,18 @@ public class AppInfo implements Comparable<Object> {
                 return getPackageName();
             }
         }
+    }
+
+    public int getPermissionCount() {
+        return permissionCount;
+    }
+
+    public int getConnectionCount() {
+        return connectionCount;
+    }
+
+    public int getSensitiveCount() {
+        return sensitiveCount;
     }
 
     public String getActivityName() {
@@ -131,7 +172,21 @@ public class AppInfo implements Comparable<Object> {
     @Override
     public int compareTo(Object o) {
         AppInfo f = (AppInfo) o;
-        return getName().compareTo(f.getName());
+        if (getSensitiveCount() > f.getSensitiveCount()) {
+            return -1;
+        } else if (getSensitiveCount() < f.getSensitiveCount()) {
+            return 1;
+        } else if (getConnectionCount() > f.getConnectionCount()) {
+            return -1;
+        } else if (getConnectionCount() < f.getConnectionCount()) {
+            return 1;
+        } else if (getPermissionCount() > f.getPermissionCount()) {
+            return -1;
+        } else if (getPermissionCount() < f.getPermissionCount()) {
+            return 1;
+        } else {
+            return getName().compareTo(f.getName());
+        }
     }
 
     @Override

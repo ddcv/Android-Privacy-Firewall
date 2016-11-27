@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.database.Cursor;
@@ -105,14 +106,40 @@ public class MainActivity extends AppCompatActivity {
         final PackageManager packageManager = getPackageManager();
         List<ApplicationInfo> installedApplications =
                 packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
+        int permissionCount;
 
         for (ApplicationInfo appInfo : installedApplications) {
             Cursor c = Monitor.db.getApplicationCursorById(appInfo.uid);
 
+            permissionCount = 0;
+            try {
+                PackageInfo pack = packageManager.getPackageInfo(
+                        appInfo.packageName,PackageManager.GET_PERMISSIONS);
+                String[] permissionStrings = pack.requestedPermissions;
+                if (permissionStrings != null) {
+                    permissionCount = permissionStrings.length;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             /** Not exist */
             if (c.isAfterLast()) {
                 Monitor.db.insertApplication(appInfo.loadLabel(packageManager).toString(),
-                        appInfo.packageName, appInfo.uid);
+                        appInfo.packageName, appInfo.uid, permissionCount);
+            }
+        }
+
+        /** Cache filter rule */
+        Cursor conCur = Monitor.db.getAllConnectionCursor();
+        for (conCur.moveToFirst(); !conCur.isAfterLast(); conCur.moveToNext()) {
+            int rId = conCur.getInt(conCur.getColumnIndex(ConnectionDatabase.FIELD_RULE));
+            Cursor ruleCur = Monitor.db.getRuleCursorById(rId);
+            if (ruleCur.getCount() > 0) {
+                ruleCur.moveToFirst();
+                FireWallVPNService.blockingIPMap.add(Pair.create(
+                        ruleCur.getString(ruleCur.getColumnIndex(RuleDatabase.FIELD_IP_ADD)),
+                        conCur.getInt(conCur.getColumnIndex(ConnectionDatabase.FIELD_APP))));
             }
         }
 

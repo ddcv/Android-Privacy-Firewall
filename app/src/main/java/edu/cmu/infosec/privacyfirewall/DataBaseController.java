@@ -31,6 +31,10 @@ public class DataBaseController implements DatabaseInterface {
                 appId, ruleId);
     }
 
+    public Cursor getAllConnectionCursor() {
+        return ConnectionDatabase.getAllConnectionCursor(cDb.getReadableDatabase());
+    }
+
     public boolean insertConnection(int appId, int ruleId, int action, String content,
                                     int sensitive) {
         return ConnectionDatabase.insertConnection(cDb.getWritableDatabase(), appId, ruleId, action,
@@ -46,9 +50,9 @@ public class DataBaseController implements DatabaseInterface {
         return ApplicationDatabase.getAllApplicationCursor(aDb.getReadableDatabase());
     }
 
-    public boolean insertApplication(String name, String description, int id) {
+    public boolean insertApplication(String name, String description, int id, int permission) {
         return ApplicationDatabase.insertApplication(aDb.getWritableDatabase(), name, description,
-                id);
+                id, permission);
     }
 
     public Cursor getApplicationCursorByName(String name) {
@@ -60,7 +64,13 @@ public class DataBaseController implements DatabaseInterface {
     }
 
     public int getApplicationIdByPackagename(String packagename) {
-        return ApplicationDatabase.getApplicationIdByPackagename(aDb.getReadableDatabase(), packagename);
+        return ApplicationDatabase.getApplicationIdByPackagename(aDb.getReadableDatabase()
+                , packagename);
+    }
+
+    public Cursor getApplicationCursorByPackagename(String packagename) {
+        return ApplicationDatabase.getApplicationCursorByPackagename(aDb.getReadableDatabase()
+                , packagename);
     }
 
     /** Rule Database Interface */
@@ -70,6 +80,10 @@ public class DataBaseController implements DatabaseInterface {
 
     public Cursor getRuleCursorById(int id) {
         return RuleDatabase.getRuleCursorById(rDb.getReadableDatabase(), id);
+    }
+
+    public Cursor getAllRuleCursor() {
+        return RuleDatabase.getAllRuleCursor(rDb.getReadableDatabase());
     }
 
     public boolean updateAction(int appId, int ruleId, int action) {
@@ -83,8 +97,6 @@ public class DataBaseController implements DatabaseInterface {
     public boolean insertRule(String ipAdd, String organization, String country) {
         boolean res = RuleDatabase.insertRule(rDb.getWritableDatabase(), ipAdd, organization,
                 country);
-        traceIPAddr t = new traceIPAddr(ipAdd);
-        t.execute();
         return res;
     }
 

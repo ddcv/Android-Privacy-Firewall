@@ -14,10 +14,11 @@ import java.io.ByteArrayOutputStream;
  */
 
 public class ApplicationDatabase extends SQLiteOpenHelper{
-    final static String TABLE_NAME = "Application";
-    final static String FIELD_ID = "aid";
-    final static String FIELD_NAME = "name";
-    final static String FIELD_DESC = "description";
+    public final static String TABLE_NAME = "Application";
+    public final static String FIELD_ID = "aid";
+    public final static String FIELD_NAME = "name";
+    public final static String FIELD_DESC = "description";
+    public final static String FIELD_PER = "permission";
 
     public final static String DATABASE_TAG = "ApplicationDB";
 
@@ -32,17 +33,19 @@ public class ApplicationDatabase extends SQLiteOpenHelper{
         sql.append(" (");
         sql.append(FIELD_ID + " INTEGER PRIMARY KEY, ");
         sql.append(FIELD_NAME + " TEXT, ");
+        sql.append(FIELD_PER + " INTEGER, ");
         sql.append(FIELD_DESC + " TEXT");
         sql.append(");");
         db.execSQL(sql.toString());
     }
 
     public static boolean insertApplication(SQLiteDatabase db, String name, String description,
-                                            int id) {
+                                            int id, int permission) {
         ContentValues v = new ContentValues();
         v.put(FIELD_ID, id);
         v.put(FIELD_NAME, name);
         v.put(FIELD_DESC, description);
+        v.put(FIELD_PER, permission);
         if (db.insert(TABLE_NAME, "null", v) != -1) {
             return true;
         } else {
@@ -111,5 +114,19 @@ public class ApplicationDatabase extends SQLiteOpenHelper{
             cur.moveToFirst();
             return cur.getInt(cur.getColumnIndex(FIELD_ID));
         }
+    }
+
+    public static Cursor getApplicationCursorByPackagename(SQLiteDatabase db, String packagename) {
+        /*
+         * table
+         * columns
+         * selection
+         * selectionArgs
+         * groupBy
+         * having
+         * orderBy
+         * */
+        return db.query(TABLE_NAME, null, FIELD_DESC + " = \"" + packagename + "\"",
+                null, null, null, null);
     }
 }

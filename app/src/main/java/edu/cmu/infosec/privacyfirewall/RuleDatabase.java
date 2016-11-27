@@ -85,6 +85,10 @@ public class RuleDatabase extends SQLiteOpenHelper {
         return db.query(TABLE_NAME, null, FIELD_ID + " = " + id, null, null, null, null);
     }
 
+    public static Cursor getAllRuleCursor(SQLiteDatabase db) {
+        return db.query(TABLE_NAME, null, null, null, null, null, null);
+    }
+
     public static int getNewRuleId(SQLiteDatabase db) {
         return db.query(TABLE_NAME, null, null, null, null, null, null).getCount() + 1;
     }

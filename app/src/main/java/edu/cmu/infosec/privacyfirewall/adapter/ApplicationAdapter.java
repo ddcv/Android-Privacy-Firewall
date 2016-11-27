@@ -1,13 +1,18 @@
 package edu.cmu.infosec.privacyfirewall.adapter;
 
+import android.content.Context;
+import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import edu.cmu.infosec.privacyfirewall.ApplicationDatabase;
 import edu.cmu.infosec.privacyfirewall.MainActivity;
+import edu.cmu.infosec.privacyfirewall.Monitor;
 import edu.cmu.infosec.privacyfirewall.R;
 import edu.cmu.infosec.privacyfirewall.entity.AppInfo;
 
@@ -53,6 +58,9 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
         final AppInfo appInfo = applications.get(i);
         viewHolder.name.setText(appInfo.getName());
         viewHolder.image.setImageDrawable(appInfo.getIcon());
+        viewHolder.permissionCount.setText(String.valueOf(appInfo.getPermissionCount()));
+        viewHolder.connectionCount.setText(String.valueOf(appInfo.getConnectionCount()));
+        viewHolder.sensitiveCount.setText(String.valueOf(appInfo.getSensitiveCount()));
 
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,11 +78,20 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView name;
         public ImageView image;
+        public TextView permissionCount;
+        public TextView connectionCount;
+        public TextView sensitiveCount;
 
         public ViewHolder(View itemView) {
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.countryName);
             image = (ImageView) itemView.findViewById(R.id.countryImage);
+
+            permissionCount = (TextView) itemView.findViewById(R.id.permissionCount);
+
+            connectionCount = (TextView) itemView.findViewById(R.id.connectionCount);
+
+            sensitiveCount = (TextView) itemView.findViewById(R.id.sensitiveCount);
         }
 
     }

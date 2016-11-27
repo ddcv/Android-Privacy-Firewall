@@ -12,19 +12,19 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 
 public class ConnectionDatabase extends SQLiteOpenHelper{
-    final static String TABLE_NAME = "Connection";
-    final static String FIELD_ID = "cid";
-    final static String FIELD_ACTION = "action";
-    final static String FIELD_CONTENT = "content";
-    final static String FIELD_SENSITIVE = "sensitive";
-    final static String FIELD_APP = "aid";
-    final static String FIELD_RULE = "rid";
+    public final static String TABLE_NAME = "Connection";
+    public final static String FIELD_ID = "cid";
+    public final static String FIELD_ACTION = "action";
+    public final static String FIELD_CONTENT = "content";
+    public final static String FIELD_SENSITIVE = "sensitive";
+    public final static String FIELD_APP = "aid";
+    public final static String FIELD_RULE = "rid";
 
-    final static String CONTENT_DEFAULT = "NULL";
-    final static int SENSITIVE = 1;
-    final static int NON_SENSITIVE = 0;
-    final static int ACTION_ALOW = 1;
-    final static int ACTION_DENY = 0;
+    public final static String CONTENT_DEFAULT = "NULL";
+    public final static int SENSITIVE = 1;
+    public final static int NON_SENSITIVE = 0;
+    public final static int ACTION_ALOW = 1;
+    public final static int ACTION_DENY = 0;
 
     public final static String DATABASE_TAG = "ConnectionDB";
 
@@ -92,6 +92,10 @@ public class ConnectionDatabase extends SQLiteOpenHelper{
          * */
         return db.query(TABLE_NAME, null, FIELD_APP + " = " + appId + " AND " + FIELD_RULE + " = " +
                 ruleId, null, null, null, null);
+    }
+
+    public static Cursor getAllConnectionCursor(SQLiteDatabase db) {
+        return db.query(TABLE_NAME, null, null, null, null, null, null);
     }
 
     public static void deleteConnectionByAppIdRuleId(SQLiteDatabase db, int appId, int ruleId) {

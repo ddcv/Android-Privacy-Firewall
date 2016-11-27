@@ -164,6 +164,11 @@ public class DetailActivity extends AppCompatActivity {
         TextView descriptionView = (TextView) view.findViewById(R.id.recipient);
         descriptionView.setText(line);
 
+        if (recipient.equals(RuleDatabase.ORG_DEFAULT)) {
+            traceIPAddr t = new traceIPAddr(ip);
+            t.execute();
+        }
+
         line = "Country: " + country;
         TextView countryView = (TextView) view.findViewById(R.id.country);
         countryView.setText(line);

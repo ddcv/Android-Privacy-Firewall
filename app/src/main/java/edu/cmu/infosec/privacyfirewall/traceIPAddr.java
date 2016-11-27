@@ -32,7 +32,7 @@ public class traceIPAddr extends AsyncTask<Void, Void, Void> {
         try {
             URL url = new URL(path);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setConnectTimeout(15 * 1000);
+            conn.setConnectTimeout(3 * 1000);
             conn.setRequestMethod("GET");
             int code = conn.getResponseCode();
             if (code == 200) {

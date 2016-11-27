@@ -6,25 +6,157 @@
     android:clickable="true"
     android:orientation="horizontal">
 
-
-    <TextView
-        android:id="@+id/countryName"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="72dp"
-        android:background="@drawable/button_rect_list_normal"
-        android:clickable="false"
-        android:gravity="center_vertical"
-        android:paddingLeft="80dp"
-        android:textColor="@color/text"
-        android:textSize="24sp" />
+        android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/countryImage"
-        android:layout_width="72dp"
-        android:layout_height="72dp"
-        android:clickable="false"
-        android:padding="4dp"
-        android:scaleType="centerCrop"
-        android:transitionName="appIcon" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/countryImage"
+                android:layout_width="0dp"
+                android:layout_height="72dp"
+                android:layout_weight="3"
+                android:clickable="false"
+                android:padding="4dp"
+                android:paddingLeft="80dp"
+                android:scaleType="centerInside"
+                android:transitionName="appIcon" />
+
+            <TextView
+                android:id="@+id/countryName"
+                android:layout_width="0dp"
+                android:layout_height="72dp"
+                android:layout_weight="7"
+                android:background="@drawable/button_rect_list_normal"
+                android:clickable="false"
+                android:gravity="center_vertical"
+                android:textColor="@color/text"
+                android:textSize="24sp"
+                android:textAlignment="center"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/dividers" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="54dp">
+
+            <LinearLayout
+                android:id="@+id/permissionGroup"
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/permissionLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:text="@string/application_permission"
+                    android:clickable="false"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/text"
+                    android:textSize="20sp"
+                    android:textAlignment="center"
+                    android:textStyle="normal|bold"/>
+
+                <TextView
+                    android:id="@+id/permissionCount"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:text="@string/application_default"
+                    android:clickable="false"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/text"
+                    android:textSize="16sp"
+                    android:textAlignment="center" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/connectionGroup"
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/connectionLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:text="@string/application_connection"
+                    android:clickable="false"
+                    android:gravity="center"
+                    android:textColor="@color/text"
+                    android:textSize="20sp"
+                    android:textAlignment="center"
+                    android:textStyle="normal|bold"/>
+
+                <TextView
+                    android:id="@+id/connectionCount"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:text="@string/application_default"
+                    android:clickable="false"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/text"
+                    android:textSize="16sp"
+                    android:textAlignment="center"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/sensitiveGroup"
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/sensitiveLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:text="@string/application_sensitive"
+                    android:clickable="false"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/text"
+                    android:textSize="20sp"
+                    android:textAlignment="center"
+                    android:textStyle="normal|bold" />
+
+                <TextView
+                    android:id="@+id/sensitiveCount"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:text="@string/application_default"
+                    android:clickable="false"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/text"
+                    android:textSize="16sp"
+                    android:textAlignment="center"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
 
 </android.support.v7.widget.CardView>
