@@ -43,19 +43,4 @@
             android:layout_gravity="center"
             android:padding="72dp" />
     </FrameLayout>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_normal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/toolbar"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="-28dp"
-        android:elevation="8dp"
-        android:stateListAnimator="@anim/fab_anim"
-        android:transitionName="fab"
-        app:fabSize="normal" />
 </RelativeLayout>

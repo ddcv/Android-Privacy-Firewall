@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
     private Drawer drawer;
 
     private ApplicationAdapter mAdapter;
-    private FloatingActionButton mFabButton;
+    //private FloatingActionButton mFabButton;
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private ProgressBar mProgressBar;
@@ -151,10 +151,10 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Fab Button
-        mFabButton = (FloatingActionButton) findViewById(R.id.fab_normal);
-        mFabButton.setImageDrawable(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_add)
-                .color(Color.WHITE).actionBar());
-        mFabButton.setOnClickListener(new MainAddNewRuleListener(this));
+//        mFabButton = (FloatingActionButton) findViewById(R.id.fab_normal);
+//        mFabButton.setImageDrawable(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_add)
+//                .color(Color.WHITE).actionBar());
+//        mFabButton.setOnClickListener(new MainAddNewRuleListener(this));
 
         // Build Drawer
         drawer = new DrawerBuilder(this)

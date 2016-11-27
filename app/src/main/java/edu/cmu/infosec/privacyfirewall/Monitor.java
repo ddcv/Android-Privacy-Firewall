@@ -25,18 +25,14 @@ public class Monitor extends AsyncTask<Void, Void, Void> {
 
     public void filter() {
         int rId;
-        p.contentBuffer.position(0);
-        p.contentBuffer.flip();
         byte[] bytes = new byte[p.contentBuffer.remaining()];
-        String plaintext;
+
         Cursor c;
 
         p.contentBuffer.get(bytes);
-        plaintext = new String(bytes, StandardCharsets.UTF_8);
 
-        if (!plaintext.equals("")) {
-            Log.d(MONITOR_TAG, "plaintext!");
-        }
+
+
 
         /** Filter packet */
         c = db.getRuleCursorByAdd(p.ip4Header.destinationAddress.getHostAddress());
@@ -62,6 +58,8 @@ public class Monitor extends AsyncTask<Void, Void, Void> {
             uid = NetUtils.readProcFile(port);
         }
 
+
+
         if (uid != -1) {
             c = db.getApplicationCursorById(uid);
             c.moveToFirst();
@@ -71,11 +69,23 @@ public class Monitor extends AsyncTask<Void, Void, Void> {
                 DatabaseUtils.cursorRowToContentValues(c, appVal);
                 String appName = appVal.getAsString(ApplicationDatabase.FIELD_NAME);
 
-
+                String plaintext_8 = new String(bytes, StandardCharsets.UTF_8);
+//                String plaintext_16 = new String(bytes, StandardCharsets.UTF_16);
+//                String plaintext_ASCII = new String(bytes, StandardCharsets.US_ASCII);
+//                String plaintext_ISO = new String(bytes, StandardCharsets.ISO_8859_1);
+//
+//                if (!plaintext_8.equals("")) {
+//                    Log.i(MONITOR_TAG, "Byte: " + plaintext_ISO);
+//                    Log.i(MONITOR_TAG, "ISO: " + plaintext_ISO);
+//                    Log.i(MONITOR_TAG, "UTF_8: " + plaintext_8);
+//                    Log.i(MONITOR_TAG, "UTF_16: " + plaintext_16);
+//                    Log.i(MONITOR_TAG, "UTF_ASCII: " + plaintext_ASCII);
+//                }
 
                 /** Create Connection */
-                String sensitiveContent = scanSensitive(plaintext);
-                int sensitive = sensitiveContent.equals("") ? ConnectionDatabase.NON_SENSITIVE :
+                String sensitiveContent = scanSensitive(plaintext_8);
+                int sensitive = sensitiveContent.equals(ConnectionDatabase.CONTENT_DEFAULT) ?
+                        ConnectionDatabase.NON_SENSITIVE :
                         ConnectionDatabase.SENSITIVE;
 
                 c = db.getConnectionCursorByAppId(uid);
@@ -97,7 +107,7 @@ public class Monitor extends AsyncTask<Void, Void, Void> {
                     Log.d(MONITOR_TAG, "AppName = " + appName);
                     Log.d(MONITOR_TAG, "DestAddr = " +
                             p.ip4Header.destinationAddress.getHostAddress());
-                    Log.d(MONITOR_TAG, "plaintext = " + plaintext);
+                    Log.d(MONITOR_TAG, "plaintext = " + plaintext_8);
                 }
             }
         }
@@ -124,7 +134,7 @@ public class Monitor extends AsyncTask<Void, Void, Void> {
     }
 
     private static String scanSensitive(String plaintext) {
-        String result = "";
+        String result = ConnectionDatabase.CONTENT_DEFAULT;
         if (Patterns.PHONE.matcher(plaintext).matches()) {
             result = result + "Phone ";
         }

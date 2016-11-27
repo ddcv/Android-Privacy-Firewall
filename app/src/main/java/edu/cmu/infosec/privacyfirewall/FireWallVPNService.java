@@ -235,4 +235,18 @@ public class FireWallVPNService extends VpnService {
             return FireWallVPNService.this;
         }
     }
+
+    /**
+     * Delete rule from block list.
+     */
+    public static void deleteRulePair(String ipaddr, int appId) {
+        Iterator<Pair<String, Integer>> it = FireWallVPNService.blockingIPMap.iterator();
+        while (it.hasNext()) {
+            Pair<String, Integer> rulePair = it.next();
+            if (rulePair.first.equals(ipaddr) && rulePair.second == appId) {
+                FireWallVPNService.blockingIPMap.remove(rulePair);
+                break;
+            }
+        }
+    }
 }

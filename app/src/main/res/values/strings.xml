@@ -16,8 +16,8 @@
     <string name="dialog_cancel">Cancel</string>
     <string name="dialog_yes">Yes</string>
     <string name="dialog_no">No</string>
-    <string name="application_permission">Permission</string>
-    <string name="application_connection">Connection</string>
-    <string name="application_sensitive">Data Leak</string>
+    <string name="application_permission">Permissions</string>
+    <string name="application_connection">Connections</string>
+    <string name="application_sensitive">Data Leaks</string>
     <string name="application_default">0</string>
 </resources>

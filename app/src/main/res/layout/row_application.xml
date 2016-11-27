@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
     android:clickable="true"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    app:cardBackgroundColor="@color/about_libraries_card"
+    app:layout_collapseParallaxMultiplier="1.0">
 
     <LinearLayout
         android:orientation="vertical"
@@ -59,6 +62,18 @@
                 android:layout_height="match_parent">
 
                 <TextView
+                    android:id="@+id/permissionCount"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:text="@string/application_default"
+                    android:clickable="false"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/text"
+                    android:textSize="20sp"
+                    android:textAlignment="center" />
+
+                <TextView
                     android:id="@+id/permissionLabel"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
@@ -68,22 +83,14 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/text"
                     android:textSize="20sp"
-                    android:textAlignment="center"
-                    android:textStyle="normal|bold"/>
-
-                <TextView
-                    android:id="@+id/permissionCount"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:text="@string/application_default"
-                    android:clickable="false"
-                    android:gravity="center_vertical"
-                    android:textColor="@color/text"
-                    android:textSize="16sp"
                     android:textAlignment="center" />
 
             </LinearLayout>
+
+            <View
+                android:layout_width="1px"
+                android:layout_height="match_parent"
+                android:background="@color/dividers" />
 
             <LinearLayout
                 android:id="@+id/connectionGroup"
@@ -91,6 +98,18 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/connectionCount"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:text="@string/application_default"
+                    android:clickable="false"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/text"
+                    android:textSize="20sp"
+                    android:textAlignment="center"/>
 
                 <TextView
                     android:id="@+id/connectionLabel"
@@ -102,22 +121,14 @@
                     android:gravity="center"
                     android:textColor="@color/text"
                     android:textSize="20sp"
-                    android:textAlignment="center"
-                    android:textStyle="normal|bold"/>
-
-                <TextView
-                    android:id="@+id/connectionCount"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:text="@string/application_default"
-                    android:clickable="false"
-                    android:gravity="center_vertical"
-                    android:textColor="@color/text"
-                    android:textSize="16sp"
-                    android:textAlignment="center"/>
+                    android:textAlignment="center" />
 
             </LinearLayout>
+
+            <View
+                android:layout_width="1px"
+                android:layout_height="match_parent"
+                android:background="@color/dividers" />
 
             <LinearLayout
                 android:id="@+id/sensitiveGroup"
@@ -125,6 +136,18 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/sensitiveCount"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:text="@string/application_default"
+                    android:clickable="false"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/text"
+                    android:textSize="20sp"
+                    android:textAlignment="center"/>
 
                 <TextView
                     android:id="@+id/sensitiveLabel"
@@ -136,20 +159,7 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/text"
                     android:textSize="20sp"
-                    android:textAlignment="center"
-                    android:textStyle="normal|bold" />
-
-                <TextView
-                    android:id="@+id/sensitiveCount"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:text="@string/application_default"
-                    android:clickable="false"
-                    android:gravity="center_vertical"
-                    android:textColor="@color/text"
-                    android:textSize="16sp"
-                    android:textAlignment="center"/>
+                    android:textAlignment="center" />
 
             </LinearLayout>
 

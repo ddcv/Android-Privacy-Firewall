@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -26,7 +27,14 @@ import android.widget.TextView;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+
 import edu.cmu.infosec.privacyfirewall.entity.AppInfo;
+import edu.cmu.infosec.privacyfirewall.entity.ConInfo;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -38,6 +46,8 @@ public class DetailActivity extends AppCompatActivity {
 
     private AppInfo mAppInfo = null;
     private String packagename;
+
+    private List<ConInfo> connectionList = new ArrayList<ConInfo>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -177,9 +187,17 @@ public class DetailActivity extends AppCompatActivity {
         TextView sensitiveView = (TextView) view.findViewById(R.id.sensitive);
         sensitiveView.setText(line);
 
+        if (!sensitive.equals(ConnectionDatabase.CONTENT_DEFAULT)) {
+            view.setBackgroundColor(getResources().getColor(R.color.md_amber_A200));
+        }
+
         line = "Action: " + (action == ConnectionDatabase.ACTION_ALOW ? "Allow" : "Deny");
         TextView actionView = (TextView) view.findViewById(R.id.action);
         actionView.setText(line);
+
+        if (action == ConnectionDatabase.ACTION_DENY) {
+            actionView.setTextColor(getResources().getColor(R.color.about_libraries_accent));
+        }
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -210,8 +228,10 @@ public class DetailActivity extends AppCompatActivity {
                             int new_action;
                             if (action == ConnectionDatabase.ACTION_ALOW) {
                                 new_action = ConnectionDatabase.ACTION_DENY;
+                                FireWallVPNService.blockingIPMap.add(Pair.create(ip, appId));
                             } else {
                                 new_action = ConnectionDatabase.ACTION_ALOW;
+                                FireWallVPNService.deleteRulePair(ip, appId);
                             }
 
                             Monitor.db.updateAction(appId, ruleId, new_action);
@@ -250,6 +270,8 @@ public class DetailActivity extends AppCompatActivity {
                                     ruleId = ruleCur.getInt(ruleCur.getColumnIndex(RuleDatabase.FIELD_ID));
 
                                     Monitor.db.deleteConnectionByAppIdRuleId(appId, ruleId);
+
+                                    FireWallVPNService.deleteRulePair(ip, appId);
 
                                     Snackbar.make(mRowContainer, "Delete " + ip + " Successfully",
                                             Snackbar.LENGTH_SHORT).show();
@@ -303,9 +325,9 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     public void loadConnection() {
+        connectionList.clear();
         if (mAppInfo != null) {
             int appId = Monitor.db.getApplicationIdByPackagename(mAppInfo.getPackageName());
-            LayoutInflater inflater = getLayoutInflater();
             if (appId != -1) {
                 Cursor conCur = Monitor.db.getConnectionCursorByAppId(appId);
                 for (conCur.moveToFirst(); !conCur.isAfterLast(); conCur.moveToNext()) {
@@ -332,12 +354,25 @@ public class DetailActivity extends AppCompatActivity {
                         Log.i("Fill Connection", "ip: " + ip + ", recipient: " + recipient +
                                 ", country: " + country);
                     }
-                    inflater.inflate(R.layout.row_detailconnection, mRowContainer, true);
-                    fillConnection(mRowContainer.getChildAt(mRowContainer.getChildCount() - 1),
-                            ip, recipient, country, sensitive, appId, action);
+
+                    connectionList.add(
+                            new ConInfo(ip, recipient, country, sensitive, appId, action));
                 }
             }
         }
+
+        Collections.sort(connectionList);
+        Iterator<ConInfo> it = connectionList.iterator();
+        LayoutInflater inflater = getLayoutInflater();
+
+        while (it.hasNext()) {
+            ConInfo con = it.next();
+            inflater.inflate(R.layout.row_detailconnection, mRowContainer, true);
+            fillConnection(mRowContainer.getChildAt(mRowContainer.getChildCount() - 1),
+                    con.getIp(), con.getRecipient(), con.getCountry(), con.getSensitive(),
+                    con.getAppId(), con.getAction());
+        }
+
         for (int i = 1; i < mRowContainer.getChildCount(); i++) {
             View rowView = mRowContainer.getChildAt(i);
             rowView.animate().setStartDelay(100 + i * SCALE_DELAY).scaleX(1).scaleY(1);

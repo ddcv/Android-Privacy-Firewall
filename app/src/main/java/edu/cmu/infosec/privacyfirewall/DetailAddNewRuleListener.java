@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.support.design.widget.Snackbar;
+import android.support.v4.util.Pair;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
@@ -90,6 +91,10 @@ public class DetailAddNewRuleListener implements View.OnClickListener {
                                     Snackbar.LENGTH_SHORT).show();
 
                         }
+
+                        /** Add filter rule into VPN */
+                        FireWallVPNService.blockingIPMap.add(Pair.create(addrStr, appId));
+
                         activity.clearConnection();
                         activity.loadConnection();
                     } else {

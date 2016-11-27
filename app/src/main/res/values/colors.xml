@@ -8,7 +8,7 @@
     <!-- general text colors -->
     <color name="text">#212121</color>
     <color name="secondary">#727272</color>
-    <color name="hint">#B8B8B8</color>
+    <color name="hint">#b8b8b8</color>
     <color name="dividers">#DADADA</color>
 
     <!-- general colors for drawer -->
