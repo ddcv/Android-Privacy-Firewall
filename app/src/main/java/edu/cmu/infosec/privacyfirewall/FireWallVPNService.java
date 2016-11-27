@@ -200,7 +200,7 @@ public class FireWallVPNService extends VpnService {
 
                     // TODO: do scan and record on currentPacket
                     // TODO: Add IPs into Block Map, VPN will block those IPs
-                    Monitor.filter(currentPacket);
+                    //Monitor.filter(currentPacket);
 
                 }
             } catch (InterruptedException e) {
