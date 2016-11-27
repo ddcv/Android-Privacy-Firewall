@@ -1,3 +1,0 @@
--- Configuring done
--- Generating done
--- Build files have been written to: F:/Project/Fall2016_InfoSecProject_VPN/Fall2016_InfoSecProject/app/.externalNativeBuild/cmake/debug/armeabi
