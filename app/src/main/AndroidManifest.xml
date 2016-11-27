@@ -18,6 +18,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="edu.cmu.infosec.privacyfirewall.DetailActivity"
+            android:label="@string/activity_detail_title">
+        </activity>
 
         <!-- Added by Bill -->
         <service

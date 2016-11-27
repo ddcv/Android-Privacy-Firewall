@@ -30,7 +30,9 @@ public class FireWallVPNService extends VpnService {
 
     public static ConcurrentLinkedQueue<IPPacket> packetQueue = new ConcurrentLinkedQueue<>();
 
-    public static ConcurrentHashMap<String, Boolean> blockingIPMap = new ConcurrentHashMap<>();
+    public static ConcurrentHashMap<String, Integer> blockingIPMap = new ConcurrentHashMap<>();
+
+    public static ConcurrentHashMap<Integer, Integer> portAppMap = new ConcurrentHashMap<>();
 
     private native void jni_init();
 
@@ -170,7 +172,8 @@ public class FireWallVPNService extends VpnService {
      */
     private Allowed isAddressAllowed(Packet packet) {
 
-        if (blockingIPMap.containsKey(packet.daddr)) return null;
+        if (blockingIPMap.containsKey(packet.daddr) && portAppMap.containsKey(packet.dport)
+                && blockingIPMap.get(packet.daddr) == portAppMap.get(packet.dport)) return null;
 
         Log.d(TAG, packet.daddr);
 
@@ -197,7 +200,7 @@ public class FireWallVPNService extends VpnService {
 
                     // TODO: do scan and record on currentPacket
                     // TODO: Add IPs into Block Map, VPN will block those IPs
-                    // Monitor.filter(currentPacket);
+                    Monitor.filter(currentPacket);
 
                 }
             } catch (InterruptedException e) {
