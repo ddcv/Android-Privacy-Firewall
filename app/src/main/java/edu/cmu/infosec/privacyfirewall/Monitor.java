@@ -25,14 +25,20 @@ public class Monitor extends AsyncTask<Void, Void, Void> {
 
     public void filter() {
         int rId;
-        byte[] bytes = new byte[p.contentBuffer.remaining()];
+        int contentSize = p.contentBuffer.remaining();
+        byte[] bytes = new byte[contentSize];
 
         Cursor c;
 
         p.contentBuffer.get(bytes);
 
 
+        String plaintext_8 = new String(bytes, StandardCharsets.UTF_8);
 
+        if (!plaintext_8.equals("") && contentSize > 60) {
+            Log.i(MONITOR_TAG, "size: " + String.valueOf(contentSize));
+            Log.i(MONITOR_TAG, "UTF_8: " + plaintext_8);
+        }
 
         /** Filter packet */
         c = db.getRuleCursorByAdd(p.ip4Header.destinationAddress.getHostAddress());
@@ -69,18 +75,7 @@ public class Monitor extends AsyncTask<Void, Void, Void> {
                 DatabaseUtils.cursorRowToContentValues(c, appVal);
                 String appName = appVal.getAsString(ApplicationDatabase.FIELD_NAME);
 
-                String plaintext_8 = new String(bytes, StandardCharsets.UTF_8);
-//                String plaintext_16 = new String(bytes, StandardCharsets.UTF_16);
-//                String plaintext_ASCII = new String(bytes, StandardCharsets.US_ASCII);
-//                String plaintext_ISO = new String(bytes, StandardCharsets.ISO_8859_1);
-//
-//                if (!plaintext_8.equals("")) {
-//                    Log.i(MONITOR_TAG, "Byte: " + plaintext_ISO);
-//                    Log.i(MONITOR_TAG, "ISO: " + plaintext_ISO);
-//                    Log.i(MONITOR_TAG, "UTF_8: " + plaintext_8);
-//                    Log.i(MONITOR_TAG, "UTF_16: " + plaintext_16);
-//                    Log.i(MONITOR_TAG, "UTF_ASCII: " + plaintext_ASCII);
-//                }
+
 
                 /** Create Connection */
                 String sensitiveContent = scanSensitive(plaintext_8);

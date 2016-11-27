@@ -207,16 +207,16 @@ public class FireWallVPNService extends VpnService {
                     if (currentThread.isInterrupted())
                         break;
 
-                    int pos = currentPacket.contentBuffer.position();
-                    currentPacket.contentBuffer.flip();
+//                    int pos = currentPacket.contentBuffer.position();
+//                    currentPacket.contentBuffer.flip();
 
                     // TODO: do scan and record on currentPacket
                     // TODO: Add IPs into Block Map, VPN will block those IPs
                     Monitor monitorTask = new Monitor(currentPacket);
                     monitorTask.execute();
 
-                    currentPacket.contentBuffer.position(pos);
-                    currentPacket.contentBuffer.flip();
+//                    currentPacket.contentBuffer.position(pos);
+//                    currentPacket.contentBuffer.flip();
 
                 }
             } catch (InterruptedException e) {
