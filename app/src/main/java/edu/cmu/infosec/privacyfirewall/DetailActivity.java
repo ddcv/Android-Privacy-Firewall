@@ -183,12 +183,14 @@ public class DetailActivity extends AppCompatActivity {
         TextView countryView = (TextView) view.findViewById(R.id.country);
         countryView.setText(line);
 
-        line = "Sensitive Info: " + sensitive;
+        line = "Sensitive Info: \n" + sensitive;
         TextView sensitiveView = (TextView) view.findViewById(R.id.sensitive);
         sensitiveView.setText(line);
 
         if (!sensitive.equals(ConnectionDatabase.CONTENT_DEFAULT)) {
-            view.setBackgroundColor(getResources().getColor(R.color.md_amber_A200));
+            sensitiveView.setTextColor(getResources().getColor(R.color.about_libraries_accent));
+            titleView.setTextColor(getResources().getColor(R.color.about_libraries_accent));
+            descriptionView.setTextColor(getResources().getColor(R.color.about_libraries_accent));
         }
 
         line = "Action: " + (action == ConnectionDatabase.ACTION_ALOW ? "Allow" : "Deny");
@@ -197,6 +199,8 @@ public class DetailActivity extends AppCompatActivity {
 
         if (action == ConnectionDatabase.ACTION_DENY) {
             actionView.setTextColor(getResources().getColor(R.color.about_libraries_accent));
+        } else {
+            actionView.setTextColor(getResources().getColor(R.color.about_libraries_primary));
         }
 
         view.setOnClickListener(new View.OnClickListener() {

@@ -3,8 +3,14 @@
     <string name="action_settings">Settings</string>
     <string name="activity_detail_title">DetailActivity</string>
     <string name="drawer_switch">VPN Switch</string>
+    <string name="drawer_general_phone_switch">General Phone Number</string>
+    <string name="drawer_strict_phone_switch">Strict Phone Number</string>
+    <string name="drawer_email_switch">Email</string>
+    <string name="drawer_ssn_switch">SSN</string>
+    <string name="drawer_credit_card_switch">Credit Card Number</string>
     <string name="connection">Connections</string>
-    <string name="drawer_title">Setting</string>
+    <string name="drawer_vpn_title">VPN Setting</string>
+    <string name="drawer_scan_title">Scan Setting</string>
     <string name="dialog_main_title">Add New Global Deny Rule</string>
     <string name="dialog_title">Add New Deny Rule</string>
     <string name="dialog_title_delete">Do you want to **Delete** this IP Address?</string>

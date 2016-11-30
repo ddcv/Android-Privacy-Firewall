@@ -164,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
                 .withToolbar(toolbar)
                 .addDrawerItems(
                         new SecondaryDrawerItem().withIcon(GoogleMaterial.Icon.gmd_settings)
-                                .withName(R.string.drawer_title)
+                                .withName(R.string.drawer_vpn_title)
                 )
                 .addDrawerItems(
                         new SwitchDrawerItem().withOnCheckedChangeListener(
@@ -187,6 +187,92 @@ public class MainActivity extends AppCompatActivity {
                                         }
                                     }
                                 }).withName(R.string.drawer_switch)
+                )
+                .addDrawerItems(
+                        new SecondaryDrawerItem().withIcon(GoogleMaterial.Icon.gmd_settings)
+                                .withName(R.string.drawer_scan_title)
+                )
+                .addDrawerItems(
+                        new SwitchDrawerItem().withOnCheckedChangeListener(
+                                new OnCheckedChangeListener() {
+                                    @Override
+                                    public void onCheckedChanged(IDrawerItem drawerItem,
+                                                                 CompoundButton compoundButton, boolean b) {
+                                        if (b) {
+                                            /** Turn on */
+                                            Monitor.scan_strict_phone = true;
+                                        } else {
+                                            /** Turn off */
+                                            Monitor.scan_strict_phone = false;
+                                        }
+                                    }
+                                })
+                                .withName(R.string.drawer_strict_phone_switch)
+                                .withChecked(true)
+                )
+                .addDrawerItems(
+                        new SwitchDrawerItem().withOnCheckedChangeListener(
+                                new OnCheckedChangeListener() {
+                                    @Override
+                                    public void onCheckedChanged(IDrawerItem drawerItem,
+                                                                 CompoundButton compoundButton, boolean b) {
+                                        if (b) {
+                                            /** Turn on */
+                                            Monitor.scan_general_phone = true;
+                                        } else {
+                                            /** Turn off */
+                                            Monitor.scan_general_phone = false;
+                                        }
+                                    }
+                                }).withName(R.string.drawer_general_phone_switch)
+                )
+                .addDrawerItems(
+                        new SwitchDrawerItem().withOnCheckedChangeListener(
+                                new OnCheckedChangeListener() {
+                                    @Override
+                                    public void onCheckedChanged(IDrawerItem drawerItem,
+                                                                 CompoundButton compoundButton, boolean b) {
+                                        if (b) {
+                                            /** Turn on */
+                                            Monitor.scan_email = true;
+                                        } else {
+                                            /** Turn off */
+                                            Monitor.scan_email = false;
+                                        }
+                                    }
+                                }).withName(R.string.drawer_email_switch)
+                )
+                .addDrawerItems(
+                        new SwitchDrawerItem().withOnCheckedChangeListener(
+                                new OnCheckedChangeListener() {
+                                    @Override
+                                    public void onCheckedChanged(IDrawerItem drawerItem,
+                                                                 CompoundButton compoundButton, boolean b) {
+                                        if (b) {
+                                            /** Turn on */
+                                            Monitor.scan_credit_card = true;
+                                        } else {
+                                            /** Turn off */
+                                            Monitor.scan_credit_card = false;
+                                        }
+                                    }
+                                }).withName(R.string.drawer_credit_card_switch)
+                )
+                .addDrawerItems(
+                        new SwitchDrawerItem().withOnCheckedChangeListener(
+                                new OnCheckedChangeListener() {
+                                    @Override
+                                    public void onCheckedChanged(IDrawerItem drawerItem,
+                                                                 CompoundButton compoundButton, boolean b) {
+                                        if (b) {
+                                            /** Turn on */
+                                            Monitor.scan_ssn = true;
+                                        } else {
+                                            /** Turn off */
+                                            Monitor.scan_ssn = false;
+                                        }
+                                    }
+                                }).withName(R.string.drawer_ssn_switch)
                 )
                 .withSelectedItem(-1)
                 .withSavedInstance(savedInstanceState)

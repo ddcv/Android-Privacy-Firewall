@@ -62,6 +62,11 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
         viewHolder.connectionCount.setText(String.valueOf(appInfo.getConnectionCount()));
         viewHolder.sensitiveCount.setText(String.valueOf(appInfo.getSensitiveCount()));
 
+        if (appInfo.getSensitiveCount() != 0) {
+            viewHolder.sensitiveLabel.setTextColor(mAct.getResources().getColor(R.color.theme_accent));
+            viewHolder.sensitiveCount.setTextColor(mAct.getResources().getColor(R.color.theme_accent));
+        }
+
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,17 +86,16 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
         public TextView permissionCount;
         public TextView connectionCount;
         public TextView sensitiveCount;
+        public TextView sensitiveLabel;
 
         public ViewHolder(View itemView) {
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.countryName);
             image = (ImageView) itemView.findViewById(R.id.countryImage);
-
             permissionCount = (TextView) itemView.findViewById(R.id.permissionCount);
-
             connectionCount = (TextView) itemView.findViewById(R.id.connectionCount);
-
             sensitiveCount = (TextView) itemView.findViewById(R.id.sensitiveCount);
+            sensitiveLabel = (TextView) itemView.findViewById(R.id.sensitiveLabel);
         }
 
     }

@@ -27,7 +27,7 @@ public class traceIPAddr extends AsyncTask<Void, Void, Void> {
         String recipient = "Not Known";
         String country = "Not Known";
         String path = "http://www.whoisxmlapi.com/whoisserver/WhoisService?domainName=" +
-                ipaddr + "&username=daiker0330&password=infosec2016&outputFormat=JSON";
+                ipaddr + "&username=infosec2016&password=infosec2016&outputFormat=JSON";
 
         try {
             URL url = new URL(path);

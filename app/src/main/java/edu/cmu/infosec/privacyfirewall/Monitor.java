@@ -20,6 +20,12 @@ public class Monitor extends AsyncTask<Void, Void, Void> {
     public final static String MONITOR_TAG = "Monitor";
     private IPPacket p;
 
+    public static boolean scan_general_phone = false;
+    public static boolean scan_strict_phone = true;
+    public static boolean scan_email = false;
+    public static boolean scan_ssn = false;
+    public static boolean scan_credit_card = false;
+
     public Monitor(IPPacket _p) {
         super();
         p = _p;
@@ -131,49 +137,95 @@ public class Monitor extends AsyncTask<Void, Void, Void> {
         return Patterns.IP_ADDRESS.matcher(ipaddr).matches();
     }
 
-//    final static Pattern pattern_phone_general =
-//            Pattern.compile("(?:.*)(\\(?([1]?[2-9]\\d{2})\\)?[\\s-]?([2-9]\\d{2})[\\s-]?([\\d]{4}))(?:.*)");
-    final static Pattern pattern_phone_url =
+    final static Pattern pattern_general_phone =
+            Pattern.compile("(?:.*)(\\(?([1]?[2-9]\\d{2})\\)?[\\s-]?([2-9]\\d{2})[\\s-]?([\\d]{4}))(?:.*)");
+    final static Pattern pattern_url_phone =
             Pattern.compile("(?:.*)(%28(\\d{3})%29(\\d{3})-(\\d{4}))(?:.*)");
-//    final static Pattern pattern_email =
-//            Pattern.compile("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])");
+    final static Pattern pattern_email =
+            Pattern.compile("(?:.*)[_a-zA-Z0-9-]+@([_a-zA-Z0-9-]+\\.)+[_a-zA-Z0-9-]{2,4}(?:.*)");
+    final static Pattern pattern_url_email =
+            Pattern.compile("(?:=)([_a-zA-Z0-9-]+[(@)(%40)]([_a-zA-Z0-9-]+\\.)+[_a-zA-Z0-9-]{2,4})(?:[&\\n])");
+    final static Pattern pattern_ssn =
+            Pattern.compile("(?:.*)(\\d{3}-\\d{2}-\\d{4})(?:.*)");
+    final static Pattern pattern_credit_card =
+            Pattern.compile("(?:.*)(((4\\d{3})|(5[1-5]\\d{2})|(6011))-?\\d{4}-?\\d{4}-?\\d{4}|3[4,7]\\d{13})(?:.*)");
 
     private static String scanSensitive(String plaintext, String sensitive_org) {
         String result = sensitive_org;
+        Matcher m;
 
-        Matcher m = pattern_phone_url.matcher(plaintext);
-        if (m.find()) {
-            String append = ConnectionDatabase.CONTENT_PHONE + "(\"" + m.group(1) + "\")";
-            append = append.replace("%28", "(");
-            append = append.replace("%29", ")");
-            if (result.contains(append)) {
-                ;
-            } else if (result.equals(ConnectionDatabase.CONTENT_DEFAULT)) {
-                result = append;
-            } else {
-                result = result + ", " + append;
+        if (scan_strict_phone) {
+            m = pattern_url_phone.matcher(plaintext);
+            if (m.find()) {
+                String append = ConnectionDatabase.CONTENT_PHONE + "(\"" + m.group(1) + "\")";
+                append = append.replace("%28", "(");
+                append = append.replace("%29", ")");
+                if (result.contains(append)) {
+                    ;
+                } else if (result.equals(ConnectionDatabase.CONTENT_DEFAULT)) {
+                    result = append;
+                } else {
+                    result = result + ", \n" + append;
+                }
             }
         }
 
-//        m = pattern_phone_general.matcher(plaintext);
-//        if (m.find() && !sensitive_org.contains(m.group(1))) {
-//            String append = ConnectionDatabase.CONTENT_PHONE + "(\"" + m.group(1) + "\")";
-//            if (result.equals(ConnectionDatabase.CONTENT_DEFAULT)) {
-//                result = append;
-//            } else {
-//                result = result + ", " + append;
-//            }
-//        }
+        if (scan_general_phone) {
+            m = pattern_general_phone.matcher(plaintext);
+            if (m.find() && !sensitive_org.contains(m.group(1))) {
+                String append = ConnectionDatabase.CONTENT_PHONE + "(\"" + m.group(1) + "\")";
+                if (result.contains(append)) {
+                    ;
+                } else if (result.equals(ConnectionDatabase.CONTENT_DEFAULT)) {
+                    result = append;
+                } else {
+                    result = result + ", \n" + append;
+                }
+            }
+        }
 
-//        m = pattern_email.matcher(plaintext);
-//        if (m.find() && !sensitive_org.contains(m.group(1))) {
-//            String append = ConnectionDatabase.CONTENT_EMAIL + "(\"" + m.group(1) + "\")";
-//            if (result.equals(ConnectionDatabase.CONTENT_DEFAULT)) {
-//                result = append;
-//            } else {
-//                result = result + ", " + append;
-//            }
-//        }
+        if (scan_email) {
+            m = pattern_url_email.matcher(plaintext);
+            if (m.find() && !sensitive_org.contains(m.group(1))) {
+                String append = ConnectionDatabase.CONTENT_EMAIL + "(\"" + m.group(1) + "\")";
+                append = append.replace("%40", "@");
+                if (result.contains(append)) {
+                    ;
+                } else if (result.equals(ConnectionDatabase.CONTENT_DEFAULT)) {
+                    result = append;
+                } else {
+                    result = result + ", \n" + append;
+                }
+            }
+        }
+
+        if (scan_ssn) {
+            m = pattern_ssn.matcher(plaintext);
+            if (m.find() && !sensitive_org.contains(m.group(1))) {
+                String append = ConnectionDatabase.CONTENT_SSN + "(\"" + m.group(1) + "\")";
+                if (result.contains(append)) {
+                    ;
+                } else if (result.equals(ConnectionDatabase.CONTENT_DEFAULT)) {
+                    result = append;
+                } else {
+                    result = result + ", \n" + append;
+                }
+            }
+        }
+
+        if (scan_credit_card) {
+            m = pattern_credit_card.matcher(plaintext);
+            if (m.find() && !sensitive_org.contains(m.group(1))) {
+                String append = ConnectionDatabase.CONTENT_CREDIT_CARD + "(\"" + m.group(1) + "\")";
+                if (result.contains(append)) {
+                    ;
+                } else if (result.equals(ConnectionDatabase.CONTENT_DEFAULT)) {
+                    result = append;
+                } else {
+                    result = result + ", \n" + append;
+                }
+            }
+        }
 
         return result;
     }

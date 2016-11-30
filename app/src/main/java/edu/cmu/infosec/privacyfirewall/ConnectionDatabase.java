@@ -23,6 +23,8 @@ public class ConnectionDatabase extends SQLiteOpenHelper{
     public final static String CONTENT_DEFAULT = "NULL";
     public final static String CONTENT_PHONE = "Phone number";
     public final static String CONTENT_EMAIL = "Email";
+    public final static String CONTENT_SSN = "SSN number";
+    public final static String CONTENT_CREDIT_CARD = "credit card number";
     public final static int SENSITIVE = 1;
     public final static int NON_SENSITIVE = 0;
     public final static int ACTION_ALOW = 1;
