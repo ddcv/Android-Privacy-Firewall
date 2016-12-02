@@ -142,7 +142,7 @@ public class Monitor extends AsyncTask<Void, Void, Void> {
     final static Pattern pattern_url_phone =
             Pattern.compile("(?:.*)(%28(\\d{3})%29(\\d{3})-(\\d{4}))(?:.*)");
     final static Pattern pattern_email =
-            Pattern.compile("(?:.*)[_a-zA-Z0-9-]+@([_a-zA-Z0-9-]+\\.)+[_a-zA-Z0-9-]{2,4}(?:.*)");
+            Pattern.compile("(?:.*)([_a-zA-Z0-9-]+@([_a-zA-Z0-9-]+\\.)+[_a-zA-Z0-9-]{2,4})(?:.*)");
     final static Pattern pattern_url_email =
             Pattern.compile("(?:=)([_a-zA-Z0-9-]+[(@)(%40)]([_a-zA-Z0-9-]+\\.)+[_a-zA-Z0-9-]{2,4})(?:[&\\n])");
     final static Pattern pattern_ssn =
@@ -157,9 +157,15 @@ public class Monitor extends AsyncTask<Void, Void, Void> {
         if (scan_strict_phone) {
             m = pattern_url_phone.matcher(plaintext);
             if (m.find()) {
-                String append = ConnectionDatabase.CONTENT_PHONE + "(\"" + m.group(1) + "\")";
+                String append = m.group(1);
                 append = append.replace("%28", "(");
                 append = append.replace("%29", ")");
+
+                /** Anonymity */
+                append = append.substring(0, 5) + "***-" + append.substring(9, 13);
+
+                append = ConnectionDatabase.CONTENT_PHONE + "(\"" + append + "\")";
+
                 if (result.contains(append)) {
                     ;
                 } else if (result.equals(ConnectionDatabase.CONTENT_DEFAULT)) {
@@ -173,7 +179,13 @@ public class Monitor extends AsyncTask<Void, Void, Void> {
         if (scan_general_phone) {
             m = pattern_general_phone.matcher(plaintext);
             if (m.find() && !sensitive_org.contains(m.group(1))) {
-                String append = ConnectionDatabase.CONTENT_PHONE + "(\"" + m.group(1) + "\")";
+                String append = m.group(1);
+
+                /** Anonymity */
+                append = append.substring(0, 3) + "***-" + append.substring(6, 10);
+
+                append = ConnectionDatabase.CONTENT_PHONE + "(\"" + append + "\")";
+
                 if (result.contains(append)) {
                     ;
                 } else if (result.equals(ConnectionDatabase.CONTENT_DEFAULT)) {
@@ -187,8 +199,18 @@ public class Monitor extends AsyncTask<Void, Void, Void> {
         if (scan_email) {
             m = pattern_url_email.matcher(plaintext);
             if (m.find() && !sensitive_org.contains(m.group(1))) {
-                String append = ConnectionDatabase.CONTENT_EMAIL + "(\"" + m.group(1) + "\")";
+                String append = m.group(1);
                 append = append.replace("%40", "@");
+
+                /** Anonymity */
+                int index = append.indexOf('@');
+                if (index > 2) {
+                    String repeated = new String(new char[index - 2]).replace("\0", "*");
+                    append = repeated + append.substring(index - 2);
+                }
+
+                append = ConnectionDatabase.CONTENT_EMAIL + "(\"" + append + "\")";
+
                 if (result.contains(append)) {
                     ;
                 } else if (result.equals(ConnectionDatabase.CONTENT_DEFAULT)) {
@@ -202,7 +224,13 @@ public class Monitor extends AsyncTask<Void, Void, Void> {
         if (scan_ssn) {
             m = pattern_ssn.matcher(plaintext);
             if (m.find() && !sensitive_org.contains(m.group(1))) {
-                String append = ConnectionDatabase.CONTENT_SSN + "(\"" + m.group(1) + "\")";
+                String append = m.group(1);
+
+                /** Anonymity */
+                append = "***-**-" + append.substring(7, 11);
+
+                append = ConnectionDatabase.CONTENT_SSN + "(\"" + append + "\")";
+
                 if (result.contains(append)) {
                     ;
                 } else if (result.equals(ConnectionDatabase.CONTENT_DEFAULT)) {
@@ -216,7 +244,13 @@ public class Monitor extends AsyncTask<Void, Void, Void> {
         if (scan_credit_card) {
             m = pattern_credit_card.matcher(plaintext);
             if (m.find() && !sensitive_org.contains(m.group(1))) {
-                String append = ConnectionDatabase.CONTENT_CREDIT_CARD + "(\"" + m.group(1) + "\")";
+                String append = m.group(1);
+
+                /** Anonymity */
+                append = append.substring(0, 4) + "-****-****-" + append.substring(15, 19);
+
+                append = ConnectionDatabase.CONTENT_CREDIT_CARD + "(\"" + append + "\")";
+
                 if (result.contains(append)) {
                     ;
                 } else if (result.equals(ConnectionDatabase.CONTENT_DEFAULT)) {
