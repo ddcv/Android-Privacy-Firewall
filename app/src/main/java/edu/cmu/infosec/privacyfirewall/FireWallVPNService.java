@@ -178,7 +178,7 @@ public class FireWallVPNService extends VpnService {
         while (it.hasNext()) {
             Pair<String, Integer> p = it.next();
             if (p.first.equals(packet.daddr)) {
-                if (p.second == NetUtils.readProcFile(packet.dport)) {
+                if (p.second == NetUtils.readProcFile(packet.sport)) {
                     return null;
                 }
             }
