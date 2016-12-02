@@ -1,4 +1,4 @@
-#include "netguard.h"
+#include "network.h"
 
 extern int loglevel;
 

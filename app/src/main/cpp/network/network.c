@@ -1,10 +1,6 @@
 #include "network.h"
 
-// It is assumed that no packets will get lost and that packets arrive in order
-// https://android.googlesource.com/platform/frameworks/base.git/+/master/services/core/jni/com_android_server_connectivity_Vpn.cpp
-
 // Global variables
-
 JavaVM *jvm = NULL;
 int pipefds[2];
 pthread_t thread_id = 0;
@@ -22,11 +18,9 @@ extern size_t pcap_record_size;
 extern long pcap_file_size;
 
 // JNI
-
 jclass clsPacket;
 jclass clsAllowed;
 jclass clsRR;
-//jclass clsUsage;
 
 // Add by Bill
 jclass clsVpn;
@@ -102,10 +96,6 @@ void JNI_OnUnload(JavaVM *vm, void *reserved) {
     JNIEnv *env;
     if ((*vm)->GetEnv(vm, (void **) &env, JNI_VERSION_1_6) != JNI_OK)
         log_android(ANDROID_LOG_INFO, "JNI load GetEnv failed");
-    else {
-//        (*env)->DeleteGlobalRef(env, clsPacket);
-//        (*env)->DeleteGlobalRef(env, clsRR);
-    }
 }
 
 // JNI ServiceSinkhole
@@ -202,117 +192,6 @@ Java_edu_cmu_infosec_privacyfirewall_FireWallVPNService_jni_1stop(
         log_android(ANDROID_LOG_WARN, "Stopped thread %x", t);
     } else
         log_android(ANDROID_LOG_WARN, "Not running thread %x", t);
-}
-
-JNIEXPORT jint JNICALL
-Java_edu_cmu_infosec_privacyfirewall_FireWallVPNService_jni_1get_1mtu(JNIEnv *env, jobject instance) {
-    return get_mtu();
-}
-
-JNIEXPORT jintArray JNICALL
-Java_edu_cmu_infosec_privacyfirewall_FireWallVPNService_jni_1get_1stats(JNIEnv *env, jobject instance) {
-    if (pthread_mutex_lock(&lock))
-        log_android(ANDROID_LOG_ERROR, "pthread_mutex_lock failed");
-
-    jintArray jarray = (*env)->NewIntArray(env, 5);
-    jint *jcount = (*env)->GetIntArrayElements(env, jarray, NULL);
-
-
-    struct ng_session *s = ng_session;
-    while (s != NULL) {
-        if (s->protocol == IPPROTO_ICMP || s->protocol == IPPROTO_ICMPV6) {
-            if (!s->icmp.stop)
-                jcount[0]++;
-        }
-        else if (s->protocol == IPPROTO_UDP) {
-            if (s->udp.state == UDP_ACTIVE)
-                jcount[1]++;
-        }
-        else if (s->protocol == IPPROTO_TCP) {
-            if (s->tcp.state != TCP_CLOSING && s->tcp.state != TCP_CLOSE)
-                jcount[2]++;
-        }
-        s = s->next;
-    }
-
-    if (pthread_mutex_unlock(&lock))
-        log_android(ANDROID_LOG_ERROR, "pthread_mutex_unlock failed");
-
-    jcount[3] = 0;
-    DIR *d = opendir("/proc/self/fd");
-    if (d) {
-        struct dirent *dir;
-        while ((dir = readdir(d)) != NULL)
-            if (dir->d_type != DT_DIR)
-                jcount[3]++;
-        closedir(d);
-    }
-
-    struct rlimit rlim;
-    memset(&rlim, 0, sizeof(struct rlimit));
-    getrlimit(RLIMIT_NOFILE, &rlim);
-    jcount[4] = (jint) rlim.rlim_cur;
-
-    (*env)->ReleaseIntArrayElements(env, jarray, jcount, NULL);
-    return jarray;
-}
-
-JNIEXPORT void JNICALL
-Java_edu_cmu_infosec_privacyfirewall_FireWallVPNService_jni_1pcap(
-        JNIEnv *env, jclass type,
-        jstring name_, jint record_size, jint file_size) {
-
-    pcap_record_size = (size_t) record_size;
-    pcap_file_size = file_size;
-
-    if (pthread_mutex_lock(&lock))
-        log_android(ANDROID_LOG_ERROR, "pthread_mutex_lock failed");
-
-    if (name_ == NULL) {
-        if (pcap_file != NULL) {
-            int flags = fcntl(fileno(pcap_file), F_GETFL, 0);
-            if (flags < 0 || fcntl(fileno(pcap_file), F_SETFL, flags & ~O_NONBLOCK) < 0)
-                log_android(ANDROID_LOG_ERROR, "PCAP fcntl ~O_NONBLOCK error %d: %s",
-                            errno, strerror(errno));
-
-            if (fsync(fileno(pcap_file)))
-                log_android(ANDROID_LOG_ERROR, "PCAP fsync error %d: %s", errno, strerror(errno));
-
-            if (fclose(pcap_file))
-                log_android(ANDROID_LOG_ERROR, "PCAP fclose error %d: %s", errno, strerror(errno));
-
-            pcap_file = NULL;
-        }
-        log_android(ANDROID_LOG_WARN, "PCAP disabled");
-    }
-    else {
-        const char *name = (*env)->GetStringUTFChars(env, name_, 0);
-        log_android(ANDROID_LOG_WARN, "PCAP file %s record size %d truncate @%ld",
-                    name, pcap_record_size, pcap_file_size);
-
-        pcap_file = fopen(name, "ab+");
-        if (pcap_file == NULL)
-            log_android(ANDROID_LOG_ERROR, "PCAP fopen error %d: %s", errno, strerror(errno));
-        else {
-            int flags = fcntl(fileno(pcap_file), F_GETFL, 0);
-            if (flags < 0 || fcntl(fileno(pcap_file), F_SETFL, flags | O_NONBLOCK) < 0)
-                log_android(ANDROID_LOG_ERROR, "PCAP fcntl O_NONBLOCK error %d: %s",
-                            errno, strerror(errno));
-
-            long size = ftell(pcap_file);
-            if (size == 0) {
-                log_android(ANDROID_LOG_WARN, "PCAP initialize");
-                write_pcap_hdr();
-            }
-            else
-                log_android(ANDROID_LOG_WARN, "PCAP current size %ld", size);
-        }
-
-        (*env)->ReleaseStringUTFChars(env, name_, name);
-    }
-
-    if (pthread_mutex_unlock(&lock))
-        log_android(ANDROID_LOG_ERROR, "pthread_mutex_unlock failed");
 }
 
 JNIEXPORT void JNICALL

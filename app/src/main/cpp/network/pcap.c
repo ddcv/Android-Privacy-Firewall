@@ -1,4 +1,4 @@
-#include "netguard.h"
+#include "network.h"
 
 FILE *pcap_file = NULL;
 size_t pcap_record_size = 64;

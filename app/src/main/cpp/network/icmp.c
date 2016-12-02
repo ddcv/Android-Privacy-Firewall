@@ -1,4 +1,4 @@
-#include "netguard.h"
+#include "network.h"
 
 extern struct ng_session *ng_session;
 extern FILE *pcap_file;

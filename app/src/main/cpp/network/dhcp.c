@@ -1,4 +1,4 @@
-#include "netguard.h"
+#include "network.h"
 
 int check_dhcp(const struct arguments *args, const struct udp_session *u,
                const uint8_t *data, const size_t datalen) {

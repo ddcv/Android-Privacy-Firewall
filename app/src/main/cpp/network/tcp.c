@@ -1,4 +1,4 @@
-#include "netguard.h"
+#include "network.h"
 
 extern struct ng_session *ng_session;
 extern char socks5_addr[INET6_ADDRSTRLEN + 1];

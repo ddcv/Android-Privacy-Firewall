@@ -1,4 +1,4 @@
-#include "netguard.h"
+#include "network.h"
 
 int32_t get_qname(const uint8_t *data, const size_t datalen, uint16_t off, char *qname) {
     *qname = 0;

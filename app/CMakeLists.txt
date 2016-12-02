@@ -18,8 +18,8 @@ add_library( # Sets the name of the library.
              # Provides a relative path to your source file(s).
              # Associated headers in the same location as their source
              # file are automatically included.
-             src/main/cpp/network/netguard.h
-             src/main/cpp/network/netguard.c
+             src/main/cpp/network/network.h
+             src/main/cpp/network/network.c
              src/main/cpp/network/ip.c
              src/main/cpp/network/tcp.c
              src/main/cpp/network/udp.c

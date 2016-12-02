@@ -23,34 +23,33 @@ public class FireWallVPNService extends VpnService {
     public static final String VPN_ADDRESS = "10.0.0.2"; // Only IPv4 support for now
     private static final String VPN_ROUTE = "0.0.0.0"; // Intercept everything
 
-    private static boolean isRunning = false;
+    private static boolean isRunning = false; // VPN status
 
-    private ParcelFileDescriptor vpnInterface = null;
+    private ParcelFileDescriptor vpnInterface = null; // vpn ParcelFileDescriptor
 
-    private PendingIntent pendingIntent;
+    private PendingIntent pendingIntent; // used for establish vpn service
 
-    private final IBinder mBinder = new LocalBinder();
+    private final IBinder mBinder = new LocalBinder(); // binder
 
+    // A thread-safe queue used for :
+    // 1. VPN network thread(implemented in C code) keep putting all output packets into it
+    // 2. VPN filter thread keep polling packets and do the scanning jobs
     public static ConcurrentLinkedQueue<IPPacket> packetQueue = new ConcurrentLinkedQueue<>();
 
+    // A thread-safe queue store banned IP list,
+    // Pair:String is the IP address
+    // Pair:Integer is the port
     public static ConcurrentLinkedQueue<Pair<String, Integer>>
             blockingIPMap = new ConcurrentLinkedQueue<>();
 
+    // Native function: do the init work of network
     private native void jni_init();
-
+    // Native function: start network part
     private native void jni_start(int tun, boolean fwd53, int loglevel);
-
+    // Native function: stop network part
     private native void jni_stop(int tun, boolean clr);
-
-    private native int jni_get_mtu();
-
-    private native int[] jni_get_stats();
-
-    private static native void jni_pcap(String name, int record_size, int file_size);
-
+    // Native function: configure the socket
     private native void jni_socks5(String addr, int port, String username, String password);
-
-    private native void jni_done();
 
     @Override
     public void onCreate() {
@@ -124,6 +123,10 @@ public class FireWallVPNService extends VpnService {
         return isRunning;
     }
 
+    /**
+     * Start native network part
+     * @param vpn
+     */
     private void startNative(ParcelFileDescriptor vpn) {
         boolean log = false, log_app = false, filter = true;
         Log.i(TAG, "Start native log=" + log + "/" + log_app + " filter=" + filter);
@@ -131,6 +134,11 @@ public class FireWallVPNService extends VpnService {
         jni_start(vpn.getFd(), true, 0);
     }
 
+    /**
+     * Stop native network part
+     * @param vpn
+     * @param clear
+     */
     private void stopNative(ParcelFileDescriptor vpn, boolean clear) {
         Log.i(TAG, "Stop native clear=" + clear);
         try {
@@ -161,7 +169,6 @@ public class FireWallVPNService extends VpnService {
             try {
                 resource.close();
             } catch (IOException e) {
-                // Ignore
             }
         }
     }
@@ -189,6 +196,10 @@ public class FireWallVPNService extends VpnService {
         return new Allowed();
     }
 
+    /**
+     * Runnable for vpn thread,
+     * do scanning works
+     */
     private class VPNRunnable implements Runnable {
 
         @Override
@@ -207,16 +218,10 @@ public class FireWallVPNService extends VpnService {
                     if (currentThread.isInterrupted())
                         break;
 
-//                    int pos = currentPacket.contentBuffer.position();
-//                    currentPacket.contentBuffer.flip();
-
                     // TODO: do scan and record on currentPacket
                     // TODO: Add IPs into Block Map, VPN will block those IPs
                     Monitor monitorTask = new Monitor(currentPacket);
                     monitorTask.execute();
-
-//                    currentPacket.contentBuffer.position(pos);
-//                    currentPacket.contentBuffer.flip();
 
                 }
             } catch (InterruptedException e) {

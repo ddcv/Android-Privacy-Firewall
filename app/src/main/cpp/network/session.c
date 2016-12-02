@@ -1,4 +1,4 @@
-#include "netguard.h"
+#include "network.h"
 
 extern JavaVM *jvm;
 extern int pipefds[2];

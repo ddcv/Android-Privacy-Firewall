@@ -1,4 +1,4 @@
-#include "netguard.h"
+#include "network.h"
 
 int max_tun_msg = 0;
 extern int loglevel;
