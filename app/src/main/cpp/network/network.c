@@ -1,4 +1,4 @@
-#include "netguard.h"
+#include "network.h"
 
 // It is assumed that no packets will get lost and that packets arrive in order
 // https://android.googlesource.com/platform/frameworks/base.git/+/master/services/core/jni/com_android_server_connectivity_Vpn.cpp
@@ -808,49 +808,6 @@ void account_usage(const struct arguments *args, jint version, jint protocol,
     struct timeval start, end;
     gettimeofday(&start, NULL);
 #endif
-//
-//    jclass clsService = (*args->env)->GetObjectClass(args->env, args->instance);
-//
-//    const char *signature = "(Ledu/cmu/infosec/privacyfirewall/Usage;)V";
-//    if (midAccountUsage == NULL)
-//        midAccountUsage = jniGetMethodID(args->env, clsService, "accountUsage", signature);
-//
-//    const char *usage = "edu/cmu/infosec/privacyfirewall/Usage";
-//    if (midInitUsage == NULL)
-//        midInitUsage = jniGetMethodID(args->env, clsUsage, "<init>", "()V");
-//
-//    jobject jusage = jniNewObject(args->env, clsUsage, midInitUsage, usage);
-//
-//    if (fidUsageTime == NULL) {
-//        const char *string = "Ljava/lang/String;";
-//        fidUsageTime = jniGetFieldID(args->env, clsUsage, "Time", "J");
-//        fidUsageVersion = jniGetFieldID(args->env, clsUsage, "Version", "I");
-//        fidUsageProtocol = jniGetFieldID(args->env, clsUsage, "Protocol", "I");
-//        fidUsageDAddr = jniGetFieldID(args->env, clsUsage, "DAddr", string);
-//        fidUsageDPort = jniGetFieldID(args->env, clsUsage, "DPort", "I");
-//        fidUsageUid = jniGetFieldID(args->env, clsUsage, "Uid", "I");
-//        fidUsageSent = jniGetFieldID(args->env, clsUsage, "Sent", "J");
-//        fidUsageReceived = jniGetFieldID(args->env, clsUsage, "Received", "J");
-//    }
-//
-//    jlong jtime = time(NULL) * 1000LL;
-//    jstring jdaddr = (*args->env)->NewStringUTF(args->env, daddr);
-//
-//    (*args->env)->SetLongField(args->env, jusage, fidUsageTime, jtime);
-//    (*args->env)->SetIntField(args->env, jusage, fidUsageVersion, version);
-//    (*args->env)->SetIntField(args->env, jusage, fidUsageProtocol, protocol);
-//    (*args->env)->SetObjectField(args->env, jusage, fidUsageDAddr, jdaddr);
-//    (*args->env)->SetIntField(args->env, jusage, fidUsageDPort, dport);
-//    (*args->env)->SetIntField(args->env, jusage, fidUsageUid, uid);
-//    (*args->env)->SetLongField(args->env, jusage, fidUsageSent, sent);
-//    (*args->env)->SetLongField(args->env, jusage, fidUsageReceived, received);
-//
-//    (*args->env)->CallVoidMethod(args->env, args->instance, midAccountUsage, jusage);
-//    jniCheckException(args->env);
-//
-//    (*args->env)->DeleteLocalRef(args->env, jdaddr);
-//    (*args->env)->DeleteLocalRef(args->env, jusage);
-//    (*args->env)->DeleteLocalRef(args->env, clsService);
 
 #ifdef PROFILE_JNI
     gettimeofday(&end, NULL);
