@@ -301,7 +301,7 @@ public class Monitor extends AsyncTask<Void, Void, Void> {
                 new android.support.v4.app.NotificationCompat.BigTextStyle();
 
         mBuilder.setSmallIcon(R.drawable.ic_warning_black_24dp);
-        mBuilder.setContentText(appName + " is sending " + message + " to the Internet.");
+        mBuilder.setContentText(appName + " is sending " + message);
         mBuilder.setContentTitle("Detect Potential Data Leak!");
         style.setBigContentTitle("Detect Potential Data Leak!");
         style.bigText(appName + " is sending " + message);
