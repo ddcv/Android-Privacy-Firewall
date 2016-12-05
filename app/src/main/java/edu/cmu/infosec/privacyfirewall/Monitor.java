@@ -1,8 +1,10 @@
 package edu.cmu.infosec.privacyfirewall;
 
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.os.AsyncTask;
@@ -297,15 +299,22 @@ public class Monitor extends AsyncTask<Void, Void, Void> {
                                   NotificationManager mNotificationManager) {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(ContextUtil.getInstance());
-        android.support.v4.app.NotificationCompat.BigTextStyle style =
-                new android.support.v4.app.NotificationCompat.BigTextStyle();
-
         mBuilder.setSmallIcon(R.drawable.ic_warning_black_24dp);
         mBuilder.setContentText(appName + " is sending " + message);
         mBuilder.setContentTitle("Detect Potential Data Leak!");
+
+        /** Set big text */
+        android.support.v4.app.NotificationCompat.BigTextStyle style =
+                new android.support.v4.app.NotificationCompat.BigTextStyle();
         style.setBigContentTitle("Detect Potential Data Leak!");
         style.bigText(appName + " is sending " + message);
         mBuilder.setStyle(style);
+
+        /** Set intent */
+        Intent intent = new Intent(ContextUtil.getInstance(),MainActivity.class);
+        PendingIntent pIntent = PendingIntent.getActivity(ContextUtil.getInstance(),1,intent,0);
+        mBuilder.setContentIntent(pIntent);
+
         mNotificationManager.notify(notificationID++, mBuilder.build());
     }
 }
