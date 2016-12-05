@@ -1,9 +1,12 @@
 package edu.cmu.infosec.privacyfirewall;
 
+import android.app.NotificationManager;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.os.AsyncTask;
+import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.util.Patterns;
 
@@ -25,6 +28,8 @@ public class Monitor extends AsyncTask<Void, Void, Void> {
     public static boolean scan_email = false;
     public static boolean scan_ssn = false;
     public static boolean scan_credit_card = false;
+
+    private static int notificationID = 0;
 
     public Monitor(IPPacket _p) {
         super();
@@ -75,10 +80,10 @@ public class Monitor extends AsyncTask<Void, Void, Void> {
 
                 String plaintext_8 = new String(bytes, StandardCharsets.UTF_8);
 
-                if (!plaintext_8.equals("")) {
-                    Log.i(MONITOR_TAG, "size: " + String.valueOf(contentSize));
-                    Log.i(MONITOR_TAG, "UTF_8: " + plaintext_8);
-                }
+//                if (!plaintext_8.equals("")) {
+//                    Log.i(MONITOR_TAG, "size: " + String.valueOf(contentSize));
+//                    Log.i(MONITOR_TAG, "UTF_8: " + plaintext_8);
+//                }
 
                 /** Create Connection */
                 c = db.getConnectionCursorByAppId(uid);
@@ -88,7 +93,7 @@ public class Monitor extends AsyncTask<Void, Void, Void> {
                     if (appVal.getAsInteger(ConnectionDatabase.FIELD_RULE) == rId) {
                         exist = true;
                         String sensitiveContent = scanSensitive(plaintext_8,
-                                appVal.getAsString(ConnectionDatabase.FIELD_CONTENT));
+                                appVal.getAsString(ConnectionDatabase.FIELD_CONTENT), appName);
                         Monitor.db.updateSensitive(
                                 appVal.getAsInteger(ConnectionDatabase.FIELD_APP),
                                 appVal.getAsInteger(ConnectionDatabase.FIELD_RULE),
@@ -97,21 +102,21 @@ public class Monitor extends AsyncTask<Void, Void, Void> {
                     }
                 }
 
-                Log.d(MONITOR_TAG, "exist = " + exist);
+//                Log.d(MONITOR_TAG, "exist = " + exist);
                 if (!exist) {
                     String sensitiveContent = scanSensitive(plaintext_8,
-                            ConnectionDatabase.CONTENT_DEFAULT);
+                            ConnectionDatabase.CONTENT_DEFAULT, appName);
                     int sensitive = sensitiveContent.equals(ConnectionDatabase.CONTENT_DEFAULT) ?
                             ConnectionDatabase.NON_SENSITIVE :
                             ConnectionDatabase.SENSITIVE;
                     db.insertConnection(uid, rId, ConnectionDatabase.ACTION_ALOW,
                             sensitiveContent, sensitive);
-                    Log.d(MONITOR_TAG, "uid = " + uid);
-                    Log.d(MONITOR_TAG, "rId = " + rId);
-                    Log.d(MONITOR_TAG, "AppName = " + appName);
-                    Log.d(MONITOR_TAG, "DestAddr = " +
-                            p.ip4Header.destinationAddress.getHostAddress());
-                    Log.d(MONITOR_TAG, "plaintext = " + plaintext_8);
+//                    Log.d(MONITOR_TAG, "uid = " + uid);
+//                    Log.d(MONITOR_TAG, "rId = " + rId);
+//                    Log.d(MONITOR_TAG, "AppName = " + appName);
+//                    Log.d(MONITOR_TAG, "DestAddr = " +
+//                            p.ip4Header.destinationAddress.getHostAddress());
+//                    Log.d(MONITOR_TAG, "plaintext = " + plaintext_8);
                 }
             }
         }
@@ -144,15 +149,19 @@ public class Monitor extends AsyncTask<Void, Void, Void> {
     final static Pattern pattern_email =
             Pattern.compile("(?:.*)([_a-zA-Z0-9-]+@([_a-zA-Z0-9-]+\\.)+[_a-zA-Z0-9-]{2,4})(?:.*)");
     final static Pattern pattern_url_email =
-            Pattern.compile("(?:=)([_a-zA-Z0-9-]+[(@)(%40)]([_a-zA-Z0-9-]+\\.)+[_a-zA-Z0-9-]{2,4})(?:[&\\n])");
+            Pattern.compile("(?:=)([_a-zA-Z0-9-]+(@|%40)([_a-zA-Z0-9-]+\\.)+[_a-zA-Z0-9-]{2,4})(?:[&\\n])");
     final static Pattern pattern_ssn =
             Pattern.compile("(?:.*)(\\d{3}-\\d{2}-\\d{4})(?:.*)");
     final static Pattern pattern_credit_card =
             Pattern.compile("(?:.*)(((4\\d{3})|(5[1-5]\\d{2})|(6011))-?\\d{4}-?\\d{4}-?\\d{4}|3[4,7]\\d{13})(?:.*)");
 
-    private static String scanSensitive(String plaintext, String sensitive_org) {
+    private static String scanSensitive(String plaintext, String sensitive_org, String appName) {
         String result = sensitive_org;
         Matcher m;
+
+        NotificationManager mNotificationManager =
+                (NotificationManager) ContextUtil.getInstance()
+                                                    .getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (scan_strict_phone) {
             m = pattern_url_phone.matcher(plaintext);
@@ -168,10 +177,14 @@ public class Monitor extends AsyncTask<Void, Void, Void> {
 
                 if (result.contains(append)) {
                     ;
-                } else if (result.equals(ConnectionDatabase.CONTENT_DEFAULT)) {
-                    result = append;
                 } else {
-                    result = result + ", \n" + append;
+                    sendNotification(append, appName, mNotificationManager);
+
+                    if (result.equals(ConnectionDatabase.CONTENT_DEFAULT)) {
+                        result = append;
+                    } else {
+                        result = result + ", \n" + append;
+                    }
                 }
             }
         }
@@ -188,10 +201,14 @@ public class Monitor extends AsyncTask<Void, Void, Void> {
 
                 if (result.contains(append)) {
                     ;
-                } else if (result.equals(ConnectionDatabase.CONTENT_DEFAULT)) {
-                    result = append;
                 } else {
-                    result = result + ", \n" + append;
+                    sendNotification(append, appName, mNotificationManager);
+
+                    if (result.equals(ConnectionDatabase.CONTENT_DEFAULT)) {
+                        result = append;
+                    } else {
+                        result = result + ", \n" + append;
+                    }
                 }
             }
         }
@@ -213,10 +230,14 @@ public class Monitor extends AsyncTask<Void, Void, Void> {
 
                 if (result.contains(append)) {
                     ;
-                } else if (result.equals(ConnectionDatabase.CONTENT_DEFAULT)) {
-                    result = append;
                 } else {
-                    result = result + ", \n" + append;
+                    sendNotification(append, appName, mNotificationManager);
+
+                    if (result.equals(ConnectionDatabase.CONTENT_DEFAULT)) {
+                        result = append;
+                    } else {
+                        result = result + ", \n" + append;
+                    }
                 }
             }
         }
@@ -233,10 +254,14 @@ public class Monitor extends AsyncTask<Void, Void, Void> {
 
                 if (result.contains(append)) {
                     ;
-                } else if (result.equals(ConnectionDatabase.CONTENT_DEFAULT)) {
-                    result = append;
                 } else {
-                    result = result + ", \n" + append;
+                    sendNotification(append, appName, mNotificationManager);
+
+                    if (result.equals(ConnectionDatabase.CONTENT_DEFAULT)) {
+                        result = append;
+                    } else {
+                        result = result + ", \n" + append;
+                    }
                 }
             }
         }
@@ -253,14 +278,33 @@ public class Monitor extends AsyncTask<Void, Void, Void> {
 
                 if (result.contains(append)) {
                     ;
-                } else if (result.equals(ConnectionDatabase.CONTENT_DEFAULT)) {
-                    result = append;
                 } else {
-                    result = result + ", \n" + append;
+                    sendNotification(append, appName, mNotificationManager);
+
+                    if (result.equals(ConnectionDatabase.CONTENT_DEFAULT)) {
+                        result = append;
+                    } else {
+                        result = result + ", \n" + append;
+                    }
                 }
             }
         }
 
         return result;
+    }
+
+    private static void sendNotification(String message, String appName,
+                                  NotificationManager mNotificationManager) {
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(ContextUtil.getInstance());
+        NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+
+        mBuilder.setSmallIcon(R.drawable.ic_warning_black_24dp);
+        mBuilder.setContentTitle("Detect Potential Data Leak!");
+        inboxStyle.setBigContentTitle("Detect Potential Data Leak!");
+        mBuilder.setContentText(appName + " is sending " + message + " to the Internet.");
+        inboxStyle.addLine(appName + " is sending ");
+        inboxStyle.addLine(message);
+        mNotificationManager.notify(notificationID++, mBuilder.build());
     }
 }
