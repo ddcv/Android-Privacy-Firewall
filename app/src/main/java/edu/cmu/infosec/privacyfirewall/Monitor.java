@@ -297,14 +297,15 @@ public class Monitor extends AsyncTask<Void, Void, Void> {
                                   NotificationManager mNotificationManager) {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(ContextUtil.getInstance());
-        NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+        android.support.v4.app.NotificationCompat.BigTextStyle style =
+                new android.support.v4.app.NotificationCompat.BigTextStyle();
 
         mBuilder.setSmallIcon(R.drawable.ic_warning_black_24dp);
-        mBuilder.setContentTitle("Detect Potential Data Leak!");
-        inboxStyle.setBigContentTitle("Detect Potential Data Leak!");
         mBuilder.setContentText(appName + " is sending " + message + " to the Internet.");
-        inboxStyle.addLine(appName + " is sending ");
-        inboxStyle.addLine(message);
+        mBuilder.setContentTitle("Detect Potential Data Leak!");
+        style.setBigContentTitle("Detect Potential Data Leak!");
+        style.bigText(appName + " is sending " + message);
+        mBuilder.setStyle(style);
         mNotificationManager.notify(notificationID++, mBuilder.build());
     }
 }
